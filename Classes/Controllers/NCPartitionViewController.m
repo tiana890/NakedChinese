@@ -25,6 +25,8 @@
 #import "NCInteractionManager.h"
 #import "NCInteractionView.h"
 
+#import "NCDataManager.h"
+
 #pragma mark Storyboard segues identifiers
 static NSString *const NCPackControllerSegueIdentifier = @"toPackController";
 static NSString *const NCMenuControllerSegueIdentifier = @"toMenuController";
@@ -40,7 +42,7 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
 
 #pragma mark -
 
-@interface NCPartitionViewController () <UIToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITabBarDelegate, UINavigationControllerDelegate, NCInteractionViewDelegate>
+@interface NCPartitionViewController () <UIToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITabBarDelegate, UINavigationControllerDelegate, NCInteractionViewDelegate, NCDataManagerProtocol>
 
 @property (weak, nonatomic) IBOutlet FXBlurView *backgroundBlurView;
 
@@ -54,6 +56,7 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
 
 @property (weak, nonatomic) IBOutlet NCInteractionView *interactionView;
 
+@property (strong, nonatomic) NCDataManager *dataManager;
 @end
 
 @implementation NCPartitionViewController
@@ -77,6 +80,9 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
     self.navigationItem.leftBarButtonItem = nil;
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    
+    self.dataManager = [NCDataManager sharedInstance];
+    self.dataManager.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -101,6 +107,22 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
     NSLog(@"select partition");
     
     [self showHiddenUIElements];
+    
+    NSString *type = [[NSString alloc] init];
+    switch (sender.selectedSegmentIndex) {
+        case 0:
+            type = @"sex";
+            break;
+        case 1:
+            type = @"swear";
+            break;
+        case 2:
+            type = @"slang";
+            break;
+        default:
+            break;
+    }
+    [self.dataManager getNumberOfPacks:type];
 }
 
 #pragma mark - Custom Accessors
