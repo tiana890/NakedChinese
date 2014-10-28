@@ -18,9 +18,12 @@
 
 @implementation NCDataManager
 
+#pragma mark Constants
+
 #define ONLINE_MODE @"reachable"
 #define OFFLINE_MODE @"not_reachable"
 
+#pragma mark Initialization
 
 +(NCDataManager*) sharedInstance
 {
@@ -34,6 +37,8 @@
     } );
     return sDataManager;
 }
+
+#pragma mark Reachability
 
 - (void) reachabilityChanged:(NSNotification *)note
 {
@@ -59,11 +64,18 @@
 #pragma mark methods
 - (void)getNumberOfPacks:(NSString *)type
 {
-    Requester *requester = [[Requester alloc] init];
-    requester.delegate = self;
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    [dict setObject:type forKey:@"type"];
-    [requester requestPath:@"pack" withParameters:dict isPOST:NO delegate:@selector(getNumberOfPacksResponse:)];
+    if([self.internetMode isEqualToString:ONLINE_MODE])
+    {
+        Requester *requester = [[Requester alloc] init];
+        requester.delegate = self;
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        [dict setObject:type forKey:@"type"];
+        [requester requestPath:@"pack" withParameters:dict isPOST:NO delegate:@selector(getNumberOfPacksResponse:)];
+    }
+    else if ([self.internetMode isEqualToString:OFFLINE_MODE])
+    {
+        
+    }
 }
 
 - (void)getNumberOfPacksResponse:(NSDictionary *) jsonDict

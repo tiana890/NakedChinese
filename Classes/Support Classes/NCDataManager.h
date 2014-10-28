@@ -20,6 +20,7 @@
 
 -(void) getNumberOfPacks:(NSString *)type;
 
+
 +(NCDataManager*) sharedInstance;
 
 @property (nonatomic, weak) id<NCDataManagerProtocol> delegate;
