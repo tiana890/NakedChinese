@@ -7,9 +7,20 @@
 //
 
 #import "NCDataManager.h"
-#import "Requester.h"
+#import "Reachability.h"
+
+
+@interface NCDataManager()
+
+@property (nonatomic, strong) NSString *internetMode;
+@property (nonatomic, strong) Reachability *internetReachability;
+@end
 
 @implementation NCDataManager
+
+#define ONLINE_MODE @"reachable"
+#define OFFLINE_MODE @"not_reachable"
+
 
 +(NCDataManager*) sharedInstance
 {
@@ -17,10 +28,31 @@
     static dispatch_once_t predicate;
     dispatch_once( &predicate, ^{
         sDataManager = [ [ self alloc ] init ];
-        sDataManager.packsCount = [[NSMutableDictionary alloc] init];
-        
+        [[NSNotificationCenter defaultCenter] addObserver:sDataManager selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+        sDataManager.internetReachability = [Reachability reachabilityForInternetConnection];
+        [sDataManager.internetReachability startNotifier];
     } );
     return sDataManager;
+}
+
+- (void) reachabilityChanged:(NSNotification *)note
+{
+    Reachability* curReach = [note object];
+    NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
+    
+    if(curReach.currentReachabilityStatus != NotReachable)
+    {
+        [NCDataManager sharedInstance].internetMode = ONLINE_MODE;
+    }
+    else
+    {
+        [NCDataManager sharedInstance].internetMode = OFFLINE_MODE;
+    }
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:[NCDataManager sharedInstance]];
 }
 
 

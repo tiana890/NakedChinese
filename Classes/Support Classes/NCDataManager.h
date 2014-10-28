@@ -23,5 +23,5 @@
 +(NCDataManager*) sharedInstance;
 
 @property (nonatomic, weak) id<NCDataManagerProtocol> delegate;
-@property (nonatomic, strong) NSMutableDictionary *packsCount;
+
 @end

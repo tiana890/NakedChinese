@@ -7,10 +7,12 @@
 //
 
 #import "NCAppDelegate.h"
+#import "NCDataManager.h"
 
 @implementation NCAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    NCDataManager *dataManager = [NCDataManager sharedInstance];
     [self setupAnalitycs];
     return YES;
 }
