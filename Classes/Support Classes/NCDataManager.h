@@ -10,18 +10,20 @@
 #import "Requester.h"
 
 
+
 @protocol NCDataManagerProtocol <NSObject>
 
-- (void) ncDataManagerProtocolGetNumberOfPacks:(int)numberOfPacks;
+- (void) ncDataManagerProtocolGetWordsWithPackID:(NSArray *)arrayOfWords;
 
 @end
 
 @interface NCDataManager : NSObject<RequesterProtocol>
 
--(void) getNumberOfPacks:(NSString *)type;
-
 
 +(NCDataManager*) sharedInstance;
+
+- (void) getWordsWithPackID:(int)packID;
+- (void) getWordsWithPackID:(int)packID andMode:(NSString *) mode;
 
 @property (nonatomic, weak) id<NCDataManagerProtocol> delegate;
 

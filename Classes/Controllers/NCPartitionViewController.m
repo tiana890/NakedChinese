@@ -122,7 +122,7 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
         default:
             break;
     }
-    [self.dataManager getNumberOfPacks:type];
+
 }
 
 #pragma mark - Custom Accessors

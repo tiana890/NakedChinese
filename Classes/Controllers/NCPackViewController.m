@@ -20,6 +20,8 @@
 
 #import "NCVisuallyPackViewController.h"
 
+#import "NCDataManager.h"
+
 static NSString *const NCPackControllerWordIndexKey = @"NCPackControllerWordIndexKey";
 
 static NSString *const NCVisuallyPackControllerSegueIdentifier = @"toVisuallyPackController";
@@ -32,7 +34,7 @@ static NSString *const NCWordLockCellIdentifier = @"wordLockCell";
 const CGFloat KeyboardHeight = 216.f;
 const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 
-@interface NCPackViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UIToolbarDelegate, UIGestureRecognizerDelegate, UISearchBarDelegate>
+@interface NCPackViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UIToolbarDelegate, UIGestureRecognizerDelegate, UISearchBarDelegate, NCDataManagerProtocol>
 
 @property (weak, nonatomic) IBOutlet FXBlurView *navigationBlurView;
 @property (weak, nonatomic) IBOutlet FXBlurView *searchBlurView;
@@ -52,6 +54,9 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupNavigationItem];
+    
+    [NCDataManager sharedInstance].delegate = self;
+    [[NCDataManager sharedInstance] getWordsWithPackID:18 andMode:@"not_reachable"];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -62,6 +67,13 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self disableBlurView];
+}
+
+#pragma  mark DataManager Protocol methods
+
+- (void)ncDataManagerProtocolGetWordsWithPackID:(NSArray *)arrayOfWords
+{
+    NSArray *arrayOfWord = arrayOfWords;
 }
 
 #pragma mark - IBActions

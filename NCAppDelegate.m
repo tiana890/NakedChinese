@@ -9,13 +9,124 @@
 #import "NCAppDelegate.h"
 #import "NCDataManager.h"
 
+@interface NCAppDelegate()
+
+
+
+@end
 @implementation NCAppDelegate
 
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    NCDataManager *dataManager = [NCDataManager sharedInstance];
+    
     [self setupAnalitycs];
-    return YES;
+    [self initDB];
+    BOOL ifFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"];
+    
+    if (ifFirstLaunch == NO)
+    {
+        
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        
+    }
+       return YES;
 }
+
+- (void)initDB
+{
+    /*NSDictionary *dishNamesAndWeights = @{@"soup":@310, @"meat":@300, @"fruit":@500, @"fish":@270, @"bread":@100, @"salad":@220, @"pizza":@280, @"tea":@250, @"coffee":@210, @"juice":@200};
+    
+    
+    NSManagedObject *menu = [NSEntityDescription insertNewObjectForEntityForName:@"Menu"
+                                                          inManagedObjectContext:self.managedObjectContext];
+    
+    NSMutableSet *dishes = [menu mutableSetValueForKey:@"dishes"];
+    
+    int dishID = 0;
+    for(NSString *key in [dishNamesAndWeights allKeys])
+    {
+        NSManagedObject *dish = [NSEntityDescription insertNewObjectForEntityForName:@"Dish"
+                                                              inManagedObjectContext:self.managedObjectContext];
+        [dish setValue:[NSNumber numberWithInt:dishID] forKey:@"id"];
+        [dish setValue:@"dish name" forKey:@"name"];
+        [dish setValue:[dishNamesAndWeights objectForKey:key] forKey:@"weight"];
+        [dish setValue:@0 forKey:@"count"];
+        
+        [dishes addObject:dish];
+        
+        dishID++;
+        
+    }
+    
+    //    сохраняем данные в хранилище
+    [self saveContext];*/
+    
+    NCDataManager *dataManager = [NCDataManager sharedInstance];
+    [dataManager getWordsWithPackID:18 andMode:@"reachable"];
+    
+}
+
+#pragma mark - Core Data Stack
+
+- (NSManagedObjectModel *)managedObjectModel
+{
+    if(_managedObjectModel)
+        return _managedObjectModel;
+    
+    _managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+    
+    return _managedObjectModel;
+}
+
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
+{
+    if(_persistentStoreCoordinator)
+        return _persistentStoreCoordinator;
+    
+    NSURL *storeURL = [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                               inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:@"nakedChienese.sqlite"];
+    
+    NSError *error = nil;
+    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
+    if(![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]){
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    return _persistentStoreCoordinator;
+}
+
+- (NSManagedObjectContext *)managedObjectContext
+{
+    if(nil != _managedObjectContext)
+        return _managedObjectContext;
+    
+    NSPersistentStoreCoordinator *store = self.persistentStoreCoordinator;
+    if(nil != store){
+        _managedObjectContext = [[NSManagedObjectContext alloc] init];
+        [_managedObjectContext setPersistentStoreCoordinator:store];
+    }
+    
+    return _managedObjectContext;
+}
+
+- (void)saveContext {
+    NSError *error = nil;
+    NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
+    
+    if(managedObjectContext != nil) {
+        if([managedObjectContext hasChanges] && ![managedObjectContext save:&error]){
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+    }
+}
+
 
 - (void)setupAnalitycs {
 }

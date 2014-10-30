@@ -8,12 +8,15 @@
 
 #import "NCDataManager.h"
 #import "Reachability.h"
-
+#import "DBHelper.h"
+#import "NCPack.h"
+#import "NCWord.h"
 
 @interface NCDataManager()
 
 @property (nonatomic, strong) NSString *internetMode;
 @property (nonatomic, strong) Reachability *internetReachability;
+@property (nonatomic, strong) DBHelper *dbHelper;
 @end
 
 @implementation NCDataManager
@@ -31,9 +34,21 @@
     static dispatch_once_t predicate;
     dispatch_once( &predicate, ^{
         sDataManager = [ [ self alloc ] init ];
+        
         [[NSNotificationCenter defaultCenter] addObserver:sDataManager selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
         sDataManager.internetReachability = [Reachability reachabilityForInternetConnection];
+        if(sDataManager.internetReachability.currentReachabilityStatus != NotReachable)
+        {
+            sDataManager.internetMode = ONLINE_MODE;
+        }
+        else
+        {
+            sDataManager.internetMode = OFFLINE_MODE;
+        }
+
         [sDataManager.internetReachability startNotifier];
+        
+        sDataManager.dbHelper = [[DBHelper alloc] init];
     } );
     return sDataManager;
 }
@@ -61,8 +76,50 @@
 }
 
 
-#pragma mark methods
-- (void)getNumberOfPacks:(NSString *)type
+#pragma mark first Launch Methods
+
+/*- (void)firstLaunch
+{
+    Requester *requester = [[Requester alloc] init];
+    
+    
+}*/
+
+#pragma mark commonMethods
+- (void) getWordsWithPackID:(int)packID andMode:(NSString *) mode
+{
+    if([mode isEqualToString:ONLINE_MODE])
+    {
+        Requester *requester = [[Requester alloc] init];
+        requester.delegate = self;
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        [dict setObject:[NSNumber numberWithInt:packID] forKey:@"pack_id"];
+        [requester requestPath:@"word" withParameters:dict isPOST:NO delegate:@selector(getWordsWithPackIDResponse:)];
+    }
+    else if ([mode isEqualToString:OFFLINE_MODE])
+    {
+        //берем из БД
+        NSArray *wordsArray = [[NCDataManager sharedInstance].dbHelper getWordsFromDBWithPackID:packID];
+        if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetWordsWithPackID:)])
+        {
+            [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetWordsWithPackID:wordsArray];
+        }
+    }
+}
+
+- (void) getWordsWithPackIDResponse:(NSDictionary *)jsonDict
+{
+    NSArray *jsonArray = (NSArray *)jsonDict;
+    NSMutableArray *wordArray = [[NSMutableArray alloc] init];
+    for(NSDictionary *dict in jsonArray)
+    {
+        [wordArray addObject:[NCWord getNCWordFromJSON:dict]];
+    }
+    
+    [[NCDataManager sharedInstance].dbHelper setWordsToDB:wordArray];
+}
+/*
+- (void)getPacksFromServer
 {
     if([self.internetMode isEqualToString:ONLINE_MODE])
     {
@@ -86,5 +143,5 @@
     {
         [self.delegate ncDataManagerProtocolGetNumberOfPacks:3];
     }
-}
+}*/
 @end

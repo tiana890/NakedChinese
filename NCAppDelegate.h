@@ -7,9 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
+#import "NCDataManager.h"
 
-@interface NCAppDelegate : UIResponder <UIApplicationDelegate>
+@interface NCAppDelegate : UIResponder <UIApplicationDelegate, NCDataManagerProtocol>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+- (void)saveContext;
 @end

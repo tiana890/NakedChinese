@@ -9,7 +9,8 @@
 #import "Requester.h"
 #import "AFNetworking.h"
 
-#define SERVER_ADDRESS @"http://nakedchinese.bb777.ru/api/get/"
+//#define SERVER_ADDRESS @"http://nakedchinese.bb777.ru/api/get/"
+#define SERVER_ADDRESS @"http://china:8901/api/get/"
 
 @implementation Requester
 
