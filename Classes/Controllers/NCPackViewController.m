@@ -7,6 +7,7 @@
 //
 
 #import "NCPackViewController.h"
+#import "UIImageView+AFNetworking.h"
 
 #import "NCNavigationBar.h"
 #import "NCWordCell.h"
@@ -23,6 +24,8 @@
 #import "NCDataManager.h"
 #import "NCWord.h"
 
+
+#define SERVER_ADDRESS @"http://china:8901/upload/picture/"
 
 static NSString *const NCPackControllerWordIndexKey = @"NCPackControllerWordIndexKey";
 
@@ -168,25 +171,37 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+   /*
     NSInteger itemsCount = 0;
     if (collectionView == [self collectionView]) {
-        itemsCount = [self _words].count;
+        //itemsCount = [self _words].count;
+        itemsCount = self.arrayOfWords.count;
     } else if (collectionView == [self searchCollectionView]) {
         itemsCount = [self _words].count;
     }
     return itemsCount;
+    */
+    return self.arrayOfWords.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     NCWordCell *openCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordCellIdentifier forIndexPath:indexPath];
     
+    NCWord *word = self.arrayOfWords[indexPath.item];
+    [openCell.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]]];
+    [openCell.chineseLabel setText:word.material.materialZH];
+    [openCell.pinyinLabel setText:word.material.materialZH_TR];
+    [openCell.translateLabel setText:word.material.materialRU];
+    /*
     NSDictionary *explanation = [self _words][indexPath.item];
     
     openCell.pictureView.image = explanation[NCWorkPictureKey];
     openCell.chineseLabel.text = explanation[NCWordChineseKey];
     openCell.pinyinLabel.text = explanation[NCWordPinyinKey];
     openCell.translateLabel.text = explanation[NCWordTranslateKey];
+    */
+    
     
     return openCell;
 }

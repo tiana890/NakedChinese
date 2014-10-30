@@ -43,36 +43,8 @@
     if([jsonDict objectForKey:@"material"] != [NSNull null])
     {
         NSDictionary *materialDict = [jsonDict objectForKey:@"material"];
-        
-        if([materialDict objectForKey:@"zh"] != [NSNull null])
-        {
-            word.materialZH = [materialDict objectForKey:@"zh"];
-        }
-        
-        if([materialDict objectForKey:@"zh_tr"] != [NSNull null])
-        {
-            word.materialZH_TR = [materialDict objectForKey:@"zh_tr"];
-        }
-        
-        if([materialDict objectForKey:@"en"] != [NSNull null])
-        {
-            word.materialEN = [materialDict objectForKey:@"en"];
-        }
-        
-        if([materialDict objectForKey:@"ru"] != [NSNull null])
-        {
-            word.materialRU = [materialDict objectForKey:@"ru"];
-        }
-        
-        if([materialDict objectForKey:@"sound"] != [NSNull null])
-        {
-            word.materialSound = [materialDict objectForKey:@"sound"];
-        }
-        
-        if([materialDict objectForKey:@"last_update"] != [NSNull null])
-        {
-            word.materialLastUpdate = [materialDict objectForKey:@"last_update"];
-        }
+        word.material = [NCMaterial getNCMaterialFromJSON:materialDict];
+        word.material.materialID = word.ID;
     }
     return word;
 }
@@ -84,6 +56,8 @@
     word.ID = [object valueForKey:@"id"];
     word.packID = [object valueForKey:@"pack_id"];
     word.image = [object valueForKey:@"image"];
+    word.paid = [object valueForKey:@"paid"];
+    word.show = [object valueForKey:@"show"];
     
     return word;
 }
