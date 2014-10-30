@@ -82,7 +82,8 @@
     NCWord *word = [[NCWord alloc] init];
     
     word.ID = [object valueForKey:@"id"];
-    
+    word.packID = [object valueForKey:@"pack_id"];
+    word.image = [object valueForKey:@"image"];
     
     return word;
 }

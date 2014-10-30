@@ -26,6 +26,7 @@
 #import "NCInteractionView.h"
 
 #import "NCDataManager.h"
+#import "NCPack.h"
 
 #pragma mark Storyboard segues identifiers
 static NSString *const NCPackControllerSegueIdentifier = @"toPackController";
@@ -57,6 +58,11 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
 @property (weak, nonatomic) IBOutlet NCInteractionView *interactionView;
 
 @property (strong, nonatomic) NCDataManager *dataManager;
+
+@property (nonatomic, strong) NSArray *packsArray;
+@property (nonatomic) NSArray *currentPartition;
+
+@property (nonatomic, strong) NSMutableArray *numbersAndPacks;
 @end
 
 @implementation NCPartitionViewController
@@ -81,14 +87,17 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
     
-    self.dataManager = [NCDataManager sharedInstance];
-    self.dataManager.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self hideBarLine];
     [self disableBlurViews];
+    
+    self.dataManager = [NCDataManager sharedInstance];
+    self.dataManager.delegate = self;
+    
+    self.currentPartition = @[@"sex", @"swear", @"slang"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -96,33 +105,65 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
     [self disableBlurViews];
 }
 
+#pragma mark - Getters&Setters
+- (NSArray *)packsArray
+{
+    if(!_packsArray) _packsArray = [[NSArray alloc] init];
+    return _packsArray;
+}
 
+- (NSMutableArray *)numbersAndPacks
+{
+    if(!_numbersAndPacks)
+    {
+        _numbersAndPacks = [[NSMutableArray alloc] init];
+        for(int i = 0; i < self.currentPartition.count; i++)
+        {
+            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+            [_numbersAndPacks addObject:dict];
+        }
+    }
+    return _numbersAndPacks;
+}
 #pragma mark - IBActions
 
-- (IBAction)showInteractionView:(id)sender {
+- (IBAction)showInteractionView:(id)sender
+{
     [self hideShownUIElements];
 }
 
 - (IBAction)changedPartitionAction:(UISegmentedControl *)sender {
-    NSLog(@"select partition");
-    
-    [self showHiddenUIElements];
-    
-    NSString *type = [[NSString alloc] init];
-    switch (sender.selectedSegmentIndex) {
-        case 0:
-            type = @"sex";
-            break;
-        case 1:
-            type = @"swear";
-            break;
-        case 2:
-            type = @"slang";
-            break;
-        default:
-            break;
-    }
+    [[NCDataManager sharedInstance] getPacks];
+}
 
+#pragma mark - NCDataManagerProtocol methods
+- (void)ncDataManagerProtocolGetPacks:(NSArray *)arrayOfPacks
+{
+    self.packsArray = arrayOfPacks;
+    for(int i = 0; i < self.packsArray.count; i++)
+    {
+        NCPack *pack = self.packsArray[i];
+        int count0 = 0;
+        int count1 = 0;
+        int count2 = 0;
+        if([pack.partition isEqualToString:self.currentPartition[0]])
+        {
+            [self.numbersAndPacks[0] setObject:[NSNumber numberWithInt:i] forKey:[NSNumber numberWithInt: count0]];
+            count0 ++;
+        }
+        else if([pack.partition isEqualToString:self.currentPartition[1]])
+        {
+            [self.numbersAndPacks[1] setObject:[NSNumber numberWithInt:i] forKey:[NSNumber numberWithInt: count1]];
+            count1 ++;
+        }
+        else if([pack.partition isEqualToString:self.currentPartition[2]])
+        {
+            [self.numbersAndPacks[2] setObject:[NSNumber numberWithInt:i] forKey:[NSNumber numberWithInt: count2]];
+            count2 ++;
+        }
+    }
+    [self.collectionView reloadData];
+    [self showHiddenUIElements];
 }
 
 #pragma mark - Custom Accessors
@@ -214,7 +255,15 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 10;
+    int count = 0;
+    for(NCPack *pack in self.packsArray)
+    {
+        if([pack.partition isEqualToString:self.currentPartition[self.partitionSegmentedControl.selectedSegmentIndex]])
+        {
+            count ++;
+        }
+    }
+    return count;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -223,7 +272,7 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
     NCPackCell *packCell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
     packCell.packView.packNumber = indexPath.row+1;
-//    packCell.packNumber = indexPath.row+1;
+//  packCell.packNumber = indexPath.row+1;
     
     return packCell;
 }
@@ -296,6 +345,11 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
             destinationViewController.packNumber = [sender[NCPackControllerNumberKey] unsignedIntegerValue];
         }
         destinationViewController.type = type;
+        
+        NSNumber *key = [NSNumber numberWithInteger:destinationViewController.packNumber-1];
+        NSNumber *index = [self.numbersAndPacks[self.partitionSegmentedControl.selectedSegmentIndex] objectForKey:key];
+        NCPack *pack = self.packsArray[[index integerValue]];
+        destinationViewController.pack = pack;
     }
 }
 

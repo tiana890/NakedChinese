@@ -21,6 +21,8 @@
 #import "NCVisuallyPackViewController.h"
 
 #import "NCDataManager.h"
+#import "NCWord.h"
+
 
 static NSString *const NCPackControllerWordIndexKey = @"NCPackControllerWordIndexKey";
 
@@ -44,7 +46,7 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UICollectionView *searchCollectionView;
 
-
+@property (nonatomic, strong) NSArray *arrayOfWords;
 @end
 
 @implementation NCPackViewController
@@ -54,14 +56,14 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupNavigationItem];
-    
-    [NCDataManager sharedInstance].delegate = self;
-    [[NCDataManager sharedInstance] getWordsWithPackID:18 andMode:@"not_reachable"];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self disableBlurView];
+    
+    [NCDataManager sharedInstance].delegate = self;
+    [[NCDataManager sharedInstance] getWordsWithPackID:[self.pack.ID intValue] andMode:@"not_reachable"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -73,7 +75,8 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 
 - (void)ncDataManagerProtocolGetWordsWithPackID:(NSArray *)arrayOfWords
 {
-    NSArray *arrayOfWord = arrayOfWords;
+    self.arrayOfWords = arrayOfWords;
+    [self.collectionView reloadData];
 }
 
 #pragma mark - IBActions

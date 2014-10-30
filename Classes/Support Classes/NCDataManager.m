@@ -118,16 +118,14 @@
     
     [[NCDataManager sharedInstance].dbHelper setWordsToDB:wordArray];
 }
-/*
-- (void)getPacksFromServer
+
+- (void) getPacks
 {
     if([self.internetMode isEqualToString:ONLINE_MODE])
     {
         Requester *requester = [[Requester alloc] init];
         requester.delegate = self;
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-        [dict setObject:type forKey:@"type"];
-        [requester requestPath:@"pack" withParameters:dict isPOST:NO delegate:@selector(getNumberOfPacksResponse:)];
+        [requester requestPath:@"pack" withParameters:nil isPOST:NO delegate:@selector(getPacksResponse:)];
     }
     else if ([self.internetMode isEqualToString:OFFLINE_MODE])
     {
@@ -135,6 +133,22 @@
     }
 }
 
+- (void) getPacksResponse:(NSDictionary *) jsonDict
+{
+    NSArray *array = (NSArray *)jsonDict;
+    NSMutableArray *packArray = [[NSMutableArray alloc] init];
+    for(NSDictionary *dict in array)
+    {
+        [packArray addObject:[NCPack getNCPackFromJson:dict]];
+    }
+    
+    if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetPacks:)])
+    {
+        [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetPacks:packArray];
+    }
+    
+}
+/*
 - (void)getNumberOfPacksResponse:(NSDictionary *) jsonDict
 {
     NSArray *array = (NSArray *)jsonDict;

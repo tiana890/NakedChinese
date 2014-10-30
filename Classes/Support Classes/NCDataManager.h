@@ -14,6 +14,7 @@
 @protocol NCDataManagerProtocol <NSObject>
 
 - (void) ncDataManagerProtocolGetWordsWithPackID:(NSArray *)arrayOfWords;
+- (void) ncDataManagerProtocolGetPacks:(NSArray *)arrayOfPacks;
 
 @end
 
@@ -24,6 +25,8 @@
 
 - (void) getWordsWithPackID:(int)packID;
 - (void) getWordsWithPackID:(int)packID andMode:(NSString *) mode;
+
+- (void) getPacks;
 
 @property (nonatomic, weak) id<NCDataManagerProtocol> delegate;
 

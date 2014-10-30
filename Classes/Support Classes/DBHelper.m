@@ -72,7 +72,6 @@
         
         [containWords addObject:newWord];
         
-        
     }
     
     //    сохраняем данные в хранилище

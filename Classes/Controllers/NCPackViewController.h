@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NCPack.h"
 
 typedef NS_ENUM(NSUInteger, NCPackControllerType) {
     NCPackControllerOfNumber,
@@ -19,4 +20,5 @@ typedef NS_ENUM(NSUInteger, NCPackControllerType) {
 
 @property (assign, nonatomic) NCPackControllerType type;
 
+@property (strong, nonatomic) NCPack *pack;
 @end
