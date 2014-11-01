@@ -15,6 +15,8 @@
 
 #import "NCConstants.h"
 
+#import "NCWord.h"
+
 static CGFloat const NCVisuallyPackMaxBlurRadius = 20.f;
 static CGFloat const NCVisuallySlideViewHeight = 60.f;
 
@@ -141,6 +143,7 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
     NCWordContentViewController *contentViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"wordContentViewController"];
     
     contentViewController.dictionaryWithWord = self.arrayOfWords[index];
+    contentViewController.word = self.arrayOfWords[index];
     contentViewController.pageIndex = index;
     
     return contentViewController;

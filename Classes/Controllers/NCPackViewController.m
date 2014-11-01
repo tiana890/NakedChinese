@@ -248,7 +248,8 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     NSInteger openedWordIndex = [sender[NCPackControllerWordIndexKey] integerValue];
     NCVisuallyPackViewController *packViewController = [segue destinationViewController];
     // DEV: Test data!
-    packViewController.arrayOfWords = [self _words];
+    //packViewController.arrayOfWords = [self _words];
+    packViewController.arrayOfWords = self.arrayOfWords;
     packViewController.openedWordIndex = openedWordIndex;
 }
 

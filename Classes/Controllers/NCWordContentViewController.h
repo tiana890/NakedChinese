@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "NCExplanationViewController.h"
+#import "NCWord.h"
 
 @interface NCWordContentViewController : UIViewController
 
 @property (strong, nonatomic) NSDictionary *dictionaryWithWord;
+
+@property (strong, nonatomic) NCWord *word;
 @property (assign, nonatomic) NSInteger pageIndex;
 
 @end
