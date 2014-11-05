@@ -8,10 +8,10 @@
 
 #import "NCAppDelegate.h"
 #import "NCDataManager.h"
+#import "NCGreetingViewController.h"
+#import "NCPartitionViewController.h"
 
 @interface NCAppDelegate()
-
-
 
 @end
 @implementation NCAppDelegate
@@ -25,16 +25,24 @@
     [self setupAnalitycs];
     [self initDB];
     BOOL ifFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"];
-    
+    self.ifFirstLaunch = ifFirstLaunch;
     if (ifFirstLaunch == NO)
     {
-        
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
-        
     }
-       return YES;
+    else
+    {
+        /*UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+        NCGreetingViewController *gc = [storyboard instantiateViewControllerWithIdentifier:@"greetingViewController"];
+        NCPartitionViewController *pc = [storyboard instantiateViewControllerWithIdentifier:@"partitionController"];
+        UINavigationController *ncc = [storyboard instantiateViewControllerWithIdentifier:@"mainNavigationController"];
+        [ncc setViewControllers:@[pc] animated:NO];*/
+    
+    }
+   
+    return YES;
 }
 
 - (void)initDB

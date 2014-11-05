@@ -17,5 +17,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+@property (nonatomic) BOOL ifFirstLaunch;
+
 - (void)saveContext;
 @end

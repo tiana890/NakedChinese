@@ -27,6 +27,7 @@
 
 #import "NCDataManager.h"
 #import "NCPack.h"
+#import "NCGreetingViewController.h"
 
 #pragma mark Storyboard segues identifiers
 static NSString *const NCPackControllerSegueIdentifier = @"toPackController";
@@ -86,6 +87,20 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
     self.navigationItem.leftBarButtonItem = nil;
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    self.navigationController.navigationBarHidden = NO;
+    [self.navigationItem setHidesBackButton:YES];
+    
+    //удаляем приветствие из стека контроллеров
+    NSArray* tempVCA = [self.navigationController viewControllers];
+    
+    for(UIViewController *tempVC in tempVCA)
+    {
+        if([tempVC isKindOfClass:[NCGreetingViewController class]])
+        {
+            [tempVC removeFromParentViewController];
+        }
+    }
+    
     
 }
 
