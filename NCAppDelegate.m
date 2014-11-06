@@ -39,6 +39,7 @@
         NCPartitionViewController *pc = [storyboard instantiateViewControllerWithIdentifier:@"partitionController"];
         UINavigationController *ncc = [storyboard instantiateViewControllerWithIdentifier:@"mainNavigationController"];
         [ncc setViewControllers:@[pc] animated:NO];*/
+        
     
     }
    
