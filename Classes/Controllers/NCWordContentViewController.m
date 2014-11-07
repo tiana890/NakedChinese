@@ -28,11 +28,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    /*self.pictureView.image = self.dictionaryWithWord[NCWorkPictureKey];
-    self.chineseLabel.text = self.dictionaryWithWord[NCWordChineseKey];
-    self.pinyinLabel.text = self.dictionaryWithWord[NCWordPinyinKey];
-    self.translationLabel.text = self.dictionaryWithWord[NCWordTranslateKey];
-     */
+
     //[self.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, self.word.image]]];
     self.chineseLabel.text = self.word.material.materialZH;
     self.pinyinLabel.text = self.word.material.materialZH_TR;

@@ -11,7 +11,7 @@
 
 @interface NCGreetingViewController ()
 @property (strong, nonatomic) IBOutlet GreetingView *greetingView;
-
+@property (strong, nonatomic) UIColor *tintColor;
 @end
 
 @implementation NCGreetingViewController
@@ -27,7 +27,17 @@
     [self.greetingView addItemWithUpperText:@"ЭТОМУ НЕ УЧАТ В ИНСТИТУТЕ" andBottomText:@"ОБ ЭТОМ НЕ ПИШУТ В УЧЕБНИКАХ" andImage:@"greet_photo4"];
     [self.greetingView addItemWithUpperText:@"МЫ ОБНАЖИМ ВЕСЬ КИТАЙСКИЙ ЯЗЫК" andBottomText:@"ДЛЯ ТЕБЯ!" andImage:@"greet_photo5"];
     
-    self.navigationController.navigationBarHidden = YES;
+    if(!self.openFromMenu)
+    {
+        self.navigationController.navigationBarHidden = YES;
+    }
+    else
+    {
+        self.navigationController.navigationBarHidden = NO;
+        self.tintColor = self.navigationController.navigationBar.tintColor;
+        [self.navigationController.navigationBar setTintColor:[UIColor clearColor]];
+    }
+    
 
 }
 
@@ -35,6 +45,13 @@
 {
     [super viewWillAppear:animated];
     
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.navigationController.navigationBar setTintColor:self.tintColor];
+    self.navigationController.navigationBarHidden = NO;
 }
 
 - (void)didReceiveMemoryWarning {

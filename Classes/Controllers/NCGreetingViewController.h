@@ -10,4 +10,5 @@
 
 @interface NCGreetingViewController : UIViewController
 
+@property (nonatomic) BOOL openFromMenu;
 @end

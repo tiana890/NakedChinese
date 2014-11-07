@@ -33,6 +33,7 @@
 static NSString *const NCPackControllerSegueIdentifier = @"toPackController";
 static NSString *const NCMenuControllerSegueIdentifier = @"toMenuController";
 static NSString *const NCTestControllerSegueIdentifier = @"toTestController";
+static NSString *const NCGreetingControllerSeguedentifier = @"toGreetingController";
 
 #pragma mark Storyboard controllers identifiers
 static NSString *const NCMenuStoryboardIdentifier = @"menuNavigationController";
@@ -314,6 +315,11 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
     NSUInteger itemIndex = [tabBar.items indexOfObject:item];
     switch (itemIndex) {
+        case 0:
+        {
+            [self performSegueWithIdentifier:NCGreetingControllerSeguedentifier sender:self];
+            break;
+        }
         case 1:
             [self performSegueWithIdentifier:NCPackControllerSegueIdentifier sender:@{ NCPackControllerTypeKey: @(NCPackControllerOfFavorite)}];
             break;
@@ -354,6 +360,11 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
         NSNumber *index = [self.numbersAndPacks[self.partitionSegmentedControl.selectedSegmentIndex] objectForKey:key];
         NCPack *pack = self.packsArray[[index integerValue]];
         destinationViewController.pack = pack;
+    }
+    else if([segue.identifier isEqualToString:NCGreetingControllerSeguedentifier])
+    {
+        NCGreetingViewController *gc = [segue destinationViewController];
+        gc.openFromMenu = YES;
     }
 }
 
