@@ -28,6 +28,8 @@
 
 - (void) getPacks;
 
+- (void) firstDBInitialization;
+
 @property (nonatomic, weak) id<NCDataManagerProtocol> delegate;
 
 @end

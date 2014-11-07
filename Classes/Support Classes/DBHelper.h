@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "NCPack.h"
 @protocol DBHelperProtocol <NSObject>
 
 
@@ -17,4 +17,6 @@
 
 - (NSArray *) getWordsFromDBWithPackID:(int)packID;
 - (void) setWordsToDB:(NSArray *)wordsArray;
+- (NSArray *) getPacks;
+- (void) setPackToDB:(NCPack *)pack;
 @end

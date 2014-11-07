@@ -17,8 +17,6 @@
 {
     NSMutableArray *array = [[NSMutableArray alloc] init];
     
-    NCAppDelegate *appDelegate = (NCAppDelegate *)[[UIApplication sharedApplication]delegate];
-    
     NSString *formatPredicate = [NSString stringWithFormat:@"pack_id == %i", packID];
     
     NSArray *wordArray = [self fetchRequestWithEntityName:@"Word" andFormatPredicate:formatPredicate];
@@ -34,6 +32,20 @@
             word.material = [NCMaterial getNCMaterialFromNSManagedObject:materialArray[0]];
         }
         [array addObject:word];
+    }
+    return array;
+}
+
+- (NSArray *)getPacks
+{
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    NSArray *packArray = [self fetchRequestWithEntityName:@"Pack" andFormatPredicate:@""];
+    
+    for(NSManagedObject *obj in packArray)
+    {
+        NCPack *pack = [NCPack getNCPackFromNSManagedObject:obj];
+        [array addObject:pack];
     }
     return array;
 }
@@ -100,14 +112,49 @@
 
 }
 
+- (void)setPackToDB:(NCPack *)pack
+{
+    NCAppDelegate *appDelegate = (NCAppDelegate *)[[UIApplication sharedApplication]delegate];
+    
+    NSManagedObject *packs = [NSEntityDescription insertNewObjectForEntityForName:@"Packs"
+                                                           inManagedObjectContext:appDelegate.managedObjectContext];
+    
+    NSMutableSet *containPacks = [packs mutableSetValueForKey:@"containPacks"];
+    
+    //проверяем есть ли такой элемент в БД
+    NSString *formatPredicate = [NSString stringWithFormat:@"id == %i", [pack.ID intValue]];
+    NSArray *packArray = [self fetchRequestWithEntityName:@"Pack" andFormatPredicate:formatPredicate];
+    if(packArray.count > 0)
+    {
+        for(int i = 0; i < packArray.count; i++)
+            [appDelegate.managedObjectContext deleteObject:packArray[i]];
+    }
+   
+    NSManagedObject *newPack = [NSEntityDescription insertNewObjectForEntityForName:@"Pack"
+                                                                 inManagedObjectContext:appDelegate.managedObjectContext];
+    [newPack setValue:pack.ID forKey:@"id"];
+    [newPack setValue:pack.partition forKey:@"partition"];
+    
+    [containPacks addObject:newPack];
+        
+    //    сохраняем данные в хранилище
+    [appDelegate saveContext];
+
+}
+
 - (NSArray *) fetchRequestWithEntityName:(NSString *) entityName andFormatPredicate:(NSString *)formatPredicate
 {
     NCAppDelegate *appDelegate = (NCAppDelegate *)[[UIApplication sharedApplication] delegate];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityName];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:formatPredicate];
-    [fetchRequest setPredicate:predicate];
+    if(![formatPredicate isEqualToString:@""])
+    {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:formatPredicate];
+        [fetchRequest setPredicate:predicate];
+    }
     NSError *error = nil;
     NSArray *array = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
     return array;
 }
+
+
 @end

@@ -33,7 +33,7 @@
     self.pinyinLabel.text = self.dictionaryWithWord[NCWordPinyinKey];
     self.translationLabel.text = self.dictionaryWithWord[NCWordTranslateKey];
      */
-    [self.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, self.word.image]]];
+    //[self.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, self.word.image]]];
     self.chineseLabel.text = self.word.material.materialZH;
     self.pinyinLabel.text = self.word.material.materialZH_TR;
     self.translationLabel.text = self.word.material.materialRU;

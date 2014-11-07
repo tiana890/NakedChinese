@@ -59,6 +59,11 @@
     word.paid = [object valueForKey:@"paid"];
     word.show = [object valueForKey:@"show"];
     
+    //NSLog(@"DEBUG word id %i", [word.ID intValue]);
+    //NSLog(@"DEBUG word pack id %i", [word.packID intValue]);
+    //NSLog(@"DEBUG word image %@", word.image);
+    //NSLog(@"DEBUG word material %@", word.material.materialZH);
+    
     return word;
 }
 

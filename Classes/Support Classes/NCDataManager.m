@@ -78,14 +78,17 @@
 
 #pragma mark first Launch Methods
 
-/*- (void)firstLaunch
+- (void)firstDBInitialization
 {
-    Requester *requester = [[Requester alloc] init];
-    
-    
-}*/
+    NCPack *pack = [[NCPack alloc] init];
+    pack.ID = @1;
+    pack.partition = @"sex";
+    [self.dbHelper setPackToDB:pack];
+    [self.dbHelper setWordsToDB:[self words]];
+}
 
 #pragma mark commonMethods
+
 - (void) getWordsWithPackID:(int)packID andMode:(NSString *) mode
 {
     if([mode isEqualToString:ONLINE_MODE])
@@ -129,7 +132,12 @@
     }
     else if ([self.internetMode isEqualToString:OFFLINE_MODE])
     {
-        
+        //берем из БД
+        NSArray *packsArray = [[NCDataManager sharedInstance].dbHelper getPacks];
+        if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetPacks:)])
+        {
+            [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetPacks:packsArray];
+        }
     }
 }
 
@@ -141,6 +149,11 @@
     {
         [packArray addObject:[NCPack getNCPackFromJson:dict]];
     }
+    //добавляем бесплатный пакет
+    NCPack *pack = [[NCPack alloc] init];
+    pack.partition = @"sex";
+    pack.ID = @1;
+    [packArray addObject:pack];
     
     if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetPacks:)])
     {
@@ -148,14 +161,32 @@
     }
     
 }
-/*
-- (void)getNumberOfPacksResponse:(NSDictionary *) jsonDict
+
+
+- (NSArray *) words
 {
-    NSArray *array = (NSArray *)jsonDict;
+    NSMutableArray *array = [[NSMutableArray alloc] init];
     
-    if([self.delegate respondsToSelector:@selector(ncDataManagerProtocolGetNumberOfPacks:)])
+    NSArray *chinese = @[@"假阳具", @"小姐", @"高潮", @"打飞机", @"射", @"同志", @"拉拉", @"鸡巴", @"阳痿", @"屄", @"有一腿", @"开包"];
+    NSArray *pinyin = @[@"jǐayángjǜ", @"xiǎojiě", @"gāo cháo", @"dǎfēijī", @"shè", @"tóngzhì", @"lāla", @"jībā", @"yángwěi", @"bī", @"yǒuyītuǐ", @"kāibāo"];
+    NSArray *russian = @[@"Фаллоимитатор", @"Проститутка", @"Оргазм", @"Мастурбировать", @"Эякулировать, кончить", @"Гей", @"Лесбиянки", @"Пенис", @"Импотент", @"Вагина", @"Изменять", @"Лишить девственности"];
+    
+    for(int i = 0; i < 12; i++)
     {
-        [self.delegate ncDataManagerProtocolGetNumberOfPacks:3];
+        NCWord *word = [[NCWord alloc] init];
+        word.ID = [NSNumber numberWithInt: i+1];
+        word.packID = @1;
+        word.image = [NSString stringWithFormat:@"%i_img_small", i+1];
+        word.material.materialZH = chinese[i];
+        word.material.materialZH_TR = pinyin[i];
+        word.material.materialRU = russian[i];
+        word.material.materialID = word.ID;
+        word.paid = @0;
+        word.show = @0;
+       
+        [array addObject:word];
     }
-}*/
+    
+    return array;
+}
 @end

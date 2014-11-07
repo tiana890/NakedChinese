@@ -211,7 +211,7 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
         self.frontBlurView.alpha = 0.f;
     } completion:^(BOOL finished) {
         self.explanationViewController.state = NCExplanationSliderHidden;
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+        //[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
     }];
 }
 
@@ -228,7 +228,7 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
         self.frontBlurView.alpha = 1.f;
     } completion:^(BOOL finished) {
         self.explanationViewController.state = NCExplanationSliderVisible;
-        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+        //[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     }];
 }
 

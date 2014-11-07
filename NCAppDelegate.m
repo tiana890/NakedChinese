@@ -26,58 +26,19 @@
     [self initDB];
     BOOL ifFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"];
     self.ifFirstLaunch = ifFirstLaunch;
-    if (ifFirstLaunch == NO)
+    if (!ifFirstLaunch)
     {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        
+        [self initDB];
     }
-    else
-    {
-        /*UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-        NCGreetingViewController *gc = [storyboard instantiateViewControllerWithIdentifier:@"greetingViewController"];
-        NCPartitionViewController *pc = [storyboard instantiateViewControllerWithIdentifier:@"partitionController"];
-        UINavigationController *ncc = [storyboard instantiateViewControllerWithIdentifier:@"mainNavigationController"];
-        [ncc setViewControllers:@[pc] animated:NO];*/
-        
     
-    }
-   
     return YES;
 }
 
 - (void)initDB
 {
-    /*NSDictionary *dishNamesAndWeights = @{@"soup":@310, @"meat":@300, @"fruit":@500, @"fish":@270, @"bread":@100, @"salad":@220, @"pizza":@280, @"tea":@250, @"coffee":@210, @"juice":@200};
-    
-    
-    NSManagedObject *menu = [NSEntityDescription insertNewObjectForEntityForName:@"Menu"
-                                                          inManagedObjectContext:self.managedObjectContext];
-    
-    NSMutableSet *dishes = [menu mutableSetValueForKey:@"dishes"];
-    
-    int dishID = 0;
-    for(NSString *key in [dishNamesAndWeights allKeys])
-    {
-        NSManagedObject *dish = [NSEntityDescription insertNewObjectForEntityForName:@"Dish"
-                                                              inManagedObjectContext:self.managedObjectContext];
-        [dish setValue:[NSNumber numberWithInt:dishID] forKey:@"id"];
-        [dish setValue:@"dish name" forKey:@"name"];
-        [dish setValue:[dishNamesAndWeights objectForKey:key] forKey:@"weight"];
-        [dish setValue:@0 forKey:@"count"];
-        
-        [dishes addObject:dish];
-        
-        dishID++;
-        
-    }
-    
-    //    сохраняем данные в хранилище
-    [self saveContext];*/
-    
-    NCDataManager *dataManager = [NCDataManager sharedInstance];
-    [dataManager getWordsWithPackID:18 andMode:@"reachable"];
-    
+    [[NCDataManager sharedInstance] firstDBInitialization];
 }
 
 #pragma mark - Core Data Stack

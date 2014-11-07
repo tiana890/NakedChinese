@@ -189,10 +189,14 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     NCWordCell *openCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordCellIdentifier forIndexPath:indexPath];
     
     NCWord *word = self.arrayOfWords[indexPath.item];
-    [openCell.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]]];
+    //[openCell.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]]];
+    UIImage *image = [UIImage imageNamed:word.image];
+    [openCell.pictureView setImage:image];
+    
     [openCell.chineseLabel setText:word.material.materialZH];
     [openCell.pinyinLabel setText:word.material.materialZH_TR];
     [openCell.translateLabel setText:word.material.materialRU];
+    
     /*
     NSDictionary *explanation = [self _words][indexPath.item];
     

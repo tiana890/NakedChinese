@@ -90,18 +90,6 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
     self.navigationController.navigationBarHidden = NO;
     [self.navigationItem setHidesBackButton:YES];
     
-    //удаляем приветствие из стека контроллеров
-    NSArray* tempVCA = [self.navigationController viewControllers];
-    
-    for(UIViewController *tempVC in tempVCA)
-    {
-        if([tempVC isKindOfClass:[NCGreetingViewController class]])
-        {
-            [tempVC removeFromParentViewController];
-        }
-    }
-    
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -148,6 +136,7 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
 }
 
 - (IBAction)changedPartitionAction:(UISegmentedControl *)sender {
+    [NCDataManager sharedInstance].delegate = self;
     [[NCDataManager sharedInstance] getPacks];
 }
 

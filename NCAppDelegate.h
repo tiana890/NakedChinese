@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "NCDataManager.h"
 
-@interface NCAppDelegate : UIResponder <UIApplicationDelegate, NCDataManagerProtocol>
+@interface NCAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;

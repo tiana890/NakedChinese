@@ -724,6 +724,7 @@
                             <constraint firstItem="ksw-c6-KLu" firstAttribute="top" secondItem="VoP-jD-KGX" secondAttribute="top" id="yYU-fG-31W"/>
                         </constraints>
                     </view>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <outlet property="slideImage" destination="sGK-Bk-4g7" id="aHz-c1-kFQ"/>
                         <outlet property="sliderLabel" destination="acg-50-8fA" id="paV-Qu-IJQ"/>
