@@ -21,7 +21,6 @@
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
     [self setupAnalitycs];
     [self initDB];
     BOOL ifFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"];
@@ -96,7 +95,6 @@
         }
     }
 }
-
 
 - (void)setupAnalitycs {
 }

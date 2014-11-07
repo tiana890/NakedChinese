@@ -7,9 +7,19 @@
 //
 
 #import "NCWord.h"
-
+#import "NCMaterial.h"
 
 @implementation NCWord
+
+- (instancetype)init
+{
+    self = [super init];
+    if(self)
+    {
+        self.material = [[NCMaterial alloc] init];
+    }
+    return self;
+}
 
 + (NCWord *) getNCWordFromJSON:(NSDictionary *)jsonDict
 {

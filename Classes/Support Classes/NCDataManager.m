@@ -183,7 +183,6 @@
         word.material.materialID = word.ID;
         word.paid = @0;
         word.show = @0;
-       
         [array addObject:word];
     }
     

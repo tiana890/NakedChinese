@@ -97,6 +97,9 @@
         
         NSManagedObject *newMaterial = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:appDelegate.managedObjectContext];
         
+        NSLog(@"material %i", [word.material.materialID intValue]);
+        NSLog(@"material %@", word.material.materialZH);
+        
         [newMaterial setValue:word.material.materialID forKey:@"id"];
         [newMaterial setValue:word.material.materialZH forKey:@"zh"];
         [newMaterial setValue:word.material.materialZH_TR forKey:@"zh_tr"];

@@ -55,7 +55,7 @@
     [self shareWithActivityItems:@[@"say"]];
 }
 - (IBAction)sayAction:(id)sender {
-    [self sayText:self.dictionaryWithWord[NCWordChineseKey]];
+    [self sayText:self.chineseLabel.text];
 }
 
 #pragma mark - Private
