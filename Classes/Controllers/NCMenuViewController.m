@@ -10,6 +10,7 @@
 #import "UIViewController+nc_interactionImageSetuper.h"
 #import "NCTestViewController.h"
 #import "NCGreetingViewController.h"
+#import "NCPackViewController.h"
 
 #import "NCNavigationBar.h"
 #import <FXBlurView/FXBlurView.h>
@@ -23,6 +24,7 @@ static NSString *const NCLanguageControllerSegueIdentifier  = @"toLanguageContro
 static NSString *const NCSubscribeControllerSegueIdentifier = @"toSubscribeController";
 static NSString *const NCTestControllerSegueIdentifier = @"toTestController";
 static NSString *const NCGreetingControllerSegueIdentifier = @"toGreetingController";
+static NSString *const NCFavoritesControllerSegueIdentifier = @"toFavoritesController";
 
 static NSString *const NCMenuIconKey  = @"icon";
 static NSString *const NCMenuTitleKey = @"title";
@@ -115,7 +117,7 @@ static NSString *const NCMenuTitleKey = @"title";
     } else if (indexPath.section == 1) {
         switch (indexPath.row) {
             case 0:
-                
+                [self performSegueWithIdentifier:NCFavoritesControllerSegueIdentifier sender:self];
                 break;
             case 1:
                 [self performSegueWithIdentifier:NCTestControllerSegueIdentifier sender:self];
@@ -157,6 +159,11 @@ static NSString *const NCMenuTitleKey = @"title";
     {
         NCGreetingViewController *greetingController = [segue destinationViewController];
         greetingController.openFromMenu = YES;
+    }
+    else if([segue.identifier isEqualToString:NCFavoritesControllerSegueIdentifier])
+    {
+        NCPackViewController *packController = [segue destinationViewController];
+        packController.type = NCPackControllerOfFavorite;
     }
 }
 

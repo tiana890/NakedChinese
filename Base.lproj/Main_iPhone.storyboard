@@ -848,6 +848,7 @@
                         <segue destination="hcp-aG-Qg4" kind="push" identifier="toSubscribeController" id="PKN-F2-KDY"/>
                         <segue destination="WHd-Xb-XyJ" kind="push" identifier="toTestController" id="k2M-g0-S2p"/>
                         <segue destination="mOa-nL-wUw" kind="push" identifier="toGreetingController" id="H29-pb-krf"/>
+                        <segue destination="IFt-0b-pT9" kind="push" identifier="toFavoritesController" id="Pw8-Qx-xVT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5rs-92-oeh" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1974,8 +1975,9 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="k2M-g0-S2p"/>
         <segue reference="vtP-ns-RMh"/>
-        <segue reference="Brb-eK-n9d"/>
-        <segue reference="LfK-Me-RZM"/>
+        <segue reference="H29-pb-krf"/>
+        <segue reference="Pw8-Qx-xVT"/>
     </inferredMetricsTieBreakers>
 </document>
