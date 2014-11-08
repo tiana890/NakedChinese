@@ -12,9 +12,8 @@
 
 @interface NCWordContentViewController : UIViewController
 
-@property (strong, nonatomic) NSDictionary *dictionaryWithWord;
-
 @property (strong, nonatomic) NCWord *word;
 @property (assign, nonatomic) NSInteger pageIndex;
 
+@property (nonatomic) BOOL ifFavourite;
 @end

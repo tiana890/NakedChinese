@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface NCWordLockCell : UICollectionViewCell
-
+@property (weak, nonatomic) IBOutlet UIImageView *pictureView;
 @end

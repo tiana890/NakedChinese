@@ -73,7 +73,7 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
     
     NSDictionary *object = self.arrayOfExplanations[indexPath.row - 1];
     
-    cell.chineseLabel.text = [NSString stringWithFormat:@"%d.%@",indexPath.row+1, object[NCWordChineseKey]];
+    cell.chineseLabel.text = [NSString stringWithFormat:@"%ld.%@",indexPath.row+1, object[NCWordChineseKey]];
     cell.pinyinLabel.text = object[NCWordPinyinKey];
     cell.translateLabel.text = object[NCWordTranslateKey];
 }

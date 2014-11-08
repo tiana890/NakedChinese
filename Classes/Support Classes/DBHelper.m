@@ -36,6 +36,32 @@
     return array;
 }
 
+- (NCWord *)getWordWithID:(int)wordID
+{
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    NSString *formatPredicate = [NSString stringWithFormat:@"id == %i", wordID];
+    
+    NSArray *wordArray = [self fetchRequestWithEntityName:@"Word" andFormatPredicate:formatPredicate];
+    
+    NCWord *word = [[NCWord alloc] init];
+    
+    if(wordArray.count > 0)
+    {
+        NSManagedObject *obj = wordArray[0];
+        word = [NCWord getNCWordFromNSManagedObject:obj];
+        NSString *predicate = [NSString stringWithFormat:@"id == %i", [word.ID intValue]];
+        NSArray *materialArray = [self fetchRequestWithEntityName:@"Material" andFormatPredicate:predicate];
+        if(materialArray.count > 0)
+        {
+            word.material = [NCMaterial getNCMaterialFromNSManagedObject:materialArray[0]];
+        }
+        [array addObject:word];
+    }
+
+    return word;
+}
+
 - (NSArray *)getPacks
 {
     NSMutableArray *array = [[NSMutableArray alloc] init];
@@ -97,7 +123,6 @@
         
         NSManagedObject *newMaterial = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:appDelegate.managedObjectContext];
         
-        NSLog(@"material %i", [word.material.materialID intValue]);
         NSLog(@"material %@", word.material.materialZH);
         
         [newMaterial setValue:word.material.materialID forKey:@"id"];
@@ -113,6 +138,61 @@
     //    сохраняем данные в хранилище
     [appDelegate saveContext];
 
+}
+
+- (NSArray *)getFavorites
+{
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    NSArray *favArray = [self fetchRequestWithEntityName:@"Favorite" andFormatPredicate:@""];
+    
+    for(NSManagedObject *obj in favArray)
+    {
+        NSNumber *fav = [obj valueForKey:@"id"];
+        [array addObject:fav];
+    }
+    return array;
+}
+
+- (void)setWordToFavorites:(NCWord *)word
+{
+    NCAppDelegate *appDelegate = (NCAppDelegate *)[[UIApplication sharedApplication]delegate];
+    
+    NSManagedObject *words = [NSEntityDescription insertNewObjectForEntityForName:@"Favorites"
+                                                           inManagedObjectContext:appDelegate.managedObjectContext];
+    
+    NSMutableSet *containFavorites = [words mutableSetValueForKey:@"containFavorites"];
+    
+    //проверяем есть ли такой элемент в БД
+    NSString *formatPredicate = [NSString stringWithFormat:@"id == %i", [word.ID intValue]];
+    NSArray *favoritesArray = [self fetchRequestWithEntityName:@"Favorite" andFormatPredicate:formatPredicate];
+    if(favoritesArray.count == 0)
+    {
+        NSManagedObject *newPack = [NSEntityDescription insertNewObjectForEntityForName:@"Favorite"
+                                                                 inManagedObjectContext:appDelegate.managedObjectContext];
+        [newPack setValue:word.ID forKey:@"id"];
+        [containFavorites addObject:newPack];
+        
+        //    сохраняем данные в хранилище
+        [appDelegate saveContext];
+
+    }
+    
+}
+
+- (void) deleteWordFromFavorites:(NCWord *)word
+{
+    NCAppDelegate *appDelegate = (NCAppDelegate *)[[UIApplication sharedApplication]delegate];
+    
+    //проверяем есть ли такой элемент в БД
+    NSString *formatPredicate = [NSString stringWithFormat:@"id == %i", [word.ID intValue]];
+    NSArray *favoritesArray = [self fetchRequestWithEntityName:@"Favorite" andFormatPredicate:formatPredicate];
+    if(favoritesArray.count > 0)
+    {
+        for(int i = 0; i < favoritesArray.count; i++)
+            [appDelegate.managedObjectContext deleteObject:favoritesArray[i]];
+    }
+    [appDelegate saveContext];
 }
 
 - (void)setPackToDB:(NCPack *)pack

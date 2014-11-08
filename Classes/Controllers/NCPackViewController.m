@@ -50,6 +50,7 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 @property (weak, nonatomic) IBOutlet UICollectionView *searchCollectionView;
 
 @property (nonatomic, strong) NSArray *arrayOfWords;
+@property (nonatomic, strong) NSArray *arrayOfFavorites;
 @end
 
 @implementation NCPackViewController
@@ -65,8 +66,23 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     [super viewWillAppear:animated];
     [self disableBlurView];
     
-    [NCDataManager sharedInstance].delegate = self;
-    [[NCDataManager sharedInstance] getWordsWithPackID:[self.pack.ID intValue] andMode:@"not_reachable"];
+    switch ([self type]) {
+        case NCPackControllerOfNumber:
+        {
+            [NCDataManager sharedInstance].delegate = self;
+            [[NCDataManager sharedInstance] getWordsWithPackID:[self.pack.ID intValue]];
+            break;
+        }
+        case NCPackControllerOfFavorite:
+        {
+            [NCDataManager sharedInstance].delegate = self;
+            [[NCDataManager sharedInstance] getFavorites];
+            break;
+        }
+        default:
+            break;
+    }
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -82,6 +98,11 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     [self.collectionView reloadData];
 }
 
+- (void)ncDataManagerProtocolGetFavorites:(NSArray *)arrayOfFavorites
+{
+    self.arrayOfFavorites = arrayOfFavorites;
+    [self.collectionView reloadData];
+}
 #pragma mark - IBActions
 
 - (IBAction)goBack:(id)sender {
@@ -181,33 +202,67 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     }
     return itemsCount;
     */
-    return self.arrayOfWords.count;
+    switch ([self type]) {
+        case NCPackControllerOfNumber:
+            return self.arrayOfWords.count;
+            break;
+        case NCPackControllerOfFavorite:
+            return self.arrayOfFavorites.count;
+        default:
+            break;
+    }
+    return 0;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    NCWordCell *openCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordCellIdentifier forIndexPath:indexPath];
-    
-    NCWord *word = self.arrayOfWords[indexPath.item];
-    //[openCell.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]]];
-    UIImage *image = [UIImage imageNamed:word.image];
-    [openCell.pictureView setImage:image];
-    
-    [openCell.chineseLabel setText:word.material.materialZH];
-    [openCell.pinyinLabel setText:word.material.materialZH_TR];
-    [openCell.translateLabel setText:word.material.materialRU];
-    
-    /*
-    NSDictionary *explanation = [self _words][indexPath.item];
-    
-    openCell.pictureView.image = explanation[NCWorkPictureKey];
-    openCell.chineseLabel.text = explanation[NCWordChineseKey];
-    openCell.pinyinLabel.text = explanation[NCWordPinyinKey];
-    openCell.translateLabel.text = explanation[NCWordTranslateKey];
-    */
-    
-    
-    return openCell;
+    switch ([self type]) {
+        case NCPackControllerOfNumber:
+        {
+            NCWordCell *openCell = nil;
+            
+            NCWord *word = self.arrayOfWords[indexPath.item];
+            if([word.packID isEqualToNumber:@1])
+            {
+                openCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordCellIdentifier forIndexPath:indexPath];
+                UIImage *image = [UIImage imageNamed:word.image];
+                [openCell.pictureView setImage:image];
+                [openCell.chineseLabel setText:word.material.materialZH];
+                [openCell.pinyinLabel setText:word.material.materialZH_TR];
+                [openCell.translateLabel setText:word.material.materialRU];
+                
+            }
+            else
+            {
+                openCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordLockCellIdentifier forIndexPath:indexPath];
+                [openCell.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]]];
+            }
+            
+            
+            return openCell;
+
+            break;
+        }
+            
+        case NCPackControllerOfFavorite:
+        {
+            NCWordCell *openCell = nil;
+            NCWord *word = self.arrayOfFavorites[indexPath.item];
+            if([word.packID isEqualToNumber:@1])
+            {
+                openCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordCellIdentifier forIndexPath:indexPath];
+                UIImage *image = [UIImage imageNamed:word.image];
+                [openCell.pictureView setImage:image];
+                [openCell.chineseLabel setText:word.material.materialZH];
+                [openCell.pinyinLabel setText:word.material.materialZH_TR];
+                [openCell.translateLabel setText:word.material.materialRU];
+                
+            }
+            return openCell;
+        }
+        default:
+            break;
+    }
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -253,8 +308,24 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     NCVisuallyPackViewController *packViewController = [segue destinationViewController];
     // DEV: Test data!
     //packViewController.arrayOfWords = [self _words];
-    packViewController.arrayOfWords = self.arrayOfWords;
+    
+    
     packViewController.openedWordIndex = openedWordIndex;
+    switch ([self type]) {
+        case NCPackControllerOfNumber:
+        {
+            packViewController.arrayOfWords = self.arrayOfWords;
+            break;
+        }
+        case NCPackControllerOfFavorite:
+        {
+            packViewController.arrayOfWords = self.arrayOfFavorites;
+            packViewController.ifFavorite = YES;
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 #pragma mark - Test DATA

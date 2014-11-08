@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "NCPack.h"
+#import "NCWord.h"
 @protocol DBHelperProtocol <NSObject>
 
 
@@ -17,6 +18,10 @@
 
 - (NSArray *) getWordsFromDBWithPackID:(int)packID;
 - (void) setWordsToDB:(NSArray *)wordsArray;
+- (NSArray *) getFavorites;
+- (void) setWordToFavorites:(NCWord *)word;
+- (void) deleteWordFromFavorites:(NCWord *)word;
 - (NSArray *) getPacks;
 - (void) setPackToDB:(NCPack *)pack;
+- (NCWord *)getWordWithID:(int)wordID;
 @end

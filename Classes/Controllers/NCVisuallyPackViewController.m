@@ -10,6 +10,7 @@
 
 #import "NCExplanationViewController.h"
 #import "NCWordContentViewController.h"
+#import "NCDataManager.h"
 
 #import <FXBlurView/FXBlurView.h>
 
@@ -32,6 +33,8 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
 
 @property (strong, nonatomic) FXBlurView *frontBlurView;
 
+@property (strong, nonatomic) IBOutlet UIButton *favoriteButton;
+
 @end
 
 @implementation NCVisuallyPackViewController
@@ -42,6 +45,19 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
     [super viewDidLoad];
     [self setupPageViewController];
     [self setupExplanationViewController];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if(self.ifFavorite)
+    {
+        self.favoriteButton.hidden = YES;
+    }
+    else
+    {
+        self.favoriteButton.hidden = NO;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -142,7 +158,7 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
     // Create a new view controller and pass suitable data.
     NCWordContentViewController *contentViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"wordContentViewController"];
     
-    contentViewController.dictionaryWithWord = self.arrayOfWords[index];
+    //contentViewController.dictionaryWithWord = self.arrayOfWords[index];
     contentViewController.word = self.arrayOfWords[index];
     contentViewController.pageIndex = index;
     
@@ -239,13 +255,14 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
 }
 - (IBAction)addToFavorite:(UIButton *)sender {
     sender.selected = !sender.selected;
-    NSLog(@"%@ -> %d", ( sender.selected ) ? @"Like" : @"Dislike", self.openedWordIndex );
+    NSLog(@"%@ -> %ld", ( sender.selected ) ? @"Like" : @"Dislike", (long)self.openedWordIndex );
     
     NSNumber *index = @(self.openedWordIndex);
     BOOL hasWord = [self.userIndexesFavoriteWords containsObject:index];
     if (sender.selected) {
         if (!hasWord) {
             [self.userIndexesFavoriteWords addObject:index];
+            [[NCDataManager sharedInstance] setWordToFavorites:self.arrayOfWords[[index intValue]]];
         }
     } else {
         if (hasWord) {

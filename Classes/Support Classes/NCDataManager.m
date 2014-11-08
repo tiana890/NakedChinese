@@ -89,20 +89,33 @@
 
 #pragma mark commonMethods
 
-- (void) getWordsWithPackID:(int)packID andMode:(NSString *) mode
+- (void) getWordsWithPackID:(int)packID
 {
-    if([mode isEqualToString:ONLINE_MODE])
+    //проверяем, есть ли этот пакет в БД
+    NSArray *wordsArray = [[NCDataManager sharedInstance].dbHelper getWordsFromDBWithPackID:packID];
+    
+    if([self.internetMode isEqualToString:ONLINE_MODE])
     {
-        Requester *requester = [[Requester alloc] init];
-        requester.delegate = self;
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-        [dict setObject:[NSNumber numberWithInt:packID] forKey:@"pack_id"];
-        [requester requestPath:@"word" withParameters:dict isPOST:NO delegate:@selector(getWordsWithPackIDResponse:)];
+        //если такого пакета нет в БД то ищем на сервере
+        if(wordsArray.count == 0)
+        {
+            Requester *requester = [[Requester alloc] init];
+            requester.delegate = self;
+            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+            [dict setObject:[NSNumber numberWithInt:packID] forKey:@"pack_id"];
+            [requester requestPath:@"word" withParameters:dict isPOST:NO delegate:@selector(getWordsWithPackIDResponse:)];
+        }
+        else
+        {
+            if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetWordsWithPackID:)])
+            {
+                [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetWordsWithPackID:wordsArray];
+            }
+        }
     }
-    else if ([mode isEqualToString:OFFLINE_MODE])
+    else if ([self.internetMode isEqualToString:OFFLINE_MODE])
     {
-        //берем из БД
-        NSArray *wordsArray = [[NCDataManager sharedInstance].dbHelper getWordsFromDBWithPackID:packID];
+        
         if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetWordsWithPackID:)])
         {
             [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetWordsWithPackID:wordsArray];
@@ -118,8 +131,24 @@
     {
         [wordArray addObject:[NCWord getNCWordFromJSON:dict]];
     }
+    /*
+    //проверяем, есть ли этот пакет в БД
+    NSArray *wordsArray = [[NSArray alloc] init];
     
-    [[NCDataManager sharedInstance].dbHelper setWordsToDB:wordArray];
+    if(wordArray.count > 0)
+    {
+        NCWord *word = wordArray[0];
+        wordsArray = [[NCDataManager sharedInstance].dbHelper getWordsFromDBWithPackID:[word.packID intValue]];
+    }
+    if(wordsArray.count > 0)
+    {
+        [[NCDataManager sharedInstance].dbHelper setWordsToDB:wordArray];
+    }
+     */
+    if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetWordsWithPackID:)])
+    {
+        [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetWordsWithPackID:wordArray];
+    }
 }
 
 - (void) getPacks
@@ -149,11 +178,22 @@
     {
         [packArray addObject:[NCPack getNCPackFromJson:dict]];
     }
-    //добавляем бесплатный пакет
-    NCPack *pack = [[NCPack alloc] init];
-    pack.partition = @"sex";
-    pack.ID = @1;
-    [packArray addObject:pack];
+    //берем из БД неповторяющиеся пакеты
+    NSArray *packsArray = [[NCDataManager sharedInstance].dbHelper getPacks];
+    for(NCPack *pack in packsArray)
+    {
+        BOOL packIsInPackArray = NO;
+        for(NCPack *p in packArray)
+        {
+            if([p.ID isEqualToNumber:pack.ID])
+            {
+                packIsInPackArray = YES;
+                break;
+            }
+        }
+        if(!packIsInPackArray)
+            [packArray insertObject:pack atIndex:0];
+    }
     
     if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetPacks:)])
     {
@@ -162,6 +202,28 @@
     
 }
 
+- (void)setWordToFavorites:(NCWord *)word
+{
+    [self.dbHelper setWordToFavorites:word];
+}
+
+- (void)getFavorites
+{
+    NSArray *favourites = [self.dbHelper getFavorites];
+    NSMutableArray *favWords = [[NSMutableArray alloc] init];
+    for(NSNumber *number in favourites)
+    {
+        NCWord *word = [self.dbHelper getWordWithID:[number intValue]];
+        if(word)
+        {
+            [favWords addObject:word];
+        }
+    }
+    if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetFavorites:)])
+    {
+        [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetFavorites:favWords];
+    }
+}
 
 - (NSArray *) words
 {

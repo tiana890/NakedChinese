@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *chineseLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pinyinLabel;
 @property (weak, nonatomic) IBOutlet UILabel *translationLabel;
+
 @end
 
 @implementation NCWordContentViewController
@@ -29,12 +30,31 @@
 {
     [super viewDidLoad];
 
-    //[self.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, self.word.image]]];
+    if([self.word.ID isEqualToNumber:@1])
+    {
+        [self.pictureView setImage:[UIImage imageNamed:self.word.image]];
+    }
+    else
+    {
+        [self.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, self.word.image]]];
+    }
     self.chineseLabel.text = self.word.material.materialZH;
     self.pinyinLabel.text = self.word.material.materialZH_TR;
     self.translationLabel.text = self.word.material.materialRU;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if(self.ifFavourite)
+    {
+        
+    }
+    else
+    {
+        
+    }
+}
 #pragma mark - Custom Accessors
 
 - (AVSpeechSynthesizer *)synthesizer {

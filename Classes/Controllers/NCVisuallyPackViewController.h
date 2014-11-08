@@ -12,4 +12,5 @@
 
 @property (strong, nonatomic) NSArray *arrayOfWords;
 @property (assign, nonatomic) NSInteger openedWordIndex;
+@property (nonatomic) BOOL ifFavorite;
 @end

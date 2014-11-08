@@ -144,13 +144,15 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
 #pragma mark - NCDataManagerProtocol methods
 - (void)ncDataManagerProtocolGetPacks:(NSArray *)arrayOfPacks
 {
+    self.numbersAndPacks = nil;
     self.packsArray = arrayOfPacks;
+    int count0 = 0;
+    int count1 = 0;
+    int count2 = 0;
     for(int i = 0; i < self.packsArray.count; i++)
     {
         NCPack *pack = self.packsArray[i];
-        int count0 = 0;
-        int count1 = 0;
-        int count2 = 0;
+        
         if([pack.partition isEqualToString:self.currentPartition[0]])
         {
             [self.numbersAndPacks[0] setObject:[NSNumber numberWithInt:i] forKey:[NSNumber numberWithInt: count0]];
@@ -284,9 +286,8 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
 
 #pragma mark - UICollectionViewDelegate
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"Select %ld row", (long)indexPath.row);
-    
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
     [self performSegueWithIdentifier:NCPackControllerSegueIdentifier sender:@{ NCPackControllerTypeKey: @(NCPackControllerOfNumber), NCPackControllerNumberKey: @(indexPath.row+1)}];
 }
 
@@ -351,12 +352,14 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
         NCPackViewController *destinationViewController = [segue destinationViewController];
         NCPackControllerType type = [sender[NCPackControllerTypeKey] unsignedIntegerValue];
         
-        if (type == NCPackControllerOfNumber) {
+        //if (type == NCPackControllerOfNumber) {
             destinationViewController.packNumber = [sender[NCPackControllerNumberKey] unsignedIntegerValue];
-        }
+        //}
+        
         destinationViewController.type = type;
         
         NSNumber *key = [NSNumber numberWithInteger:destinationViewController.packNumber-1];
+        NSLog(@"part %li key %i", (long)self.partitionSegmentedControl.selectedSegmentIndex, [key intValue]);
         NSNumber *index = [self.numbersAndPacks[self.partitionSegmentedControl.selectedSegmentIndex] objectForKey:key];
         NCPack *pack = self.packsArray[[index integerValue]];
         destinationViewController.pack = pack;

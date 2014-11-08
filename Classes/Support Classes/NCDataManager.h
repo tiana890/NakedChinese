@@ -8,13 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "Requester.h"
-
+#import "NCWord.h"
 
 
 @protocol NCDataManagerProtocol <NSObject>
-
+@optional
 - (void) ncDataManagerProtocolGetWordsWithPackID:(NSArray *)arrayOfWords;
 - (void) ncDataManagerProtocolGetPacks:(NSArray *)arrayOfPacks;
+- (void) ncDataManagerProtocolGetFavorites:(NSArray *)arrayOfFavorites;
 
 @end
 
@@ -24,11 +25,10 @@
 +(NCDataManager*) sharedInstance;
 
 - (void) getWordsWithPackID:(int)packID;
-- (void) getWordsWithPackID:(int)packID andMode:(NSString *) mode;
-
+- (void) getFavorites;
 - (void) getPacks;
-
-- (void) firstDBInitialization;
+- (void) setWordToFavorites:(NCWord *)word;
+- (void)firstDBInitialization;
 
 @property (nonatomic, weak) id<NCDataManagerProtocol> delegate;
 

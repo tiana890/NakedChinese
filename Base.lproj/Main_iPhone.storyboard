@@ -126,7 +126,7 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="dynamic" value="NO"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hJi-TZ-rGa" customClass="NCToolbar">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hJi-TZ-rGa" customClass="NCToolbar">
                                 <rect key="frame" x="0.0" y="64" width="320" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="mlL-XE-Ipj"/>
@@ -445,6 +445,9 @@
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </view>
                                                 <size key="customSize" width="138" height="138"/>
+                                                <connections>
+                                                    <outlet property="pictureView" destination="LUJ-8u-oPH" id="NmK-FT-l0K"/>
+                                                </connections>
                                             </collectionViewCell>
                                         </cells>
                                         <connections>
@@ -573,6 +576,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="addFavoriteButton" destination="uFx-tl-T5a" id="asR-UC-y4c"/>
+                        <outlet property="favoriteButton" destination="uFx-tl-T5a" id="MVL-bH-Gx1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hO4-N7-qET" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1639,10 +1643,10 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="13C-I6-VF9">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="13C-I6-VF9">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="OzW-Da-opq">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="OzW-Da-opq">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="Kh6-ya-d9h">
@@ -1830,10 +1834,10 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fng-xX-oW3" userLabel="textLabel">
-                                                    <rect key="frame" x="47" y="40" width="232" height="478"/>
+                                                    <rect key="frame" x="17" y="8" width="287" height="552"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="478" id="clW-hQ-2bF"/>
-                                                        <constraint firstAttribute="width" constant="232" id="mQ2-kC-IkE"/>
+                                                        <constraint firstAttribute="height" constant="552" id="clW-hQ-2bF"/>
+                                                        <constraint firstAttribute="width" constant="287" id="mQ2-kC-IkE"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="20"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -1850,8 +1854,8 @@
                                         </view>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="Fng-xX-oW3" firstAttribute="top" secondItem="rfE-Zz-Vep" secondAttribute="topMargin" constant="32" id="Vdv-GA-gYj"/>
-                                            <constraint firstItem="Fng-xX-oW3" firstAttribute="leading" secondItem="rfE-Zz-Vep" secondAttribute="leadingMargin" constant="39" id="ef7-gk-Tnn"/>
+                                            <constraint firstItem="Fng-xX-oW3" firstAttribute="top" secondItem="rfE-Zz-Vep" secondAttribute="topMargin" id="Vdv-GA-gYj"/>
+                                            <constraint firstItem="Fng-xX-oW3" firstAttribute="leading" secondItem="rfE-Zz-Vep" secondAttribute="leadingMargin" constant="9" id="ef7-gk-Tnn"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="textLabel" destination="Fng-xX-oW3" id="JYU-EF-X3i"/>
