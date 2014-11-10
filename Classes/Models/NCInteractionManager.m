@@ -19,9 +19,18 @@ static NSString *const kRU_MaleFolder   = @"male_ru";
 @interface NCInteractionManager () <AVAudioPlayerDelegate>
 @property (strong, nonatomic) AVAudioPlayer *player;
 @property (weak, nonatomic) AVAudioSession *session;
+@property (nonatomic, strong) NSNumber *soundIndex;
 @end
 
 @implementation NCInteractionManager
+
+#pragma mark - getters and setters
+- (NSNumber *)soundIndex
+{
+    if(!_soundIndex) return @0;
+    else
+        return _soundIndex;
+}
 
 #pragma mark - Lifecycle
 
@@ -108,9 +117,18 @@ static NSString *const kRU_MaleFolder   = @"male_ru";
         return;
     }
     
-    NSUInteger soundIndex = arc4random()%[sounds count];
-    NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/sounds/%@/%@", [[NSBundle mainBundle] resourcePath], directory, sounds[soundIndex]]];
-    
+    //NSUInteger soundIndex = arc4random()%[sounds count];
+    NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/sounds/%@/%@", [[NSBundle mainBundle] resourcePath], directory, sounds[[self.soundIndex intValue]]]];
+    if([self.soundIndex intValue] != sounds.count-1)
+    {
+        int value = [self.soundIndex intValue];
+        value++;
+        self.soundIndex = [NSNumber numberWithInt:value];
+    }
+    else
+    {
+        self.soundIndex = @0;
+    }
     [self playSongAtURL:url];
 }
 
