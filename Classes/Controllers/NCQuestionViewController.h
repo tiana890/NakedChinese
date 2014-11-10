@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface NCQuestionViewController : UIViewController
-
+@property (nonatomic, strong) NSArray *packsArray;
 @end

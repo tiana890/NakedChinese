@@ -19,6 +19,10 @@
 
 #import <UIAlertView+Blocks/UIAlertView+Blocks.h>
 
+#import "NCPack.h"
+#import "NCWord.h"
+#import "NCDataManager.h"
+
 @import AVFoundation;
 
 #pragma mark Cells Identifiers
@@ -30,7 +34,7 @@ const CGFloat NCTestWordCellHeight = 104.f;
 const CGFloat NCTestTranslationWordCellHeight = 55.f;
 
 
-@interface NCQuestionViewController () <UITableViewDataSource, UITableViewDelegate, AVSpeechSynthesizerDelegate>
+@interface NCQuestionViewController () <UITableViewDataSource, UITableViewDelegate, AVSpeechSynthesizerDelegate, NCDataManagerProtocol>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet FXBlurView *backgroundBlurView;
@@ -39,9 +43,20 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 
 @property (strong, nonatomic) AVSpeechSynthesizer *synthesizer;
 
+@property (nonatomic, strong) NSArray *wordsArray;
+@property (nonatomic, strong) NSNumber *currentWord;
 @end
 
 @implementation NCQuestionViewController
+
+#pragma mark getters and setters
+- (NSNumber *)currentWord
+{
+    if(!_currentWord)
+        return [[NSNumber alloc]initWithInt:0];
+    else
+        return _currentWord;
+}
 
 #pragma mark - Lifecycle
 
@@ -55,14 +70,52 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    NSMutableArray *idsArray = [[NSMutableArray alloc] init];
+    for(NCPack *pack in self.packsArray)
+    {
+        [idsArray addObject:pack.ID];
+    }
+    [NCDataManager sharedInstance].delegate = self;
+    [[NCDataManager sharedInstance] getLocalWordsWithPackIDs:idsArray];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
     [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
+
+#pragma mark Data Manager methods
+- (void)ncDataManagerProtocolGetLocalWordsWithPackIDs:(NSArray *)arrayOfWords
+{
+    
+    if(arrayOfWords.count >= 20)
+    {
+        NSMutableArray *array = [[NSMutableArray alloc] init];
+        for(int i = 0; i < 20; i++)
+        {
+            [array addObject:arrayOfWords];
+        }
+        self.wordsArray = array;
+    }
+    else
+    {
+        self.wordsArray = [self shuffleArray:arrayOfWords];
+    }
+    
+}
+
+- (NSArray*)shuffleArray:(NSArray*)array {
+    
+    NSMutableArray *temp = [[NSMutableArray alloc] initWithArray:array];
+    
+    for(NSUInteger i = [array count]; i > 1; i--) {
+        NSUInteger j = arc4random_uniform(i);
+        [temp exchangeObjectAtIndex:i-1 withObjectAtIndex:j];
+    }
+    
+    return [NSArray arrayWithArray:temp];
 }
 
 #pragma mark - Custom Accessors
@@ -75,11 +128,11 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
     return _synthesizer;
 }
 
-#warning TEST_DATA
+/*#warning TEST_DATA
 - (NSDictionary *)testWord {
     return @{NCWordChineseKey: @"現在，前橄欖球隊",
              NCWordPinyinKey : @"Zhè bùzhǐ"};
-}
+}*/
 
 #pragma mark - IBActions
 
@@ -97,7 +150,7 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 }
 
 - (IBAction)soundWordAction:(id)sender {
-    [self sayText:self.testWord[NCWordChineseKey]];
+    [self sayText:((NCWord*)self.wordsArray[[self.currentWord intValue]]).material.materialZH];
 }
 
 #pragma mark - Private
@@ -109,7 +162,6 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 }
 
 - (void)parseAnswer {
-    
     static BOOL toggle = NO;
     BOOL correctlyAnswer = toggle;
     toggle = !toggle;
@@ -117,7 +169,7 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
     UIImage *const correctImage = [UIImage imageNamed:@"nc_correct_answer"];
     UIImage *const wrongImage = [UIImage imageNamed:@"nc_wrong_answer"];
     self.answerIndicatorView.image = correctlyAnswer ? correctImage : wrongImage;
-    //[self answerAnimation];
+    [self answerAnimation];
     
 }
 
@@ -125,7 +177,13 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
     [self hideUIItems:YES completion:^{
         [self hideAnswerIndicator:NO completion:^{
             [self hideAnswerIndicator:YES completion:^{
-                [self hideUIItems:NO completion:nil];
+                [self hideUIItems:NO completion:^{
+                    int value = [self.currentWord intValue];
+                    value++;
+                    if(value < self.wordsArray.count)
+                        self.currentWord = [NSNumber numberWithInt:value];
+                    [self.tableView reloadData];
+                }];
             }];
         }];
     }];
@@ -191,12 +249,16 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger index = [indexPath row];
     
+    NCWord *word = self.wordsArray[[self.currentWord intValue]];
+    
     UITableViewCell *cell = nil;
     if (index == 0) {
         NCTestWordCell *wordCell = [tableView dequeueReusableCellWithIdentifier:NCTestWordCellIdentifier forIndexPath:indexPath];
         
-        wordCell.chineseLabel.text = self.testWord[NCWordChineseKey];
-        wordCell.pinyinLabel.text = self.testWord[NCWordPinyinKey];
+        //wordCell.chineseLabel.text = self.testWord[NCWordChineseKey];
+        //wordCell.pinyinLabel.text = self.testWord[NCWordPinyinKey];
+        wordCell.chineseLabel.text = word.material.materialZH;
+        wordCell.pinyinLabel.text = word.material.materialZH_TR;
         wordCell.userInteractionEnabled = NO;
         
         [wordCell layoutIfNeeded];
@@ -209,10 +271,10 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
         
         if (index != 5) {
             index -= 1;
-            wordCell.translationLabel.text = @"Вагина";
+            wordCell.translationLabel.text = [NSString stringWithFormat:@"Вагина %li", (long)indexPath.row];
             wordCell.userInteractionEnabled = YES;
         } else {
-            wordCell.translationLabel.text = @"1/20";
+            wordCell.translationLabel.text = [NSString stringWithFormat:@"%i/%lu", [self.currentWord intValue]+1, (unsigned long)self.wordsArray.count];
             wordCell.userInteractionEnabled = NO;
         }
         

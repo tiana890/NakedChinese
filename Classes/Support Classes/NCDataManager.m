@@ -170,6 +170,29 @@
     }
 }
 
+- (void) getLocalPacks
+{
+    NSArray *packsArray = [self.dbHelper getPacks];
+    if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetLocalPacks:)])
+    {
+        [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetLocalPacks:packsArray];
+    }
+}
+
+- (void) getLocalWordsWithPackIDs:(NSArray *)idsArray
+{
+    NSMutableArray *arrayOfWords = [[NSMutableArray alloc] init];
+    for(int i = 0; i < idsArray.count; i++)
+    {
+        NSArray *array = [self.dbHelper getWordsFromDBWithPackID:[(NSNumber *)idsArray[i] intValue]];
+        [arrayOfWords addObjectsFromArray:array];
+    }
+    if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetLocalWordsWithPackIDs:)])
+    {
+        [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetLocalWordsWithPackIDs:arrayOfWords];
+    }
+}
+
 - (void) getPacksResponse:(NSDictionary *) jsonDict
 {
     NSArray *array = (NSArray *)jsonDict;

@@ -12,15 +12,24 @@
 #import <FXBlurView/FXBlurView.h>
 #import "NCNavigationBar.h"
 #import "NCPackCell.h"
+#import "NCDataManager.h"
+#import "NCPack.h"
+#import "NCQuestionViewController.h"
 
-@interface NCTestViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface NCTestViewController () <UICollectionViewDataSource, UICollectionViewDelegate, NCDataManagerProtocol>
 @property (weak, nonatomic) IBOutlet UICollectionView *sexCollectionView;
 @property (weak, nonatomic) IBOutlet UICollectionView *invectiveCollectionView;
 @property (weak, nonatomic) IBOutlet UICollectionView *slangCollectionView;
 
+@property (nonatomic, strong) NSArray *numbersAndPacks;
+@property (nonatomic, strong) NSArray *packsArray;
 @property (strong, nonatomic) NSMutableIndexSet *sexIndexes;
 @property (strong, nonatomic) NSMutableIndexSet *invectiveIndexes;
 @property (strong, nonatomic) NSMutableIndexSet *slangIndexes;
+
+@property (strong, nonatomic) NSMutableArray *sexArray;
+@property (strong, nonatomic) NSMutableArray *invectiveArray;
+@property (strong, nonatomic) NSMutableArray *slangArray;
 
 @end
 
@@ -33,9 +42,49 @@
     [self setupBackgroundImage];
     [self updateNavigationItemsIfNeeded];
     
+    self.sexArray = [[NSMutableArray alloc] init];
+    self.invectiveArray = [[NSMutableArray alloc] init];
+    self.slangArray = [[NSMutableArray alloc] init];
+    
     [self initializeIndexes];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [NCDataManager sharedInstance].delegate = self;
+    [[NCDataManager sharedInstance] getLocalPacks];
+    
+}
+
+- (void)ncDataManagerProtocolGetLocalPacks:(NSArray *)arrayOfPacks
+{
+    self.packsArray = arrayOfPacks;
+    
+    [self.sexArray removeAllObjects];
+    [self.slangArray removeAllObjects];
+    [self.invectiveArray removeAllObjects];
+    
+    for(NCPack *pack in arrayOfPacks)
+    {
+        if([pack.partition isEqualToString:@"sex"])
+        {
+            [self.sexArray addObject:pack];
+        }
+        else if([pack.partition isEqualToString:@"swear"])
+        {
+            [self.invectiveArray addObject:pack];
+        }
+        if([pack.partition isEqualToString:@"slang"])
+        {
+            [self.slangArray addObject:pack];
+        }
+    }
+    
+    [self.sexCollectionView reloadData];
+    [self.invectiveCollectionView reloadData];
+    [self.slangCollectionView reloadData];
+}
 
 #pragma mark - IBActions
 
@@ -69,15 +118,18 @@
 #pragma mark - <UICollectionViewDataSource>
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSInteger numberOfItems = 0;
-    if (collectionView == [self sexCollectionView]) {
-        numberOfItems = 3;
-    } else if (collectionView == [self invectiveCollectionView]) {
-        numberOfItems = 5;
-    } else if (collectionView == [self slangCollectionView]) {
-        numberOfItems = 7;
+    if (collectionView == [self sexCollectionView])
+    {
+        return self.sexArray.count;
     }
-    return numberOfItems;
+    else if (collectionView == [self invectiveCollectionView])
+    {
+        return self.invectiveArray.count;
+    } else if (collectionView == [self slangCollectionView])
+    {
+        return self.slangArray.count;
+    }
+    return 0;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -96,8 +148,7 @@
     } else if (collectionView == [self slangCollectionView]) {
         currentIndexes = [self slangIndexes];
     }
-    
-    
+
     packCell.packView.fill = [currentIndexes containsIndex:indexPath.row];
     packCell.packView.packNumber = indexPath.row+1;
     
@@ -131,10 +182,28 @@
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
-//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-//{
-//    
-//}
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSMutableArray *passPacksArray = [[NSMutableArray alloc] init];
+    
+    for(int i = 0; i < self.sexIndexes.count; i++)
+    {
+        [passPacksArray addObjectsFromArray:[self.sexArray objectsAtIndexes:self.sexIndexes]];
+    }
+    
+    for(int i = 0; i < self.invectiveIndexes.count; i++)
+    {
+        [passPacksArray addObjectsFromArray:[self.invectiveArray objectsAtIndexes:self.invectiveIndexes]];
+    }
+    
+    for(int i = 0; i < self.slangIndexes.count; i++)
+    {
+        [passPacksArray addObjectsFromArray:[self.slangArray objectsAtIndexes:self.slangIndexes]];
+    }
+    
+    NCQuestionViewController *qc = [segue destinationViewController];
+    qc.packsArray = passPacksArray;
+}
 
 
 @end

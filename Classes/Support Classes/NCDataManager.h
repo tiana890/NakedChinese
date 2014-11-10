@@ -15,7 +15,9 @@
 @optional
 - (void) ncDataManagerProtocolGetWordsWithPackID:(NSArray *)arrayOfWords;
 - (void) ncDataManagerProtocolGetPacks:(NSArray *)arrayOfPacks;
+- (void) ncDataManagerProtocolGetLocalPacks:(NSArray *)arrayOfPacks;
 - (void) ncDataManagerProtocolGetFavorites:(NSArray *)arrayOfFavorites;
+- (void) ncDataManagerProtocolGetLocalWordsWithPackIDs:(NSArray *)arrayOfWords;
 
 @end
 
@@ -27,8 +29,10 @@
 - (void) getWordsWithPackID:(int)packID;
 - (void) getFavorites;
 - (void) getPacks;
+- (void) getLocalPacks;
+- (void) getLocalWordsWithPackIDs:(NSArray *)idsArray;
 - (void) setWordToFavorites:(NCWord *)word;
-- (void)firstDBInitialization;
+- (void) firstDBInitialization;
 
 @property (nonatomic, weak) id<NCDataManagerProtocol> delegate;
 
