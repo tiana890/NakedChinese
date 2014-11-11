@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <FXBlurView/FXBlurView.h>
 
 @interface NCWordLockCell : UICollectionViewCell
-@property (weak, nonatomic) IBOutlet UIImageView *pictureView;
+@property (strong, nonatomic) IBOutlet UIImageView *pictureView;
+@property (strong, nonatomic) IBOutlet FXBlurView *blurView;
 @end

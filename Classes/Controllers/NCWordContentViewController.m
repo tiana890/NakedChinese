@@ -30,7 +30,7 @@
 {
     [super viewDidLoad];
 
-    if([self.word.ID isEqualToNumber:@1])
+    if([self.word.packID isEqualToNumber:@1])
     {
         [self.pictureView setImage:[UIImage imageNamed:self.word.image]];
     }

@@ -230,17 +230,17 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
                 [openCell.chineseLabel setText:word.material.materialZH];
                 [openCell.pinyinLabel setText:word.material.materialZH_TR];
                 [openCell.translateLabel setText:word.material.materialRU];
-                
+                return openCell;
             }
             else
             {
-                openCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordLockCellIdentifier forIndexPath:indexPath];
-                [openCell.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]]];
+                NCWordLockCell *lockCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordLockCellIdentifier forIndexPath:indexPath];
+                NSLog(@"url = %@", [NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]);
+                [lockCell.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]]];
+                lockCell.blurView.blurEnabled = YES;
+                lockCell.blurView.blurRadius = 10;
+                return lockCell;
             }
-            
-            
-            return openCell;
-
             break;
         }
             
@@ -306,9 +306,6 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     NSInteger openedWordIndex = [sender[NCPackControllerWordIndexKey] integerValue];
     NCVisuallyPackViewController *packViewController = [segue destinationViewController];
-    // DEV: Test data!
-    //packViewController.arrayOfWords = [self _words];
-    
     
     packViewController.openedWordIndex = openedWordIndex;
     switch ([self type]) {
