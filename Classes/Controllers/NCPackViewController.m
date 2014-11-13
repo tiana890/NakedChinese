@@ -235,10 +235,24 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
             else
             {
                 NCWordLockCell *lockCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordLockCellIdentifier forIndexPath:indexPath];
+               
                 NSLog(@"url = %@", [NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]);
-                [lockCell.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]]];
-                lockCell.blurView.blurEnabled = YES;
-                lockCell.blurView.blurRadius = 10;
+                NSURLRequest *request = [NSURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]]];
+                UIImageView *imageView = [[UIImageView alloc] init];
+                [imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        //your main thread task here
+                        [lockCell.pictureView setImage:image];
+                        
+                        lockCell.blurView.blurEnabled = YES;
+                        lockCell.blurView.blurRadius = 10;
+                    });
+                   
+                } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                    
+                }];
+                
+                
                 return lockCell;
             }
             break;
@@ -264,6 +278,7 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
             break;
     }
 }
+
 
 #pragma mark - UICollectionViewDelegate
 
