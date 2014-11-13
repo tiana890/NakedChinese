@@ -281,6 +281,7 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
     packCell.packView.packNumber = indexPath.row+1;
 //  packCell.packNumber = indexPath.row+1;
     
+    NSLog(@"row %li frame %@", (long)indexPath.row, NSStringFromCGRect(packCell.frame));
     return packCell;
 }
 
