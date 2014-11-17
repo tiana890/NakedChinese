@@ -11,6 +11,7 @@
 
 @interface NCGreetingViewController ()
 @property (strong, nonatomic) IBOutlet GreetingView *greetingView;
+@property (strong, nonatomic) IBOutlet UIButton *nextButton;
 @property (strong, nonatomic) UIColor *tintColor;
 @end
 
@@ -21,12 +22,21 @@
     
     // Do any additional setup after loading the view.
     [self.greetingView setBackgroundImage:@"greet_background"];
+    
+    for(int i = 0; i < 5; i++)
+    {
+        
+        NSString *upString =[NSString stringWithFormat:@"greet_%i_up", i+1];
+        NSString *bottomString = [NSString stringWithFormat:@"greet_%i_bottom", i+1];
+        [self.greetingView addItemWithUpperText:NSLocalizedString(upString, nil) andBottomText:NSLocalizedString(bottomString, nil) andImage:[NSString stringWithFormat:@"greet_photo%i", i+1]];
+    }
+        /*
     [self.greetingView addItemWithUpperText:@"НЕВАЖНО КАК ДОЛГО ТЫ УЧИШЬ" andBottomText:@"КИТАЙСКИЙ ЯЗЫК" andImage:@"greet_photo1"];
     [self.greetingView addItemWithUpperText:@"НО ПРИЕХАВ В КИТАЙ, ТЫ СТОЛКНЁШЬСЯ" andBottomText:@"С НАСТОЯЩИМ КИТАЙСКИМ ЯЗЫКОМ" andImage:@"greet_photo2"];
     [self.greetingView addItemWithUpperText:@"МЫ ДАДИМ ТЕБЕ САМОЕ СИЛЬНОЕ ОРУЖИЕ -" andBottomText:@"ЗНАНИЕ!" andImage:@"greet_photo3"];
     [self.greetingView addItemWithUpperText:@"ЭТОМУ НЕ УЧАТ В ИНСТИТУТЕ" andBottomText:@"ОБ ЭТОМ НЕ ПИШУТ В УЧЕБНИКАХ" andImage:@"greet_photo4"];
     [self.greetingView addItemWithUpperText:@"МЫ ОБНАЖИМ ВЕСЬ КИТАЙСКИЙ ЯЗЫК" andBottomText:@"ДЛЯ ТЕБЯ!" andImage:@"greet_photo5"];
-    
+    */
     if(!self.openFromMenu)
     {
         self.navigationController.navigationBarHidden = YES;
@@ -68,5 +78,9 @@
     // Pass the selected object to the new view controller.
 }
 */
+- (IBAction)nextButtonPressed:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 @end
