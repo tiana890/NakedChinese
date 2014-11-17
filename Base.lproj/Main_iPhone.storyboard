@@ -135,9 +135,9 @@
                                             <rect key="frame" x="20" y="7" width="280" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <segments>
-                                                <segment title="Секс"/>
-                                                <segment title="Ругательства"/>
-                                                <segment title="Сленг"/>
+                                                <segment title="Sex"/>
+                                                <segment title="Swear"/>
+                                                <segment title="Slang"/>
                                             </segments>
                                             <connections>
                                                 <action selector="changedPartitionAction:" destination="vXZ-lx-hvc" eventType="valueChanged" id="Hf2-PZ-z7L"/>

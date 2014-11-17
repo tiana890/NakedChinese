@@ -32,6 +32,7 @@
         [self initDB];
     }
     
+    NSLog(@"%@", NSLocalizedString(@"lang", @""));
     return YES;
 }
 
