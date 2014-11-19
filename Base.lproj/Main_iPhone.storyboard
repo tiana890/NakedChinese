@@ -123,7 +123,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hJi-TZ-rGa" customClass="NCToolbar">
-                                <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="mlL-XE-Ipj"/>
                                     <constraint firstAttribute="width" constant="320" id="tIK-5h-81J"/>
@@ -159,10 +159,10 @@
                                     <constraint firstAttribute="width" constant="320" id="rhX-Q2-f87"/>
                                 </constraints>
                                 <items>
-                                    <tabBarItem title="О программе" image="nc_lamp.png" id="sf5-tM-21I"/>
-                                    <tabBarItem title="Избранное" image="nc_heart.png" id="BnO-OJ-hq9"/>
-                                    <tabBarItem title="Тест" image="nc_exam.png" id="PKl-rQ-N9J"/>
-                                    <tabBarItem title="Меню" image="nc_menu.png" id="BLA-dr-a7m"/>
+                                    <tabBarItem title="About" image="nc_lamp.png" id="sf5-tM-21I"/>
+                                    <tabBarItem title="Favourites" image="nc_heart.png" id="BnO-OJ-hq9"/>
+                                    <tabBarItem title="Test" image="nc_exam.png" id="PKl-rQ-N9J"/>
+                                    <tabBarItem title="Menu" image="nc_menu.png" id="BLA-dr-a7m"/>
                                 </items>
                                 <connections>
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="QTt-cb-rUP"/>
@@ -271,7 +271,7 @@
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="привет!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g02-zg-WnT" customClass="THLabel">
                                                     <rect key="frame" x="0.0" y="111" width="138" height="23"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="19"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                     <size key="shadowOffset" width="0.0" height="0.0"/>
@@ -350,6 +350,19 @@
                             <view hidden="YES" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zcJ-ok-K0q" userLabel="Search Blur View" customClass="FXBlurView">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
+                                    <searchBar contentMode="redraw" searchBarStyle="minimal" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rX7-rZ-Iv2">
+                                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="320" id="GEH-v4-Dqe"/>
+                                            <constraint firstAttribute="height" constant="44" id="tjU-Fp-fga"/>
+                                        </constraints>
+                                        <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="barTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="IFt-0b-pT9" id="dwK-2A-Opy"/>
+                                        </connections>
+                                    </searchBar>
                                     <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="hL5-WI-71C">
                                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -452,19 +465,6 @@
                                             <outlet property="delegate" destination="IFt-0b-pT9" id="zSL-ye-CyU"/>
                                         </connections>
                                     </collectionView>
-                                    <searchBar contentMode="redraw" searchBarStyle="minimal" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rX7-rZ-Iv2">
-                                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="320" id="GEH-v4-Dqe"/>
-                                            <constraint firstAttribute="height" constant="44" id="tjU-Fp-fga"/>
-                                        </constraints>
-                                        <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                        <color key="barTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                        <connections>
-                                            <outlet property="delegate" destination="IFt-0b-pT9" id="dwK-2A-Opy"/>
-                                        </connections>
-                                    </searchBar>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
@@ -691,19 +691,22 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ksw-c6-KLu">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sGK-Bk-4g7">
-                                        <rect key="frame" x="130" y="6" width="60" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sGK-Bk-4g7">
+                                        <rect key="frame" x="135" y="20" width="40" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="Muz-Wx-23e"/>
+                                            <constraint firstAttribute="width" constant="40" id="uTW-1z-idv"/>
+                                        </constraints>
                                         <state key="normal" image="nc_swipeUp">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="потяни вверх" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="acg-50-8fA">
-                                        <rect key="frame" x="0.0" y="32" width="320" height="21"/>
+                                        <rect key="frame" x="0.0" y="35" width="320" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="17"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view alpha="0.10000000000000001" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PfB-DZ-nNj">
-                                        <rect key="frame" x="0.0" y="59" width="320" height="1"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
                                 </subviews>
@@ -711,6 +714,8 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="320" id="bFY-MO-ts2"/>
                                     <constraint firstAttribute="height" constant="60" id="pab-Vz-fcE"/>
+                                    <constraint firstAttribute="centerX" secondItem="sGK-Bk-4g7" secondAttribute="centerX" constant="5" id="um3-f5-Iuq"/>
+                                    <constraint firstItem="sGK-Bk-4g7" firstAttribute="top" secondItem="ksw-c6-KLu" secondAttribute="top" constant="20" id="yYt-SC-wsU"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -1515,13 +1520,13 @@
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="k-0.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="AT1-r3-RJc" userLabel="Picture">
-                                <rect key="frame" x="15" y="184" width="290" height="299"/>
+                                <rect key="frame" x="15" y="173" width="290" height="310"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="210" id="TlM-VH-7wh"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Привет! Как дела?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fsw-pa-6rs">
-                                <rect key="frame" x="15" y="146" width="290" height="26"/>
+                                <rect key="frame" x="15" y="135" width="290" height="26"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="26" id="PEX-dg-p4y"/>
                                 </constraints>
@@ -1529,11 +1534,11 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="niP-iO-QeW" userLabel="Speak">
-                                <rect key="frame" x="195" y="85" width="59" height="56"/>
+                                <rect key="frame" x="195" y="85" width="48" height="45"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="59" id="CpZ-5d-UlC"/>
-                                    <constraint firstAttribute="height" constant="56" id="Vws-di-8sy"/>
+                                    <constraint firstAttribute="width" constant="48" id="CpZ-5d-UlC"/>
+                                    <constraint firstAttribute="height" constant="45" id="Vws-di-8sy"/>
                                 </constraints>
                                 <state key="normal" image="nc_soundx75">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1543,11 +1548,11 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yuM-CN-SP8" userLabel="Share">
-                                <rect key="frame" x="67" y="85" width="59" height="56"/>
+                                <rect key="frame" x="78" y="85" width="48" height="45"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="59" id="20g-za-eSV"/>
-                                    <constraint firstAttribute="height" constant="56" id="7Zd-Md-rsb"/>
+                                    <constraint firstAttribute="width" constant="48" id="20g-za-eSV"/>
+                                    <constraint firstAttribute="height" constant="45" id="7Zd-Md-rsb"/>
                                 </constraints>
                                 <state key="normal" image="nc_sharex75">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1994,8 +1999,8 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="fk7-EK-Vok"/>
-        <segue reference="Pw8-Qx-xVT"/>
-        <segue reference="r70-ye-9gL"/>
         <segue reference="k2M-g0-S2p"/>
+        <segue reference="r70-ye-9gL"/>
+        <segue reference="Pw8-Qx-xVT"/>
     </inferredMetricsTieBreakers>
 </document>

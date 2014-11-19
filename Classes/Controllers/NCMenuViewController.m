@@ -58,21 +58,33 @@ static NSString *const NCMenuTitleKey = @"title";
 }
 
 - (NSArray *)menuItemsForSection:(NSInteger)section {
+    /*
+     "about" = "About programm";
+     "creators" = "Author";
+     "partners" = "Our partners";
+     "restore" = "Restore purchases";
+     "fav" = "Favourites";
+     "test" = "Test";
+     "rate" = "Rate application";
+     "feedback" = "Feedback";
+     "site" = "Visit web site";
+     "subscribe" = "Subscribe";
+     */
     NSArray *items = nil;
     if (section == 0) {
-        items = @[@{NCMenuIconKey: @"nc_lamp_b",  NCMenuTitleKey: @"О программе"},
-                  @{NCMenuIconKey: @"nc_user",  NCMenuTitleKey: @"Создатели"},
-                  @{NCMenuIconKey: @"nc_mark",  NCMenuTitleKey: @"Наши партнеры"},
-                  @{NCMenuIconKey: @"nc_cart",  NCMenuTitleKey: @"Восстановить покупки"},
-                  @{NCMenuIconKey: @"nc_globe", NCMenuTitleKey: @"Поменять язык"}];
+        items = @[@{NCMenuIconKey: @"nc_lamp_b",  NCMenuTitleKey: NSLocalizedString(@"about", nil)},
+                  @{NCMenuIconKey: @"nc_user",  NCMenuTitleKey: NSLocalizedString(@"creators", nil)},
+                  @{NCMenuIconKey: @"nc_mark",  NCMenuTitleKey: NSLocalizedString(@"partners", nil)},
+                  @{NCMenuIconKey: @"nc_cart",  NCMenuTitleKey: NSLocalizedString(@"restore", nil)}];
+                  //@{NCMenuIconKey: @"nc_globe", NCMenuTitleKey: @}];
     } else if (section == 1) {
-        items = @[@{NCMenuIconKey: @"nc_favorite", NCMenuTitleKey: @"Избранное"},
-                  @{NCMenuIconKey: @"nc_check",    NCMenuTitleKey: @"Тест"}];
+        items = @[@{NCMenuIconKey: @"nc_favorite", NCMenuTitleKey: NSLocalizedString(@"fav", nil)},
+                  @{NCMenuIconKey: @"nc_check",    NCMenuTitleKey: NSLocalizedString(@"test", nil)}];
     } else if (section == 2) {
-        items = @[@{NCMenuIconKey: @"nc_star",    NCMenuTitleKey: @"Оценить приложение"},
-                  @{NCMenuIconKey: @"nc_edit",    NCMenuTitleKey: @"Написать нам"},
-                  @{NCMenuIconKey: @"nc_coffee",  NCMenuTitleKey: @"Посетить веб-сайт"},
-                  @{NCMenuIconKey: @"nc_message", NCMenuTitleKey: @"Рассылка"}];
+        items = @[@{NCMenuIconKey: @"nc_star",    NCMenuTitleKey: NSLocalizedString(@"rate", nil)},
+                  @{NCMenuIconKey: @"nc_edit",    NCMenuTitleKey: NSLocalizedString(@"feedback", nil)},
+                  @{NCMenuIconKey: @"nc_coffee",  NCMenuTitleKey: NSLocalizedString(@"site", nil)},
+                  @{NCMenuIconKey: @"nc_message", NCMenuTitleKey: NSLocalizedString(@"subscribe", nil)}];
     }
     return items;
 }

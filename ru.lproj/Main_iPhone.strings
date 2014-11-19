@@ -132,7 +132,7 @@
 "vV1-4O-P3C.text" = "Член";
 
 /* Class = "IBUISegmentedControl"; va1-54-wQJ.segmentTitles[0] = "Секс"; ObjectID = "va1-54-wQJ"; */
-"va1-54-wQJ.segmentTitles[0]" = "Секс1";
+"va1-54-wQJ.segmentTitles[0]" = "Секс";
 
 /* Class = "IBUISegmentedControl"; va1-54-wQJ.segmentTitles[1] = "Ругательства"; ObjectID = "va1-54-wQJ"; */
 "va1-54-wQJ.segmentTitles[1]" = "Ругательства";
