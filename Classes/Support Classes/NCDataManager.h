@@ -32,7 +32,9 @@
 - (void) getLocalPacks;
 - (void) getLocalWordsWithPackIDs:(NSArray *)idsArray;
 - (void) setWordToFavorites:(NCWord *)word;
+- (void) removeWordFromFavorites:(NCWord *)word;
 - (void) firstDBInitialization;
+- (BOOL) ifExistsInFavorites:(NCWord *)word;
 
 @property (nonatomic, weak) id<NCDataManagerProtocol> delegate;
 

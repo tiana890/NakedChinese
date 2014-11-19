@@ -21,6 +21,7 @@
 - (NSArray *) getFavorites;
 - (void) setWordToFavorites:(NCWord *)word;
 - (void) deleteWordFromFavorites:(NCWord *)word;
+- (BOOL) ifExistsInFavorites:(NCWord *)word;
 - (NSArray *) getPacks;
 - (void) setPackToDB:(NCPack *)pack;
 - (NCWord *)getWordWithID:(int)wordID;

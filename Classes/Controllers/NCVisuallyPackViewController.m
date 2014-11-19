@@ -50,15 +50,26 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self setNavItemFavoriteButton];
+}
+
+//set navItems depending on type of controller: favorite or non-favorite
+- (void) setNavItemFavoriteButton
+{
     if(self.ifFavorite)
     {
-        self.favoriteButton.hidden = YES;
+        [self.favoriteButton setImage:[UIImage imageNamed:@"nc_heart_a_nav"] forState:UIControlStateNormal];
+        [self.favoriteButton setImage:[UIImage imageNamed:@"nc_heart_nav"] forState:UIControlStateSelected];
     }
     else
     {
-        self.favoriteButton.hidden = NO;
+        [self.favoriteButton setImage:[UIImage imageNamed:@"nc_heart_a_nav"] forState:UIControlStateSelected];
+        [self.favoriteButton setImage:[UIImage imageNamed:@"nc_heart_nav"] forState:UIControlStateNormal];
+        
+        
     }
 }
+
 
 - (void)viewWillDisappear:(BOOL)animated {
     [self.frontBlurView removeFromSuperview];
@@ -165,6 +176,25 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
     return contentViewController;
 }
 
+- (void) setupFavButton:(NSUInteger) index
+{
+    //устанавливаем корректно кнопку "избранное", если слово там есть, то она должна быть в состоянии selected
+    if(!self.ifFavorite)
+    {
+        BOOL ifWordExistsInFavorites = NO;
+        NCWord *word = self.arrayOfWords[index];
+        ifWordExistsInFavorites = [[NCDataManager sharedInstance] ifExistsInFavorites:word];
+        if(ifWordExistsInFavorites)
+        {
+            self.favoriteButton.selected = YES;
+        }
+        else
+        {
+            self.favoriteButton.selected = NO;
+        }
+    }
+}
+
 - (void)enabledInteractivePopGestureRecognizer:(BOOL)enabled {
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = enabled;
@@ -254,20 +284,32 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
     [self.navigationController popViewControllerAnimated:YES];
 }
 - (IBAction)addToFavorite:(UIButton *)sender {
-    sender.selected = !sender.selected;
-    NSLog(@"%@ -> %ld", ( sender.selected ) ? @"Like" : @"Dislike", (long)self.openedWordIndex );
-    
-    NSNumber *index = @(self.openedWordIndex);
-    BOOL hasWord = [self.userIndexesFavoriteWords containsObject:index];
-    if (sender.selected) {
-        if (!hasWord) {
+    if(!self.ifFavorite)
+    {
+        sender.selected = !sender.selected;
+        NSNumber *index = @(self.openedWordIndex);
+        BOOL hasWord = [self.userIndexesFavoriteWords containsObject:index];
+        if (sender.selected) {
+            if (!hasWord) {
+                [self.userIndexesFavoriteWords addObject:index];
+                [[NCDataManager sharedInstance] setWordToFavorites:self.arrayOfWords[[index intValue]]];
+            }
+        }
+    }
+    else
+    {
+        NSNumber *index = @(self.openedWordIndex);
+        if(!sender.selected)
+        {
+            [[NCDataManager sharedInstance] removeWordFromFavorites:self.arrayOfWords[[index intValue]]];
+            [self.userIndexesFavoriteWords removeObject:index];
+        }
+        else
+        {
             [self.userIndexesFavoriteWords addObject:index];
             [[NCDataManager sharedInstance] setWordToFavorites:self.arrayOfWords[[index intValue]]];
         }
-    } else {
-        if (hasWord) {
-            [self.userIndexesFavoriteWords removeObject:index];
-        }
+        sender.selected = !sender.selected;
     }
 }
 
@@ -279,6 +321,7 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
     if ((index == 0) || (index == NSNotFound)) {
         return nil;
     }
+   
     index--;
     return [self viewControllerAtIndex:index];
 }
@@ -289,6 +332,7 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
     if ((index == NSNotFound) || (index+1 == [self.arrayOfWords count])) {
         return nil;
     }
+    
     index++;
     return [self viewControllerAtIndex:index];
 }
@@ -305,7 +349,8 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
     NSUInteger currentIndex = [wordContentController pageIndex];
     
     self.openedWordIndex = currentIndex;
-    self.addFavoriteButton.selected = [self.userIndexesFavoriteWords containsObject:@(currentIndex)];
+    [self setupFavButton:currentIndex];
+    //self.addFavoriteButton.selected = [self.userIndexesFavoriteWords containsObject:@(currentIndex)];
 }
 
 @end

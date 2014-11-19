@@ -230,6 +230,11 @@
     [self.dbHelper setWordToFavorites:word];
 }
 
+- (void)removeWordFromFavorites:(NCWord *)word
+{
+    [self.dbHelper deleteWordFromFavorites:word];
+}
+
 - (void)getFavorites
 {
     NSArray *favourites = [self.dbHelper getFavorites];
@@ -248,6 +253,11 @@
     }
 }
 
+- (BOOL) ifExistsInFavorites:(NCWord *)word
+{
+    return [self.dbHelper ifExistsInFavorites:word];
+}
+
 - (NSArray *) words
 {
     NSMutableArray *array = [[NSMutableArray alloc] init];
@@ -255,6 +265,7 @@
     NSArray *chinese = @[@"假阳具", @"小姐", @"高潮", @"打飞机", @"射", @"同志", @"拉拉", @"鸡巴", @"阳痿", @"屄", @"有一腿", @"开包"];
     NSArray *pinyin = @[@"jǐayángjǜ", @"xiǎojiě", @"gāo cháo", @"dǎfēijī", @"shè", @"tóngzhì", @"lāla", @"jībā", @"yángwěi", @"bī", @"yǒuyītuǐ", @"kāibāo"];
     NSArray *russian = @[@"Фаллоимитатор", @"Проститутка", @"Оргазм", @"Мастурбировать", @"Эякулировать, кончить", @"Гей", @"Лесбиянки", @"Пенис", @"Импотент", @"Вагина", @"Изменять", @"Лишить девственности"];
+    NSArray *english = @[@"Dildo", @"Prostitute", @"Orgasm", @"Handjob", @"Cum, to ejaculate", @"Gay, Homosexual", @"Lesbian", @"Dick, cock", @"Impotent", @"Vagina", @"To have an affair, to cheat on", @"To deflower"];
     
     for(int i = 0; i < 12; i++)
     {
@@ -266,6 +277,7 @@
         word.material.materialZH_TR = pinyin[i];
         word.material.materialRU = russian[i];
         word.material.materialID = word.ID;
+        word.material.materialEN = english[i];
         word.paid = @0;
         word.show = @0;
         [array addObject:word];

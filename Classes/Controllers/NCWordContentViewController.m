@@ -40,7 +40,15 @@
     }
     self.chineseLabel.text = self.word.material.materialZH;
     self.pinyinLabel.text = self.word.material.materialZH_TR;
-    self.translationLabel.text = self.word.material.materialRU;
+    if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
+    {
+        [self.translationLabel setText:self.word.material.materialRU];
+    }
+    else
+    {
+        [self.translationLabel setText:self.word.material.materialEN];
+    }
+
 }
 
 - (void)viewWillAppear:(BOOL)animated

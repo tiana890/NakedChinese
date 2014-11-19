@@ -195,6 +195,18 @@
     [appDelegate saveContext];
 }
 
+- (BOOL)ifExistsInFavorites:(NCWord *)word
+{
+    //проверяем есть ли такой элемент в БД
+    NSString *formatPredicate = [NSString stringWithFormat:@"id == %i", [word.ID intValue]];
+    NSArray *favoritesArray = [self fetchRequestWithEntityName:@"Favorite" andFormatPredicate:formatPredicate];
+    if(favoritesArray.count > 0)
+        return YES;
+    else
+        return NO;
+
+}
+
 - (void)setPackToDB:(NCPack *)pack
 {
     NCAppDelegate *appDelegate = (NCAppDelegate *)[[UIApplication sharedApplication]delegate];
