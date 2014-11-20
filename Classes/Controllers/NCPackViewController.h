@@ -11,7 +11,7 @@
 
 typedef NS_ENUM(NSUInteger, NCPackControllerType) {
     NCPackControllerOfNumber,
-    NCPackControllerOfFavorite
+    NCPackControllerOfFavorite,
 };
 
 @interface NCPackViewController : UIViewController

@@ -125,6 +125,8 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
     [self addChildViewController:[self pageViewController]];
     [self.view addSubview:[self.pageViewController view]];
     [self.pageViewController didMoveToParentViewController:self];
+    
+    [self setupFavButton:[self openedWordIndex]];
 }
 
 - (void)setupExplanationViewController {
@@ -172,7 +174,6 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
     //contentViewController.dictionaryWithWord = self.arrayOfWords[index];
     contentViewController.word = self.arrayOfWords[index];
     contentViewController.pageIndex = index;
-    
     return contentViewController;
 }
 
@@ -294,6 +295,12 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
                 [self.userIndexesFavoriteWords addObject:index];
                 [[NCDataManager sharedInstance] setWordToFavorites:self.arrayOfWords[[index intValue]]];
             }
+        }
+        else
+        {
+            [[NCDataManager sharedInstance] removeWordFromFavorites:self.arrayOfWords[[index intValue]]];
+            [self.userIndexesFavoriteWords removeObject:index];
+
         }
     }
     else

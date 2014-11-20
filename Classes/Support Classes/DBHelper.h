@@ -24,5 +24,6 @@
 - (BOOL) ifExistsInFavorites:(NCWord *)word;
 - (NSArray *) getPacks;
 - (void) setPackToDB:(NCPack *)pack;
-- (NCWord *)getWordWithID:(int)wordID;
+- (NCWord *) getWordWithID:(int)wordID;
+- (NSArray *) searchWordContainsString:(NSString *)string;
 @end

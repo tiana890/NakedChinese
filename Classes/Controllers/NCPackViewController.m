@@ -30,6 +30,7 @@
 static NSString *const NCPackControllerWordIndexKey = @"NCPackControllerWordIndexKey";
 
 static NSString *const NCVisuallyPackControllerSegueIdentifier = @"toVisuallyPackController";
+static NSString *const NCVisuallyPackControllerSearchSegueIdentifier = @"toVisuallyPackController";
 
 #pragma mark Table view cell identifiers
 static NSString *const NCWordCellIdentifier = @"wordCell";
@@ -51,6 +52,7 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 
 @property (nonatomic, strong) NSArray *arrayOfWords;
 @property (nonatomic, strong) NSArray *arrayOfFavorites;
+@property (nonatomic, strong) NSMutableArray *searchArrayOfWords;
 @end
 
 @implementation NCPackViewController
@@ -90,6 +92,13 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     [self disableBlurView];
 }
 
+#pragma mark getter
+- (NSMutableArray *)searchArrayOfWords
+{
+    if(!_searchArrayOfWords) _searchArrayOfWords = [[NSMutableArray alloc] init];
+    
+        return _searchArrayOfWords;
+}
 #pragma  mark DataManager Protocol methods
 
 - (void)ncDataManagerProtocolGetWordsWithPackID:(NSArray *)arrayOfWords
@@ -102,6 +111,13 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 {
     self.arrayOfFavorites = arrayOfFavorites;
     [self.collectionView reloadData];
+}
+
+- (void)ncDataManagerProtocolGetSearchWordContainsString:(NSArray *)arrayOfWords
+{
+    [self.searchArrayOfWords removeAllObjects];
+    [self.searchArrayOfWords addObjectsFromArray:arrayOfWords];
+    [self.searchCollectionView reloadData];
 }
 #pragma mark - IBActions
 
@@ -150,6 +166,10 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 }
 
 - (void)startSearch {
+    [self.searchArrayOfWords removeAllObjects];
+    [self.searchBar setText:@""];
+    
+    [self.searchCollectionView reloadData];
     self.searchBlurView.blurEnabled = YES;
     [self showSearchCollectionViewWithCompletion:^{
         [self.searchBar becomeFirstResponder];
@@ -160,6 +180,7 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     self.searchBlurView.blurEnabled = NO;
     [self.searchBar resignFirstResponder];
     [self hideSearchCollectionViewWithCompletion:nil];
+
 }
 
 - (void)disableBlurView {
@@ -192,104 +213,127 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-   /*
-    NSInteger itemsCount = 0;
-    if (collectionView == [self collectionView]) {
-        //itemsCount = [self _words].count;
-        itemsCount = self.arrayOfWords.count;
-    } else if (collectionView == [self searchCollectionView]) {
-        itemsCount = [self _words].count;
+    
+    if(collectionView == self.collectionView)
+    {
+        switch ([self type]) {
+            case NCPackControllerOfNumber:
+                return self.arrayOfWords.count;
+                break;
+            case NCPackControllerOfFavorite:
+                return self.arrayOfFavorites.count;
+            default:
+                break;
+        }
     }
-    return itemsCount;
-    */
-    switch ([self type]) {
-        case NCPackControllerOfNumber:
-            return self.arrayOfWords.count;
-            break;
-        case NCPackControllerOfFavorite:
-            return self.arrayOfFavorites.count;
-        default:
-            break;
+    else if(collectionView == self.searchCollectionView)
+    {
+        return self.searchArrayOfWords.count;
     }
-    return 0;
+    
+        return 0;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    switch ([self type]) {
-        case NCPackControllerOfNumber:
-        {
-            NCWordCell *openCell = nil;
-            
-            NCWord *word = self.arrayOfWords[indexPath.item];
-            if([word.packID isEqualToNumber:@1])
+    if(collectionView == self.collectionView)
+    {
+        switch ([self type]) {
+            case NCPackControllerOfNumber:
             {
-                openCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordCellIdentifier forIndexPath:indexPath];
-                UIImage *image = [UIImage imageNamed:word.image];
-                [openCell.pictureView setImage:image];
-                [openCell.chineseLabel setText:word.material.materialZH];
-                [openCell.pinyinLabel setText:word.material.materialZH_TR];
-                if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
+                NCWordCell *openCell = nil;
+                
+                NCWord *word = self.arrayOfWords[indexPath.item];
+                if([word.packID isEqualToNumber:@1])
                 {
-                    [openCell.translateLabel setText:word.material.materialRU];
+                    openCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordCellIdentifier forIndexPath:indexPath];
+                    UIImage *image = [UIImage imageNamed:word.image];
+                    [openCell.pictureView setImage:image];
+                    [openCell.chineseLabel setText:word.material.materialZH];
+                    [openCell.pinyinLabel setText:word.material.materialZH_TR];
+                    if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
+                    {
+                        [openCell.translateLabel setText:word.material.materialRU];
+                    }
+                    else
+                    {
+                        [openCell.translateLabel setText:word.material.materialEN];
+                    }
+                    return openCell;
                 }
                 else
                 {
-                    [openCell.translateLabel setText:word.material.materialEN];
+                    NCWordLockCell *lockCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordLockCellIdentifier forIndexPath:indexPath];
+                   
+                    NSLog(@"url = %@", [NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]);
+                    NSURLRequest *request = [NSURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]]];
+                    UIImageView *imageView = [[UIImageView alloc] init];
+                    [imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            //your main thread task here
+                            [lockCell.pictureView setImage:image];
+                            lockCell.blurView.blurEnabled = YES;
+                            lockCell.blurView.blurRadius = 10;
+                        });
+                       
+                    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                        
+                    }];
+                    
+                    
+                    return lockCell;
+                }
+                break;
+            }
+                
+            case NCPackControllerOfFavorite:
+            {
+                NCWordCell *openCell = nil;
+                NCWord *word = self.arrayOfFavorites[indexPath.item];
+                if([word.packID isEqualToNumber:@1])
+                {
+                    openCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordCellIdentifier forIndexPath:indexPath];
+                    UIImage *image = [UIImage imageNamed:word.image];
+                    [openCell.pictureView setImage:image];
+                    [openCell.chineseLabel setText:word.material.materialZH];
+                    [openCell.pinyinLabel setText:word.material.materialZH_TR];
+                    if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
+                    {
+                        [openCell.translateLabel setText:word.material.materialRU];
+                    }
+                    else
+                    {
+                        [openCell.translateLabel setText:word.material.materialEN];
+                    }
+
                 }
                 return openCell;
             }
-            else
-            {
-                NCWordLockCell *lockCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordLockCellIdentifier forIndexPath:indexPath];
-               
-                NSLog(@"url = %@", [NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]);
-                NSURLRequest *request = [NSURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]]];
-                UIImageView *imageView = [[UIImageView alloc] init];
-                [imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        //your main thread task here
-                        [lockCell.pictureView setImage:image];
-                        lockCell.blurView.blurEnabled = YES;
-                        lockCell.blurView.blurRadius = 10;
-                    });
-                   
-                } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                    
-                }];
-                
-                
-                return lockCell;
-            }
-            break;
+            default:
+                break;
         }
-            
-        case NCPackControllerOfFavorite:
-        {
-            NCWordCell *openCell = nil;
-            NCWord *word = self.arrayOfFavorites[indexPath.item];
-            if([word.packID isEqualToNumber:@1])
-            {
-                openCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordCellIdentifier forIndexPath:indexPath];
-                UIImage *image = [UIImage imageNamed:word.image];
-                [openCell.pictureView setImage:image];
-                [openCell.chineseLabel setText:word.material.materialZH];
-                [openCell.pinyinLabel setText:word.material.materialZH_TR];
-                if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
-                {
-                    [openCell.translateLabel setText:word.material.materialRU];
-                }
-                else
-                {
-                    [openCell.translateLabel setText:word.material.materialEN];
-                }
-
-            }
-            return openCell;
-        }
-        default:
-            break;
     }
+    else if(collectionView == self.searchCollectionView)
+    {
+        NCWordCell *openCell = nil;
+        
+        NCWord *word = self.searchArrayOfWords[indexPath.item];
+        openCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordCellIdentifier forIndexPath:indexPath];
+        UIImage *image = [UIImage imageNamed:word.image];
+        [openCell.pictureView setImage:image];
+        [openCell.chineseLabel setText:word.material.materialZH];
+        [openCell.pinyinLabel setText:word.material.materialZH_TR];
+        if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
+        {
+            [openCell.translateLabel setText:word.material.materialRU];
+        }
+        else
+        {
+            [openCell.translateLabel setText:word.material.materialEN];
+        }
+        return openCell;
+    }
+    return nil;
 }
 
 
@@ -297,11 +341,19 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
+    /*
     if (collectionView == [self searchCollectionView]) {
         [self cancelSearch];
+    }*/
+    if(collectionView == self.collectionView)
+    {
+        [self performSegueWithIdentifier:NCVisuallyPackControllerSegueIdentifier sender:@{NCPackControllerWordIndexKey: @(indexPath.item), @"search":@0}];
     }
-    
-    [self performSegueWithIdentifier:NCVisuallyPackControllerSegueIdentifier sender:@{NCPackControllerWordIndexKey: @(indexPath.item)}];
+    else if(collectionView == self.searchCollectionView)
+    {
+        [self performSegueWithIdentifier:NCVisuallyPackControllerSearchSegueIdentifier sender:@{NCPackControllerWordIndexKey: @(indexPath.item), @"search":@1}];
+        
+    }
     
 }
 
@@ -329,28 +381,52 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     self.searchCollectionView.contentInset = UIEdgeInsetsMake(0, 0, KeyboardHeight, 0);
 }
 
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    NSLog(@"search %@", searchBar.text);
+    [NCDataManager sharedInstance].delegate = self;
+    [[NCDataManager sharedInstance] searchWordContainsString:searchBar.text];
+    
+}
+
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSInteger openedWordIndex = [sender[NCPackControllerWordIndexKey] integerValue];
-    NCVisuallyPackViewController *packViewController = [segue destinationViewController];
+    if([sender[@"search"] intValue] == 0)
+    {
+        
+        NSInteger openedWordIndex = [sender[NCPackControllerWordIndexKey] integerValue];
+        NCVisuallyPackViewController *packViewController = [segue destinationViewController];
+        
+        packViewController.openedWordIndex = openedWordIndex;
+        switch ([self type]) {
+            case NCPackControllerOfNumber:
+            {
+                packViewController.arrayOfWords = self.arrayOfWords;
+                break;
+            }
+            case NCPackControllerOfFavorite:
+            {
+                packViewController.arrayOfWords = self.arrayOfFavorites;
+                packViewController.ifFavorite = YES;
+                break;
+            }
+            
+            default:
+                break;
+        }
     
-    packViewController.openedWordIndex = openedWordIndex;
-    switch ([self type]) {
-        case NCPackControllerOfNumber:
-        {
-            packViewController.arrayOfWords = self.arrayOfWords;
-            break;
-        }
-        case NCPackControllerOfFavorite:
-        {
-            packViewController.arrayOfWords = self.arrayOfFavorites;
-            packViewController.ifFavorite = YES;
-            break;
-        }
-        default:
-            break;
     }
+    else
+    {
+        NSInteger openedWordIndex = [sender[NCPackControllerWordIndexKey] integerValue];
+        NCVisuallyPackViewController *packViewController = [segue destinationViewController];
+        
+        packViewController.openedWordIndex = openedWordIndex;
+        packViewController.arrayOfWords = self.searchArrayOfWords;
+        [self cancelSearch];
+    }
+    
 }
 
 #pragma mark - Test DATA

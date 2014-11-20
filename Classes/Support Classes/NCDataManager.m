@@ -258,6 +258,16 @@
     return [self.dbHelper ifExistsInFavorites:word];
 }
 
+- (void)searchWordContainsString:(NSString *)string
+{
+    NSArray *arrayOfWords = [self.dbHelper searchWordContainsString:string];
+    
+    if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetSearchWordContainsString:)])
+    {
+        [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetSearchWordContainsString:arrayOfWords];
+    }
+}
+
 - (NSArray *) words
 {
     NSMutableArray *array = [[NSMutableArray alloc] init];

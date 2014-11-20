@@ -237,6 +237,36 @@
 
 }
 
+- (NSArray *)searchWordContainsString:(NSString *)string
+{
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    NSString *lang = NSLocalizedString(@"lang", nil);
+    
+    NSPredicate *predicate   = [NSPredicate predicateWithFormat:@"%K contains %@", lang, string];
+    
+    NSArray *materialArray = [self fetchRequestWithEntityName:@"Material" andPredicate:predicate];
+    
+    for (int i = 0; i < materialArray.count; i++)
+    {
+        NCMaterial *material = [[NCMaterial alloc] init];
+        NSManagedObject *obj = materialArray[i];
+        material = [NCMaterial getNCMaterialFromNSManagedObject:obj];
+        NSString *predicate = [NSString stringWithFormat:@"id == %i", [material.materialID intValue]];
+        NSArray *wordArray = [self fetchRequestWithEntityName:@"Word" andFormatPredicate:predicate];
+        if(wordArray.count > 0)
+        {
+            NCWord *word = [[NCWord alloc] init];
+            word = [NCWord getNCWordFromNSManagedObject:wordArray[0]];
+            word.material = material;
+            [array addObject:word];
+        }
+       
+    }
+    
+    return array;
+}
+
 - (NSArray *) fetchRequestWithEntityName:(NSString *) entityName andFormatPredicate:(NSString *)formatPredicate
 {
     NCAppDelegate *appDelegate = (NCAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -246,6 +276,16 @@
         NSPredicate *predicate = [NSPredicate predicateWithFormat:formatPredicate];
         [fetchRequest setPredicate:predicate];
     }
+    NSError *error = nil;
+    NSArray *array = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    return array;
+}
+
+- (NSArray *) fetchRequestWithEntityName:(NSString *) entityName andPredicate:(NSPredicate *)predicate
+{
+    NCAppDelegate *appDelegate = (NCAppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityName];
+    [fetchRequest setPredicate:predicate];
     NSError *error = nil;
     NSArray *array = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
     return array;

@@ -18,7 +18,7 @@
 - (void) ncDataManagerProtocolGetLocalPacks:(NSArray *)arrayOfPacks;
 - (void) ncDataManagerProtocolGetFavorites:(NSArray *)arrayOfFavorites;
 - (void) ncDataManagerProtocolGetLocalWordsWithPackIDs:(NSArray *)arrayOfWords;
-
+- (void) ncDataManagerProtocolGetSearchWordContainsString:(NSArray *)arrayOfWords;
 @end
 
 @interface NCDataManager : NSObject<RequesterProtocol>
@@ -35,6 +35,7 @@
 - (void) removeWordFromFavorites:(NCWord *)word;
 - (void) firstDBInitialization;
 - (BOOL) ifExistsInFavorites:(NCWord *)word;
+- (void) searchWordContainsString:(NSString *)string;
 
 @property (nonatomic, weak) id<NCDataManagerProtocol> delegate;
 
