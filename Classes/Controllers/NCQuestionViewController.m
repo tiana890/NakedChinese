@@ -23,6 +23,10 @@
 #import "NCWord.h"
 #import "NCDataManager.h"
 
+#import "NCTest.h"
+#import "NCQuestion.h"
+
+
 @import AVFoundation;
 
 #pragma mark Cells Identifiers
@@ -45,6 +49,8 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 
 @property (nonatomic, strong) NSArray *wordsArray;
 @property (nonatomic, strong) NSNumber *currentWord;
+
+@property (nonatomic, strong) NCTest *test;
 @end
 
 @implementation NCQuestionViewController
@@ -56,6 +62,12 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
         return [[NSNumber alloc]initWithInt:0];
     else
         return _currentWord;
+}
+
+- (NCTest *)test
+{
+    if(!_test) _test = [[NCTest alloc] init];
+    return _test;
 }
 
 #pragma mark - Lifecycle
@@ -79,6 +91,7 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
     }
     [NCDataManager sharedInstance].delegate = self;
     [[NCDataManager sharedInstance] getLocalWordsWithPackIDs:idsArray];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -89,33 +102,11 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 #pragma mark Data Manager methods
 - (void)ncDataManagerProtocolGetLocalWordsWithPackIDs:(NSArray *)arrayOfWords
 {
-    
-    if(arrayOfWords.count >= 20)
+    if(arrayOfWords.count > 0)
     {
-        NSMutableArray *array = [[NSMutableArray alloc] init];
-        for(int i = 0; i < 20; i++)
-        {
-            [array addObject:arrayOfWords];
-        }
-        self.wordsArray = array;
+        self.wordsArray = arrayOfWords;
+        [self.test fillTestWithWordsArray:arrayOfWords];
     }
-    else
-    {
-        self.wordsArray = [self shuffleArray:arrayOfWords];
-    }
-    
-}
-
-- (NSArray*)shuffleArray:(NSArray*)array {
-    
-    NSMutableArray *temp = [[NSMutableArray alloc] initWithArray:array];
-    
-    for(NSUInteger i = [array count]; i > 1; i--) {
-        NSUInteger j = arc4random_uniform(i);
-        [temp exchangeObjectAtIndex:i-1 withObjectAtIndex:j];
-    }
-    
-    return [NSArray arrayWithArray:temp];
 }
 
 #pragma mark - Custom Accessors
@@ -162,13 +153,10 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 }
 
 - (void)parseAnswer {
-    static BOOL toggle = NO;
-    BOOL correctlyAnswer = toggle;
-    toggle = !toggle;
     
     UIImage *const correctImage = [UIImage imageNamed:@"nc_correct_answer"];
     UIImage *const wrongImage = [UIImage imageNamed:@"nc_wrong_answer"];
-    self.answerIndicatorView.image = correctlyAnswer ? correctImage : wrongImage;
+    //self.answerIndicatorView.image = correctlyAnswer ? correctImage : wrongImage;
     [self answerAnimation];
     
 }
@@ -249,7 +237,7 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger index = [indexPath row];
     
-    NCWord *word = self.wordsArray[[self.currentWord intValue]];
+    NCQuestion *q = [self.test getQuestionWithIndex:self.currentWord.intValue];
     
     UITableViewCell *cell = nil;
     if (index == 0) {
@@ -257,8 +245,8 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
         
         //wordCell.chineseLabel.text = self.testWord[NCWordChineseKey];
         //wordCell.pinyinLabel.text = self.testWord[NCWordPinyinKey];
-        wordCell.chineseLabel.text = word.material.materialZH;
-        wordCell.pinyinLabel.text = word.material.materialZH_TR;
+        wordCell.chineseLabel.text = q.word.material.materialZH;
+        wordCell.pinyinLabel.text = q.word.material.materialZH_TR;
         wordCell.userInteractionEnabled = NO;
         
         [wordCell layoutIfNeeded];
@@ -271,10 +259,10 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
         
         if (index != 5) {
             index -= 1;
-            wordCell.translationLabel.text = [NSString stringWithFormat:@"Вагина %li", (long)indexPath.row];
+            wordCell.translationLabel.text = q.answerArray[index];
             wordCell.userInteractionEnabled = YES;
         } else {
-            wordCell.translationLabel.text = [NSString stringWithFormat:@"%i/%lu", [self.currentWord intValue]+1, (unsigned long)self.wordsArray.count];
+            wordCell.translationLabel.text = q.word.material.materialEN;
             wordCell.userInteractionEnabled = NO;
         }
         

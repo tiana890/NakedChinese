@@ -184,6 +184,12 @@
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    NCQuestionViewController *qc = [segue destinationViewController];
+    qc.packsArray = [self preparePassPacksArrayForQuestionViewController];
+}
+
+- (NSArray *)preparePassPacksArrayForQuestionViewController
+{
     NSMutableArray *passPacksArray = [[NSMutableArray alloc] init];
     
     for(int i = 0; i < self.sexIndexes.count; i++)
@@ -200,10 +206,20 @@
     {
         [passPacksArray addObjectsFromArray:[self.slangArray objectsAtIndexes:self.slangIndexes]];
     }
-    
-    NCQuestionViewController *qc = [segue destinationViewController];
-    qc.packsArray = passPacksArray;
+    return passPacksArray;
+
 }
 
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+{
+    if ([self preparePassPacksArrayForQuestionViewController].count > 0)
+        return YES;
+    else
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"empty_test_alert", nil) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alert show];
+        return NO;
+    }
+}
 
 @end

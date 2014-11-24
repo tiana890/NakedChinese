@@ -373,17 +373,17 @@
                                             <inset key="sectionInset" minX="15" minY="10" maxX="15" maxY="10"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="wordCell" id="2jQ-0T-mTT" customClass="NCWordCell">
-                                                <rect key="frame" x="15" y="10" width="138" height="138"/>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="wordCell" id="HPx-XF-4qG" customClass="NCWordCell">
+                                                <rect key="frame" x="15" y="74" width="138" height="138"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                     <rect key="frame" x="0.0" y="0.0" width="138" height="138"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rxE-Ry-xUZ">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n5A-Nh-WWK">
                                                             <rect key="frame" x="0.0" y="0.0" width="138" height="138"/>
                                                         </imageView>
-                                                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="laa-hR-OcM" customClass="FXBlurView">
+                                                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2ZU-K0-fYe" customClass="FXBlurView">
                                                             <rect key="frame" x="0.0" y="68" width="138" height="70"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                                             <userDefinedRuntimeAttributes>
@@ -396,20 +396,20 @@
                                                                 </userDefinedRuntimeAttribute>
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
-                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="你好" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hNT-oc-Q5k">
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="你好" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lk6-w6-tC2">
                                                             <rect key="frame" x="0.0" y="73" width="138" height="23"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="nǐ hǎo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LcR-be-lgd">
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="nǐ hǎo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QY4-XZ-Kym">
                                                             <rect key="frame" x="0.0" y="94" width="138" height="21"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="привет!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SWx-NX-53t" customClass="THLabel">
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="привет!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aho-g5-xKb" customClass="THLabel">
                                                             <rect key="frame" x="0.0" y="111" width="138" height="23"/>
-                                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="19"/>
+                                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                             <size key="shadowOffset" width="0.0" height="0.0"/>
@@ -427,11 +427,11 @@
                                                 </view>
                                                 <size key="customSize" width="138" height="138"/>
                                                 <connections>
-                                                    <outlet property="blurView" destination="laa-hR-OcM" id="2Ij-vE-7BD"/>
-                                                    <outlet property="chineseLabel" destination="hNT-oc-Q5k" id="kxK-3b-U1s"/>
-                                                    <outlet property="pictureView" destination="rxE-Ry-xUZ" id="tMU-os-BAH"/>
-                                                    <outlet property="pinyinLabel" destination="LcR-be-lgd" id="6Fg-W6-VvS"/>
-                                                    <outlet property="translateLabel" destination="SWx-NX-53t" id="U1c-M1-QYA"/>
+                                                    <outlet property="blurView" destination="2ZU-K0-fYe" id="wMp-N7-JAr"/>
+                                                    <outlet property="chineseLabel" destination="lk6-w6-tC2" id="jMO-f9-GXM"/>
+                                                    <outlet property="pictureView" destination="n5A-Nh-WWK" id="zfF-vG-MAA"/>
+                                                    <outlet property="pinyinLabel" destination="QY4-XZ-Kym" id="9IV-6k-cw7"/>
+                                                    <outlet property="translateLabel" destination="aho-g5-xKb" id="xUC-Je-BDR"/>
                                                 </connections>
                                             </collectionViewCell>
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="wordLockCell" id="2qJ-7b-QDA" customClass="NCWordLockCell">
