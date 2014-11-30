@@ -54,6 +54,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     if(self.ifFavourite)
     {
         
@@ -69,6 +70,13 @@
     if (!_synthesizer) {
         _synthesizer = [AVSpeechSynthesizer new];
         _synthesizer.delegate = self;
+        
+        //по какой-то причине первая строка не произносится вслух
+        AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:@" "];
+        utterance.rate = AVSpeechUtteranceMaximumSpeechRate;
+        utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"zh-CN"];
+        [_synthesizer speakUtterance:utterance];
+
     }
     return _synthesizer;
 }
@@ -85,11 +93,22 @@
 #pragma mark - Private
 
 - (void)sayText:(NSString *)text {
+    
     AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:text];
+    utterance.rate = AVSpeechUtteranceMinimumSpeechRate;
     utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"zh-CN"];
     [self.synthesizer speakUtterance:utterance];
 }
 
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didStartSpeechUtterance:(AVSpeechUtterance *)utterance
+{
+    NSLog(@"start");
+}
+
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance
+{
+    NSLog(@"%@", NSStringFromRange(characterRange));
+}
 - (void)shareWithActivityItems:(NSArray *)activityItems {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
     activityController.excludedActivityTypes = @[UIActivityTypeAirDrop, UIActivityTypeCopyToPasteboard, UIActivityTypePrint];

@@ -43,6 +43,11 @@ static NSString *const NCMenuTitleKey = @"title";
     [self setupBackgroundImage];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = NO;
+}
 #pragma mark - IBActions
 
 - (IBAction)hideMenuAction:(id)sender {

@@ -66,15 +66,34 @@
         {
             if(i == randomRightIndex)
             {
-                [question.answerArray addObject:word.material.materialEN];
+                if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
+                {
+                    [question.answerArray addObject:word.material.materialRU];
+                }
+                else
+                {
+                    [question.answerArray addObject:word.material.materialEN];
+                }
+
+                
                 ifRightAnswerSet = YES;
             }
             else
             {
-                if(!ifRightAnswerSet)
-                    [question.answerArray addObject:((NCWord *)notRightAnswerArray[i]).material.materialEN];
+                if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
+                {
+                    if(!ifRightAnswerSet)
+                        [question.answerArray addObject:((NCWord *)notRightAnswerArray[i]).material.materialRU];
+                    else
+                        [question.answerArray addObject:((NCWord *)notRightAnswerArray[i-1]).material.materialRU];
+                }
                 else
-                    [question.answerArray addObject:((NCWord *)notRightAnswerArray[i-1]).material.materialEN];
+                {
+                    if(!ifRightAnswerSet)
+                        [question.answerArray addObject:((NCWord *)notRightAnswerArray[i]).material.materialEN];
+                    else
+                        [question.answerArray addObject:((NCWord *)notRightAnswerArray[i-1]).material.materialEN];
+                }
             }
         }
         

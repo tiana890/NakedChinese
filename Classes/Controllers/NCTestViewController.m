@@ -40,7 +40,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupBackgroundImage];
-    [self updateNavigationItemsIfNeeded];
+    //[self updateNavigationItemsIfNeeded];
     
     self.sexArray = [[NSMutableArray alloc] init];
     self.invectiveArray = [[NSMutableArray alloc] init];
@@ -52,9 +52,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self updateNavigationItemsIfNeeded];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
     [NCDataManager sharedInstance].delegate = self;
     [[NCDataManager sharedInstance] getLocalPacks];
-    
 }
 
 - (void)ncDataManagerProtocolGetLocalPacks:(NSArray *)arrayOfPacks

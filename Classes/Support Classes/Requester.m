@@ -10,7 +10,8 @@
 #import "AFNetworking.h"
 
 //#define SERVER_ADDRESS @"http://nakedchinese.bb777.ru/api/get/"
-#define SERVER_ADDRESS @"http://china:8901/api/get/"
+//#define SERVER_ADDRESS @"http://china:8901/api/get/"
+#define SERVER_ADDRESS @"http://www.nakedchineseapp.com/api/get/"
 
 @implementation Requester
 
@@ -41,7 +42,7 @@
     {
         
         AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-         //manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+        // manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
         NSLog(@"%@", url.absoluteString);
         [manager GET:url.absoluteString parameters:params success:^(NSURLSessionDataTask *task , id responseObject)
          {
@@ -54,8 +55,10 @@
 
          }failure:^(NSURLSessionDataTask *task , NSError *error )
          {
+              NSLog(@"Error %@", error.description);
              if([_delegate respondsToSelector:@selector(requesterProtocolRequestFailure:)])
              {
+                
                  [_delegate performSelector:@selector(requesterProtocolRequestFailure:) withObject:[self errorMessage:error]];
              }
          }];

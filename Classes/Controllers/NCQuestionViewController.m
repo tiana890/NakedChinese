@@ -19,6 +19,8 @@
 
 #import <UIAlertView+Blocks/UIAlertView+Blocks.h>
 
+#import "NCTestResultViewController.h"
+
 #import "NCPack.h"
 #import "NCWord.h"
 #import "NCDataManager.h"
@@ -96,7 +98,6 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 #pragma mark Data Manager methods
@@ -116,6 +117,12 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
         _synthesizer = [AVSpeechSynthesizer new];
         _synthesizer.delegate = self;
     }
+    
+    //по какой-то причине первая строка не произносится вслух
+    AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:@" "];
+    utterance.rate = AVSpeechUtteranceMaximumSpeechRate;
+    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"zh-CN"];
+    [_synthesizer speakUtterance:utterance];
     return _synthesizer;
 }
 
@@ -141,7 +148,8 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 }
 
 - (IBAction)soundWordAction:(id)sender {
-    [self sayText:((NCWord*)self.wordsArray[[self.currentWord intValue]]).material.materialZH];
+    NCQuestion *q = [self.test getQuestionWithIndex:self.currentWord.intValue];
+    [self sayText:q.word.material.materialZH];
 }
 
 #pragma mark - Private
@@ -149,28 +157,41 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 - (void)sayText:(NSString *)text {
     AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:text];
     utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"zh-CN"];
+    utterance.rate = AVSpeechUtteranceMinimumSpeechRate;
     [self.synthesizer speakUtterance:utterance];
 }
 
-- (void)parseAnswer {
+- (void)parseAnswer:(int) index {
+    NCQuestion *q = [self.test getQuestionWithIndex:self.currentWord.intValue];
     
     UIImage *const correctImage = [UIImage imageNamed:@"nc_correct_answer"];
     UIImage *const wrongImage = [UIImage imageNamed:@"nc_wrong_answer"];
-    //self.answerIndicatorView.image = correctlyAnswer ? correctImage : wrongImage;
+    
+    BOOL ifRightAnswer = [self.test setAnswerIndex:index forQuestionWithIndex:self.currentWord.intValue];
+    self.answerIndicatorView.image = (ifRightAnswer) ? correctImage : wrongImage;
+    
     [self answerAnimation];
     
 }
 
 - (void)answerAnimation {
+   
     [self hideUIItems:YES completion:^{
         [self hideAnswerIndicator:NO completion:^{
+            int value = [self.currentWord intValue];
+            value++;
+            if(value < self.wordsArray.count)
+            {
+                self.currentWord = [NSNumber numberWithInt:value];
+                [self.tableView reloadData];
+            }
+            else
+            {
+                [self performSegueWithIdentifier:@"resultSegue" sender:self];
+            }
             [self hideAnswerIndicator:YES completion:^{
                 [self hideUIItems:NO completion:^{
-                    int value = [self.currentWord intValue];
-                    value++;
-                    if(value < self.wordsArray.count)
-                        self.currentWord = [NSNumber numberWithInt:value];
-                    [self.tableView reloadData];
+                    
                 }];
             }];
         }];
@@ -194,8 +215,10 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 - (void)hideAnswerIndicator:(BOOL)hide completion:(void (^)(void))completion {
     [UIView animateWithDuration:0.5 animations:^{
         self.answerIndicatorView.alpha = hide ? 0.f : 1.f;
+        
     } completion:^(BOOL finished) {
         if (finished) {
+            
             if (completion) {
                 completion();
             }
@@ -210,19 +233,20 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 }
 
 - (void)animationTransitionNextWordWithCompletion:(void (^)(void))completion {
-    [UIView animateKeyframesWithDuration:1.2 delay:0 options:UIViewKeyframeAnimationOptionCalculationModeCubic animations:^{
+       [UIView animateKeyframesWithDuration:1.2 delay:0 options:UIViewKeyframeAnimationOptionCalculationModeCubic animations:^{
         
         [UIView addKeyframeWithRelativeStartTime:0.0f relativeDuration:0.3f animations:^{
-            self.view.alpha = 0;
+            //self.view.alpha = 0;
         }];
         
         
         [UIView addKeyframeWithRelativeStartTime:0.5f relativeDuration:0.3f animations:^{
-            self.view.alpha = 1;
+           // self.view.alpha = 1;
         }];
         
     } completion:^(BOOL finished) {
         if (completion && finished) {
+            
             completion();
         }
     }];
@@ -262,7 +286,7 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
             wordCell.translationLabel.text = q.answerArray[index];
             wordCell.userInteractionEnabled = YES;
         } else {
-            wordCell.translationLabel.text = q.word.material.materialEN;
+            wordCell.translationLabel.text = [NSString stringWithFormat:@"%i/%i", self.currentWord.intValue+1, [self.test getNumberOfQuestions]];
             wordCell.userInteractionEnabled = NO;
         }
         
@@ -282,7 +306,7 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self animationTransitionNextWordWithCompletion:^{
-        [self parseAnswer];
+        [self parseAnswer:indexPath.row-1];
     }];
 }
 
@@ -290,15 +314,15 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
     [self hideBarsLinesAlgorithmFromCalculationScrollView:scrollView];
 }
 
-/*
+
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
+ //In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    NCTestResultViewController *rc = segue.destinationViewController;
+    rc.rightResults = [self.test getMark];
 }
-*/
+
 
 @end
