@@ -15,6 +15,7 @@
 @property (nonatomic, strong) NSNumber *ID;
 @property (nonatomic, strong) NSNumber *packID;
 @property (nonatomic, strong) NSString *image;
+@property (nonatomic, strong) NSString *bigImage;
 @property (nonatomic, strong) NSNumber *paid;
 @property (nonatomic, strong) NSNumber *show;
 //material

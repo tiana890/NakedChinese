@@ -115,6 +115,7 @@
                                                               inManagedObjectContext:appDelegate.managedObjectContext];
         [newWord setValue:word.ID forKey:@"id"];
         [newWord setValue:word.image forKey:@"image"];
+        [newWord setValue:word.bigImage forKey:@"imageBig"];
         [newWord setValue:word.packID forKey:@"pack_id"];
         [newWord setValue:word.paid forKey:@"paid"];
         [newWord setValue:word.show forKey:@"show"];

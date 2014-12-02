@@ -39,6 +39,10 @@
     {
         word.image = [jsonDict objectForKey:@"image"];
     }
+    if([jsonDict objectForKey:@"imageBig"] != [NSNull null])
+    {
+        word.bigImage = [jsonDict objectForKey:@"image"];
+    }
     
     if([jsonDict objectForKey:@"paid"] != [NSNull null])
     {
@@ -68,6 +72,7 @@
     word.image = [object valueForKey:@"image"];
     word.paid = [object valueForKey:@"paid"];
     word.show = [object valueForKey:@"show"];
+    word.bigImage = [object valueForKey:@"imageBig"];
     
     //NSLog(@"DEBUG word id %i", [word.ID intValue]);
     //NSLog(@"DEBUG word pack id %i", [word.packID intValue]);

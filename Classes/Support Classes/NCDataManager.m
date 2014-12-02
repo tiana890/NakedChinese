@@ -272,17 +272,18 @@
 {
     NSMutableArray *array = [[NSMutableArray alloc] init];
     
-    NSArray *chinese = @[@"假阳具", @"小姐", @"高潮", @"打飞机", @"射", @"同志", @"拉拉", @"鸡巴", @"阳痿", @"屄", @"有一腿", @"开包"];
-    NSArray *pinyin = @[@"jǐayángjǜ", @"xiǎojiě", @"gāo cháo", @"dǎfēijī", @"shè", @"tóngzhì", @"lāla", @"jībā", @"yángwěi", @"bī", @"yǒuyītuǐ", @"kāibāo"];
-    NSArray *russian = @[@"Фаллоимитатор", @"Проститутка", @"Оргазм", @"Мастурбировать", @"Эякулировать, кончить", @"Гей", @"Лесбиянки", @"Пенис", @"Импотент", @"Вагина", @"Изменять", @"Лишить девственности"];
-    NSArray *english = @[@"Dildo", @"Prostitute", @"Orgasm", @"Handjob", @"Cum, to ejaculate", @"Gay, Homosexual", @"Lesbian", @"Dick, cock", @"Impotent", @"Vagina", @"To have an affair, to cheat on", @"To deflower"];
+    NSArray *chinese = @[@"假阳具", @"小姐", @"高潮", @"打飞机", @"射", @"同志", @"拉拉", @"鸡巴", @"阳痿", @"屄", @"有一腿", @"色狼"];
+    NSArray *pinyin = @[@"jǐayángjǜ", @"xiǎojiě", @"gāo cháo", @"dǎfēijī", @"shè", @"tóngzhì", @"lāla", @"jībā", @"yángwěi", @"bī", @"yǒuyītuǐ", @"sèláng"];
+    NSArray *russian = @[@"Фаллоимитатор", @"Проститутка", @"Оргазм", @"Мастурбировать", @"Эякулировать, кончить", @"Гей", @"Лесбиянки", @"Пенис", @"Импотент", @"Вагина", @"Изменять", @"Извращенец"];
+    NSArray *english = @[@"Dildo", @"Prostitute", @"Orgasm", @"Handjob", @"Cum, to ejaculate", @"Gay, Homosexual", @"Lesbian", @"Dick, cock", @"Impotent", @"Vagina", @"To have an affair, to cheat on", @"Pervert"];
     
     for(int i = 0; i < 12; i++)
     {
         NCWord *word = [[NCWord alloc] init];
         word.ID = [NSNumber numberWithInt: i+1];
         word.packID = @1;
-        word.image = [NSString stringWithFormat:@"%i_img_small", i+1];
+        word.image = [NSString stringWithFormat:@"%i_img_preview", i+1];
+        word.bigImage = [NSString stringWithFormat:@"%i_img_big", i+1];
         word.material.materialZH = chinese[i];
         word.material.materialZH_TR = pinyin[i];
         word.material.materialRU = russian[i];

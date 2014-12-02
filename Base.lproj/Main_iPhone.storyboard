@@ -190,6 +190,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="NAKED CHINESE" id="nyG-Z1-2f5">
                         <barButtonItem key="leftBarButtonItem" image="nc_backbutton" id="xo1-o6-ViO">
+                            <color key="tintColor" red="0.57254901960000004" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="showInteractionView:" destination="vXZ-lx-hvc" id="T5Q-CV-XBS"/>
                             </connections>
@@ -245,19 +246,6 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2YX-Pj-JAB">
                                                     <rect key="frame" x="0.0" y="0.0" width="138" height="138"/>
                                                 </imageView>
-                                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Nz-NB-Wuk" customClass="FXBlurView">
-                                                    <rect key="frame" x="0.0" y="68" width="138" height="70"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="dynamic" value="NO"/>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="blurRadius">
-                                                            <integer key="value" value="10"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
-                                                            <color key="value" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </view>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="你好" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fnw-1s-pvL">
                                                     <rect key="frame" x="0.0" y="73" width="138" height="23"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -289,7 +277,6 @@
                                         </view>
                                         <size key="customSize" width="138" height="138"/>
                                         <connections>
-                                            <outlet property="blurView" destination="4Nz-NB-Wuk" id="wH7-2R-CyE"/>
                                             <outlet property="chineseLabel" destination="Fnw-1s-pvL" id="jfh-fW-CzK"/>
                                             <outlet property="pictureView" destination="2YX-Pj-JAB" id="x4a-Uw-CnO"/>
                                             <outlet property="pinyinLabel" destination="8js-Zx-xHM" id="pBd-RR-Dxz"/>
@@ -306,13 +293,6 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9BO-kH-CXf">
                                                     <rect key="frame" x="0.0" y="0.0" width="138" height="138"/>
                                                 </imageView>
-                                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zj5-0G-74S" customClass="FXBlurView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="138" height="138"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="dynamic" value="NO"/>
-                                                    </userDefinedRuntimeAttributes>
-                                                </view>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="nc_lock" translatesAutoresizingMaskIntoConstraints="NO" id="uQm-ZR-bgv" userLabel="Lock">
                                                     <rect key="frame" x="24" y="24" width="90" height="90"/>
                                                 </imageView>
@@ -321,7 +301,6 @@
                                         </view>
                                         <size key="customSize" width="138" height="138"/>
                                         <connections>
-                                            <outlet property="blurView" destination="zj5-0G-74S" id="XF9-ad-lBK"/>
                                             <outlet property="pictureView" destination="9BO-kH-CXf" id="JGz-yC-5wp"/>
                                         </connections>
                                     </collectionViewCell>
@@ -505,11 +484,13 @@
                     </view>
                     <navigationItem key="navigationItem" title="{PACK LOGO}" id="RNT-LJ-ZBG">
                         <barButtonItem key="leftBarButtonItem" image="nc_packs" id="cLk-T7-XzI">
+                            <color key="tintColor" red="0.57254901960000004" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="goBack:" destination="IFt-0b-pT9" id="Ghv-qO-6tb"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="nc_search" id="6Wh-K8-a2E">
+                            <color key="tintColor" red="0.57254901960000004" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="searchAction:" destination="IFt-0b-pT9" id="jRd-Eu-tq6"/>
                             </connections>
@@ -553,6 +534,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="NAKED CHINESE" id="fxC-MV-Qs3">
                         <barButtonItem key="leftBarButtonItem" image="nc_words" id="c1f-66-cNS">
+                            <color key="tintColor" red="0.57254901960000004" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="goBack:" destination="cdf-FH-9pE" id="KqP-Hp-696"/>
                             </connections>
@@ -569,6 +551,7 @@
                                     <action selector="addToFavorite:" destination="cdf-FH-9pE" eventType="touchUpInside" id="Aqn-Wh-Zen"/>
                                 </connections>
                             </button>
+                            <color key="tintColor" red="0.57254901960000004" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="calibratedRGB"/>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
@@ -1225,11 +1208,13 @@
                     </view>
                     <navigationItem key="navigationItem" title="ТЕСТ" id="6Lk-RI-4Ty">
                         <barButtonItem key="leftBarButtonItem" image="nc_menu" id="ATF-5o-BzF">
+                            <color key="tintColor" red="0.57254901960000004" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="popToMenuController:" destination="WHd-Xb-XyJ" id="jGl-xh-bVc"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="nc_packs" id="Knz-7Z-X19">
+                            <color key="tintColor" red="0.57254901960000004" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="popToPartitionControllerAction:" destination="WHd-Xb-XyJ" id="V7Y-w3-aVy"/>
                             </connections>
@@ -1274,11 +1259,13 @@
                                         <items>
                                             <navigationItem title="TEST" id="fi9-48-byV">
                                                 <barButtonItem key="leftBarButtonItem" image="nc_packs" id="dvT-U4-puS">
+                                                    <color key="tintColor" red="0.57254901960000004" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
                                                         <action selector="toBackAction:" destination="jsc-28-r3z" id="J9X-s4-QNW"/>
                                                     </connections>
                                                 </barButtonItem>
                                                 <barButtonItem key="rightBarButtonItem" image="nc_soundx60b" id="Ibb-dz-8NA">
+                                                    <color key="tintColor" red="0.57254901960000004" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
                                                         <action selector="soundWordAction:" destination="jsc-28-r3z" id="8eP-N2-gZ7"/>
                                                     </connections>
@@ -2001,11 +1988,14 @@
                                         <items>
                                             <navigationItem title="TEST" id="byU-VO-25N">
                                                 <barButtonItem key="leftBarButtonItem" image="nc_packs" id="gm9-6u-m4V">
+                                                    <color key="tintColor" red="0.57254901960000004" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
                                                         <action selector="toBackAction:" destination="mae-Zq-c7F" id="HTs-8R-Ed8"/>
                                                     </connections>
                                                 </barButtonItem>
-                                                <barButtonItem key="rightBarButtonItem" id="xW4-Gs-3DV"/>
+                                                <barButtonItem key="rightBarButtonItem" id="xW4-Gs-3DV">
+                                                    <color key="tintColor" red="0.57254901960000004" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                </barButtonItem>
                                             </navigationItem>
                                         </items>
                                     </navigationBar>

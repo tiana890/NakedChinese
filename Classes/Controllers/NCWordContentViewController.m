@@ -32,12 +32,13 @@
 
     if([self.word.packID isEqualToNumber:@1])
     {
-        [self.pictureView setImage:[UIImage imageNamed:self.word.image]];
+        [self.pictureView setImage:[UIImage imageNamed:self.word.bigImage]];
     }
     else
     {
         [self.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, self.word.image]]];
     }
+    NSLog(@"word frame = %@", NSStringFromCGRect(self.pictureView.frame));
     self.chineseLabel.text = self.word.material.materialZH;
     self.pinyinLabel.text = self.word.material.materialZH_TR;
     if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])

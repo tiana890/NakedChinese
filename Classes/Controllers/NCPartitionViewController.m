@@ -95,6 +95,8 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+    
     
     [self hideBarLine];
     [self disableBlurViews];
