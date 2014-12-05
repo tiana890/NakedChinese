@@ -247,19 +247,19 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="138" height="138"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="你好" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fnw-1s-pvL">
-                                                    <rect key="frame" x="0.0" y="73" width="138" height="23"/>
+                                                    <rect key="frame" x="0.0" y="71" width="138" height="23"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="nǐ hǎo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8js-Zx-xHM">
-                                                    <rect key="frame" x="0.0" y="94" width="138" height="21"/>
+                                                    <rect key="frame" x="0.0" y="92" width="138" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="привет!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g02-zg-WnT" customClass="THLabel">
-                                                    <rect key="frame" x="0.0" y="111" width="138" height="23"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
+                                                    <rect key="frame" x="0.0" y="109" width="138" height="23"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                     <size key="shadowOffset" width="0.0" height="0.0"/>
@@ -388,7 +388,7 @@
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="привет!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aho-g5-xKb" customClass="THLabel">
                                                             <rect key="frame" x="0.0" y="111" width="138" height="23"/>
-                                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
+                                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                             <size key="shadowOffset" width="0.0" height="0.0"/>
@@ -1504,11 +1504,11 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="niP-iO-QeW" userLabel="Speak">
-                                <rect key="frame" x="195" y="85" width="44" height="41"/>
+                                <rect key="frame" x="203" y="85" width="35" height="32"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="44" id="CpZ-5d-UlC"/>
-                                    <constraint firstAttribute="height" constant="41" id="Vws-di-8sy"/>
+                                    <constraint firstAttribute="width" constant="35" id="CpZ-5d-UlC"/>
+                                    <constraint firstAttribute="height" constant="32" id="Vws-di-8sy"/>
                                 </constraints>
                                 <state key="normal" image="nc_soundx75">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1518,11 +1518,11 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yuM-CN-SP8" userLabel="Share">
-                                <rect key="frame" x="78" y="85" width="44" height="41"/>
+                                <rect key="frame" x="83" y="85" width="35" height="32"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="44" id="20g-za-eSV"/>
-                                    <constraint firstAttribute="height" constant="41" id="7Zd-Md-rsb"/>
+                                    <constraint firstAttribute="width" constant="35" id="20g-za-eSV"/>
+                                    <constraint firstAttribute="height" constant="32" id="7Zd-Md-rsb"/>
                                 </constraints>
                                 <state key="normal" image="nc_sharex75">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1535,10 +1535,10 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="yuM-CN-SP8" firstAttribute="top" secondItem="uyf-61-ZtO" secondAttribute="top" constant="85" id="2SC-2W-gjy"/>
-                            <constraint firstItem="Fsw-pa-6rs" firstAttribute="top" secondItem="yuM-CN-SP8" secondAttribute="bottom" constant="9" id="Ccg-Z9-7HG"/>
-                            <constraint firstItem="6mU-lk-unN" firstAttribute="leading" secondItem="yuM-CN-SP8" secondAttribute="trailing" constant="4" id="GGA-QA-cT2"/>
+                            <constraint firstItem="Fsw-pa-6rs" firstAttribute="top" secondItem="yuM-CN-SP8" secondAttribute="bottom" constant="18" id="Ccg-Z9-7HG"/>
+                            <constraint firstItem="6mU-lk-unN" firstAttribute="leading" secondItem="yuM-CN-SP8" secondAttribute="trailing" constant="8" id="GGA-QA-cT2"/>
                             <constraint firstItem="niP-iO-QeW" firstAttribute="top" secondItem="uyf-61-ZtO" secondAttribute="top" constant="85" id="Jt3-We-Hnl"/>
-                            <constraint firstItem="niP-iO-QeW" firstAttribute="leading" secondItem="6mU-lk-unN" secondAttribute="trailing" id="PFL-N9-LWC"/>
+                            <constraint firstItem="niP-iO-QeW" firstAttribute="leading" secondItem="6mU-lk-unN" secondAttribute="trailing" constant="8" id="PFL-N9-LWC"/>
                             <constraint firstItem="6mU-lk-unN" firstAttribute="top" secondItem="uyf-61-ZtO" secondAttribute="top" constant="85" id="RCh-rz-u9T"/>
                             <constraint firstItem="AT1-r3-RJc" firstAttribute="top" secondItem="Fsw-pa-6rs" secondAttribute="bottom" constant="12" id="UpR-Td-iuA"/>
                             <constraint firstItem="Fsw-pa-6rs" firstAttribute="leading" secondItem="uyf-61-ZtO" secondAttribute="leading" constant="15" id="e15-yD-wlU"/>
@@ -1658,7 +1658,7 @@
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
-                                                        <segue destination="vXZ-lx-hvc" kind="push" id="fk7-EK-Vok"/>
+                                                        <segue destination="vXZ-lx-hvc" kind="push" identifier="greetingSegue" id="HHJ-6r-e3v"/>
                                                     </connections>
                                                 </button>
                                                 <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SO7-Rv-Vd9">
@@ -2085,9 +2085,9 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="fk7-EK-Vok"/>
-        <segue reference="K16-bG-sWg"/>
-        <segue reference="30R-Nr-slG"/>
+        <segue reference="HHJ-6r-e3v"/>
         <segue reference="Brb-eK-n9d"/>
+        <segue reference="30R-Nr-slG"/>
+        <segue reference="K16-bG-sWg"/>
     </inferredMetricsTieBreakers>
 </document>

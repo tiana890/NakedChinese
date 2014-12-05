@@ -253,11 +253,13 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
                     [openCell.pinyinLabel setText:word.material.materialZH_TR];
                     if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
                     {
-                        [openCell.translateLabel setText:word.material.materialRU];
+                        NSString *str = [self cutFirstWord:word.material.materialRU];
+                        [openCell.translateLabel setText:str];
                     }
                     else
                     {
-                        [openCell.translateLabel setText:word.material.materialEN];
+                        NSString *str = [self cutFirstWord:word.material.materialEN];
+                        [openCell.translateLabel setText:str];
                     }
                     return openCell;
                 }
@@ -336,6 +338,15 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     return nil;
 }
 
+- (NSString *) cutFirstWord:(NSString *) str
+{
+    NSArray * words = [str componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    for (NSString * word in words)
+    {
+        return word;
+    }
+    return str;
+}
 
 #pragma mark - UICollectionViewDelegate
 
@@ -383,7 +394,6 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    NSLog(@"search %@", searchBar.text);
     [NCDataManager sharedInstance].delegate = self;
     [[NCDataManager sharedInstance] searchWordContainsString:searchBar.text];
     
@@ -427,32 +437,6 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
         [self cancelSearch];
     }
     
-}
-
-#pragma mark - Test DATA
-
-#warning Test data!
-- (NSArray *)_words {
-    return @[@{NCWordChineseKey: @"讓我們",
-               NCWordPinyinKey: @"Ràng lái",
-               NCWordTranslateKey: @"sit amet",
-               NCWorkPictureKey: [UIImage imageNamed:@"k-1.jpg"]},
-             @{NCWordChineseKey: @"該薄膜為",
-               NCWordPinyinKey: @"Gāi wèi",
-               NCWordTranslateKey: @"in enim velit",
-               NCWorkPictureKey: [UIImage imageNamed:@"k-2.jpg"]},
-             @{NCWordChineseKey: @"市長。",
-               NCWordPinyinKey: @"Shuō māo",
-               NCWordTranslateKey: @"In felis",
-               NCWorkPictureKey: [UIImage imageNamed:@"k-3.jpg"]},
-             @{NCWordChineseKey: @"這不止",
-               NCWordPinyinKey: @"Zhè bùzhǐ",
-               NCWordTranslateKey: @"Etiam id",
-               NCWorkPictureKey: [UIImage imageNamed:@"k-4.jpg"]},
-             @{NCWordChineseKey: @"現在，前橄。",
-               NCWordPinyinKey: @"Qián duì.",
-               NCWordTranslateKey: @"Nunc eu",
-               NCWorkPictureKey: [UIImage imageNamed:@"k-5.jpg"]}];
 }
 
 @end

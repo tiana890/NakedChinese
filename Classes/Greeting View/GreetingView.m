@@ -96,7 +96,8 @@
         [cell.textLabel setAlpha:1.0f];
         [cell.nextButton setTitle:NSLocalizedString(@"next", nil) forState:UIControlStateNormal];
         [cell.nextButton setAlpha:1.0f];
-
+        
+        
         return cell;
     }
     else

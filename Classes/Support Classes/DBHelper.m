@@ -10,6 +10,7 @@
 #import "NCAppDelegate.h"
 #import "NCWord.h"
 #import "NCMaterial.h"
+#import "NCExplanation.h"
 
 @implementation DBHelper
 
@@ -141,6 +142,108 @@
 
 }
 
+- (void)setMaterialsToDB:(NSArray *)materialsArray andExplanations:(NSArray *)explanationsArray
+{
+    NCAppDelegate *appDelegate = (NCAppDelegate *)[[UIApplication sharedApplication]delegate];
+    
+    NSManagedObject *materials = [NSEntityDescription insertNewObjectForEntityForName:@"Materials"
+                                                               inManagedObjectContext:appDelegate.managedObjectContext];
+    
+    NSMutableSet *containMaterials = [materials mutableSetValueForKey:@"containMaterials"];
+    
+    for(NCMaterial *material in materialsArray)
+    {
+        //проверяем есть ли такой элемент в базе
+        
+        NSString *formatPredicate = [NSString stringWithFormat:@"id == %i", [material.materialID intValue]];
+        
+        NSArray *materialArray = [self fetchRequestWithEntityName:@"Material" andFormatPredicate:formatPredicate];
+        if(materialArray.count > 0)
+        {
+            [appDelegate.managedObjectContext deleteObject:materialArray[0]];
+        }
+        
+        //вставляем его в базу
+        
+        NSManagedObject *newMaterial = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:appDelegate.managedObjectContext];
+        
+        [newMaterial setValue:material.materialID forKey:@"id"];
+        [newMaterial setValue:material.materialZH forKey:@"zh"];
+        [newMaterial setValue:material.materialZH_TR forKey:@"zh_tr"];
+        [newMaterial setValue:material.materialEN forKey:@"en"];
+        [newMaterial setValue:material.materialRU forKey:@"ru"];
+        [newMaterial setValue:material.materialSound forKey:@"sound"];
+        
+        [containMaterials addObject:newMaterial];
+        
+    }
+    
+    NSManagedObject *explanations = [NSEntityDescription insertNewObjectForEntityForName:@"Explanations"
+                                                               inManagedObjectContext:appDelegate.managedObjectContext];
+    
+    NSMutableSet *containExplanations = [explanations mutableSetValueForKey:@"containExplanations"];
+    
+    
+    for(NCExplanation *explanation in explanationsArray)
+    {
+        //проверяем есть ли такой элемент в базе
+        
+        NSString *formatPredicate = [NSString stringWithFormat:@"id == %i", [explanation.ID intValue]];
+        
+        NSArray *explanationArray = [self fetchRequestWithEntityName:@"Explanation" andFormatPredicate:formatPredicate];
+        if(explanationArray.count > 0)
+        {
+            [appDelegate.managedObjectContext deleteObject:explanationArray[0]];
+        }
+        
+        //вставляем его в базу
+        
+        NSManagedObject *newExplanation = [NSEntityDescription insertNewObjectForEntityForName:@"Explanation" inManagedObjectContext:appDelegate.managedObjectContext];
+        
+        [newExplanation setValue:explanation.ID forKey:@"id"];
+        [newExplanation setValue:explanation.wordID forKey:@"word_id"];
+        
+        [containExplanations addObject:newExplanation];
+
+    }
+    
+    //    сохраняем данные в хранилище
+    [appDelegate saveContext];
+
+}
+
+- (NSArray *)getMaterialsWithWordID:(int)wordID
+{
+    NSString *formatPredicate = [NSString stringWithFormat:@"word_id == %i", wordID];
+        
+    NSArray *explanationArray = [self fetchRequestWithEntityName:@"Explanation" andFormatPredicate:formatPredicate];
+    
+    NSMutableArray *materialIDs = [[NSMutableArray alloc] init];
+    for(NSManagedObject *obj in explanationArray)
+    {
+        NCExplanation *explanation = [NCExplanation getNCExplanationdFromNSManagedObject:obj];
+        [materialIDs addObject:explanation.ID];
+    }
+    
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    
+    for(int i = 0; i < materialIDs.count; i++)
+    {
+    
+        NSString *formatPredicate = [NSString stringWithFormat:@"id == %i", [materialIDs[i] intValue]];
+            
+        NSArray *materialArray = [self fetchRequestWithEntityName:@"Material" andFormatPredicate:formatPredicate];
+        
+        if(materialArray.count > 0)
+        {
+            [result addObject:[NCMaterial getNCMaterialFromNSManagedObject:materialArray[0]]];
+        }
+    }
+
+    return result;
+    
+}
+
 - (NSArray *)getFavorites
 {
     NSMutableArray *array = [[NSMutableArray alloc] init];
@@ -267,6 +370,7 @@
     
     return array;
 }
+
 
 - (NSArray *) fetchRequestWithEntityName:(NSString *) entityName andFormatPredicate:(NSString *)formatPredicate
 {

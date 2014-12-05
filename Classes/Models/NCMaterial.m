@@ -57,7 +57,6 @@
         material.materialLastUpdate = [jsonDict objectForKey:@"last_update"];
     }
 
-    
     return material;
 }
 

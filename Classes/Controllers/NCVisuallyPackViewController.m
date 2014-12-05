@@ -17,11 +17,12 @@
 #import "NCConstants.h"
 
 #import "NCWord.h"
+#import "NCMaterial.h"
 
 static CGFloat const NCVisuallyPackMaxBlurRadius = 20.f;
 static CGFloat const NCVisuallySlideViewHeight = 60.f;
 
-@interface NCVisuallyPackViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
+@interface NCVisuallyPackViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, NCDataManagerProtocol>
 
 @property (strong, nonatomic) UIPageViewController *pageViewController;
 
@@ -34,6 +35,8 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
 @property (strong, nonatomic) FXBlurView *frontBlurView;
 
 @property (strong, nonatomic) IBOutlet UIButton *favoriteButton;
+
+@property(nonatomic, strong) NSArray *materials;
 
 @end
 
@@ -51,8 +54,19 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
 {
     [super viewWillAppear:animated];
     [self setNavItemFavoriteButton];
+    
+    NCWord *word = self.arrayOfWords[self.openedWordIndex];
+    [NCDataManager sharedInstance].delegate = self;
+    [[NCDataManager sharedInstance] getMaterialsWithWordID:word.ID.intValue];
+    
 }
 
+- (void)ncDataManagerProtocolGetMaterialsWithWordID:(NSArray *)arrayOfMaterials
+{
+    self.materials = arrayOfMaterials;
+    NCExplanationViewController *explanationViewController = [self explanationViewController];
+    explanationViewController.arrayOfExplanations = arrayOfMaterials;
+}
 //set navItems depending on type of controller: favorite or non-favorite
 - (void) setNavItemFavoriteButton
 {
@@ -131,7 +145,7 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
 
 - (void)setupExplanationViewController {
     NCExplanationViewController *explanationController = [self explanationViewController];
-    explanationController.arrayOfExplanations = [self _explanations];
+    explanationController.arrayOfExplanations = self.materials;
     
     explanationController.view.frame = CGRectMake(0, CGRectGetHeight(self.view.bounds) - NCVisuallySlideViewHeight, CGRectGetWidth(explanationController.view.bounds), CGRectGetHeight(explanationController.view.bounds));
     

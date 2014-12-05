@@ -141,11 +141,11 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
 
 - (IBAction)changedPartitionAction:(UISegmentedControl *)sender {
     [NCDataManager sharedInstance].delegate = self;
-    [[NCDataManager sharedInstance] getPacks];
+    [[NCDataManager sharedInstance] getLocalPacks];
 }
 
 #pragma mark - NCDataManagerProtocol methods
-- (void)ncDataManagerProtocolGetPacks:(NSArray *)arrayOfPacks
+- (void)ncDataManagerProtocolGetLocalPacks:(NSArray *)arrayOfPacks
 {
     self.numbersAndPacks = nil;
     self.packsArray = arrayOfPacks;
@@ -363,7 +363,6 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
         destinationViewController.type = type;
         
         NSNumber *key = [NSNumber numberWithInteger:destinationViewController.packNumber-1];
-        NSLog(@"part %li key %i", (long)self.partitionSegmentedControl.selectedSegmentIndex, [key intValue]);
         NSNumber *index = [self.numbersAndPacks[self.partitionSegmentedControl.selectedSegmentIndex] objectForKey:key];
         NCPack *pack = self.packsArray[[index integerValue]];
         destinationViewController.pack = pack;

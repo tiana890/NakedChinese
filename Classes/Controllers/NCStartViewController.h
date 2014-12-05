@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface NCStartViewController : UIViewController
-
+@property (strong, nonatomic) IBOutlet UIView *greetingView;
+@property (strong, nonatomic) IBOutlet UIView *mainView;
 @end

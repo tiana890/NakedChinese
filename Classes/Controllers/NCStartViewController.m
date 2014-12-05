@@ -10,8 +10,7 @@
 #import "NCAppDelegate.h"
 
 @interface NCStartViewController ()
-@property (strong, nonatomic) IBOutlet UIView *greetingView;
-@property (strong, nonatomic) IBOutlet UIView *mainView;
+
 
 @end
 
@@ -22,6 +21,7 @@
     // Do any additional setup after loading the view.
     
     NCAppDelegate *appDelegate = (NCAppDelegate *)[[UIApplication sharedApplication] delegate];
+    appDelegate.startViewController = self;
     if(!appDelegate.ifFirstLaunch)
     {
         self.mainView.hidden = YES;

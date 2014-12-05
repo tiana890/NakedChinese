@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "NCDataManager.h"
+#import "NCStartViewController.h"
 
 @interface NCAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -19,5 +20,6 @@
 
 @property (nonatomic) BOOL ifFirstLaunch;
 
+@property (nonatomic, strong) NCStartViewController *startViewController;
 - (void)saveContext;
 @end

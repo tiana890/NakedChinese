@@ -26,4 +26,6 @@
 - (void) setPackToDB:(NCPack *)pack;
 - (NCWord *) getWordWithID:(int)wordID;
 - (NSArray *) searchWordContainsString:(NSString *)string;
+- (void)setMaterialsToDB:(NSArray *)materialsArray andExplanations:(NSArray *)explanationsArray;
+- (NSArray *)getMaterialsWithWordID:(int)wordID;
 @end

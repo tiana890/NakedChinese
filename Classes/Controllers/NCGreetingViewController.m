@@ -8,6 +8,7 @@
 
 #import "NCGreetingViewController.h"
 #import "GreetingView.h"
+#import "NCAppDelegate.h"
 
 @interface NCGreetingViewController ()
 @property (strong, nonatomic) IBOutlet GreetingView *greetingView;
@@ -81,6 +82,13 @@
 - (IBAction)nextButtonPressed:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NCAppDelegate *appDelegate = (NCAppDelegate *)[[UIApplication sharedApplication] delegate];
+    appDelegate.startViewController.mainView.hidden = NO;
+    appDelegate.startViewController.greetingView.hidden = YES;
 }
 
 @end

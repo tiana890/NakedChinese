@@ -31,14 +31,24 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self initDB];
     }
+    else
+    {
+        [self loadPacks];
+    }
     
     NSLog(@"%@", NSLocalizedString(@"lang", @""));
     return YES;
 }
 
-- (void)initDB
+#pragma mark - Data Manager methods
+- (void) initDB
 {
     [[NCDataManager sharedInstance] firstDBInitialization];
+}
+
+- (void) loadPacks
+{
+    [[NCDataManager sharedInstance] getPacksWithNewLaunch];
 }
 
 #pragma mark - Core Data Stack

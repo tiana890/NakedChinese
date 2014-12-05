@@ -9,7 +9,7 @@
 #import "NCExplanationViewController.h"
 
 #import "NCExplanationCell.h"
-
+#import "NCMaterial.h"
 #import "NCConstants.h"
 
 static NSString *const NCExplanationCellIdentifier = @"explanationCell";
@@ -27,6 +27,13 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
     //self.tableView.contentInset = UIEdgeInsetsMake(self.tableYOffset, 0, 0, 0);
 }
 
+#pragma mark getters & setters
+- (void)setArrayOfExplanations:(NSArray *)arrayOfExplanations
+{
+    _arrayOfExplanations = arrayOfExplanations;
+    [self.tableView reloadData];
+}
+
 #pragma mark - Lifecycle
 
 #pragma mark - Custom Accessors
@@ -36,19 +43,19 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
         switch (state) {
             case NCExplanationSliderVisible:
                 [self animationSlideReplaceWithAngle:M_PI];
-                self.sliderLabel.text = NSLocalizedString(@"потяни вниз", @"pull to down");
+                self.sliderLabel.text = NSLocalizedString(@"Вернуться назад", @"pull to down");
                 break;
             case NCExplanationSliderHidden:
                 [self animationSlideReplaceWithAngle:0];
-                self.sliderLabel.text = NSLocalizedString(@"потяни вверх", @"pull to up");
+                self.sliderLabel.text = NSLocalizedString(@"Дополнительная информация", @"pull to up");
                 break;
             case NCExplanationSliderDragToDown:
                 [self animationSlideReplaceWithAngle:M_PI];
-                self.sliderLabel.text = NSLocalizedString(@"продолжай тянуть вниз", @"continue to pull down");
+                self.sliderLabel.text = NSLocalizedString(@"", @"continue to pull down");
                 break;
             case NCExplanationSliderDragToUp:
                 [self animationSlideReplaceWithAngle:0];
-                self.sliderLabel.text = NSLocalizedString(@"продолжай тянуть вверх", @"continue to pull up");
+                self.sliderLabel.text = NSLocalizedString(@"", @"continue to pull up");
                 break;
         }
         _state = state;
@@ -71,11 +78,16 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
 
 - (void)configureExplanationCell:(NCExplanationCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     
+    /*
     NSDictionary *object = self.arrayOfExplanations[indexPath.row - 1];
     
     cell.chineseLabel.text = [NSString stringWithFormat:@"%ld.%@",indexPath.row+1, object[NCWordChineseKey]];
     cell.pinyinLabel.text = object[NCWordPinyinKey];
-    cell.translateLabel.text = object[NCWordTranslateKey];
+    cell.translateLabel.text = object[NCWordTranslateKey];*/
+    NCMaterial *material = self.arrayOfExplanations[indexPath.row-1];
+    cell.chineseLabel.text = [NSString stringWithFormat:@"%d.%@",indexPath.row, material.materialZH];
+    cell.pinyinLabel.text = material.materialZH_TR;
+    cell.translateLabel.text = material.materialEN;
 }
 
 - (CGFloat)heightForBasicExplanationAtIndexPath:(NSIndexPath *)indexPath {
@@ -110,7 +122,7 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.arrayOfExplanations count] + 1;
+    return [self.arrayOfExplanations count]+1;
 }
 
 #pragma mark - UITableViewDelegate
@@ -122,7 +134,7 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
 #pragma mark - NCExplanationCellDelegate
 
 -(void)sayFromExplanationCell:(NCExplanationCell *)cell {
-    NSLog(@"Say from cell: %@", cell);
+    NSLog(@"Say from cell: %@", cell.chineseLabel.text);
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
