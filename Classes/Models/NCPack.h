@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) NSNumber *ID;
 @property (nonatomic, strong) NSString *partition;
+@property (nonatomic, strong) NSNumber *paid;
 
 + (NCPack *) getNCPackFromJson:(NSDictionary *)jsonDict;
 + (NCPack *) getNCPackFromNSManagedObject:(NSManagedObject *)object;

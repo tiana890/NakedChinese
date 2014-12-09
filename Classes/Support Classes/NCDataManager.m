@@ -85,6 +85,7 @@
     NCPack *pack = [[NCPack alloc] init];
     pack.ID = @1;
     pack.partition = @"sex";
+    pack.paid = @1;
     [self.dbHelper setPackToDB:pack];
     [self.dbHelper setWordsToDB:[self words]];
     [self.dbHelper setMaterialsToDB:[self materials] andExplanations:[self explanations]];
@@ -178,9 +179,17 @@
 - (void) getLocalPacks
 {
     NSArray *packsArray = [self.dbHelper getPacks];
+    NSMutableArray *newArray = [[NSMutableArray alloc] init];
+    for(NCPack *pack in packsArray)
+    {
+        if([pack.ID isEqualToNumber:@1])
+        {
+            [newArray addObject:pack];
+        }
+    }
     if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetLocalPacks:)])
     {
-        [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetLocalPacks:packsArray];
+        [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetLocalPacks:newArray];
     }
 }
 

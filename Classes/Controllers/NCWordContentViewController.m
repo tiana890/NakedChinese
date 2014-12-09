@@ -39,7 +39,6 @@
     {
         [self.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, self.word.image]]];
     }
-    NSLog(@"word frame = %@", NSStringFromCGRect(self.pictureView.frame));
     self.chineseLabel.text = self.word.material.materialZH;
     self.pinyinLabel.text = self.word.material.materialZH_TR;
     if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
@@ -102,15 +101,7 @@
     [self.synthesizer speakUtterance:utterance];
 }
 
-- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didStartSpeechUtterance:(AVSpeechUtterance *)utterance
-{
-    NSLog(@"start");
-}
 
-- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance
-{
-    NSLog(@"%@", NSStringFromRange(characterRange));
-}
 - (void)shareWithActivityItems:(NSArray *)activityItems {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
     activityController.excludedActivityTypes = @[UIActivityTypeAirDrop, UIActivityTypeCopyToPasteboard, UIActivityTypePrint];

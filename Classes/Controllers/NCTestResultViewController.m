@@ -15,6 +15,8 @@
 @interface NCTestResultViewController ()
 @property(weak, nonatomic) IBOutlet FXBlurView *backgroundBlurView;
 @property (weak, nonatomic) IBOutlet NCNavigationBar *navigationBar;
+@property (strong, nonatomic) IBOutlet UILabel *badResultLabel;
+@property (strong, nonatomic) IBOutlet UILabel *rightResultLabel;
 @end
 
 @implementation NCTestResultViewController
@@ -25,6 +27,21 @@
     [self.rightResultsLabel setText:self.rightResults];
     [self setupBackgroundImage];
     
+    [self.rightResultLabel setText:[NSString stringWithFormat:@"%i", self.rightResult.intValue]];
+    [self.badResultLabel setText:[NSString stringWithFormat:@"%i", self.badResult.intValue]];
+    
+}
+
+- (void)setRightResult:(NSNumber *)rightResult
+{
+    _rightResult = rightResult;
+   
+}
+
+- (void)setBadResult:(NSNumber *)badResult
+{
+    _badResult = badResult;
+   
 }
 
 - (void)viewWillAppear:(BOOL)animated

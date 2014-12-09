@@ -72,7 +72,7 @@
     for(NSManagedObject *obj in packArray)
     {
         NCPack *pack = [NCPack getNCPackFromNSManagedObject:obj];
-        [array addObject:pack];
+       [array addObject:pack];
     }
     return array;
 }
@@ -333,7 +333,7 @@
                                                                  inManagedObjectContext:appDelegate.managedObjectContext];
     [newPack setValue:pack.ID forKey:@"id"];
     [newPack setValue:pack.partition forKey:@"partition"];
-    
+    [newPack setValue:pack.paid forKey:@"paid"];
     [containPacks addObject:newPack];
         
     //    сохраняем данные в хранилище
@@ -367,6 +367,49 @@
         }
        
     }
+    
+    NSPredicate *predicateZH   = [NSPredicate predicateWithFormat:@"zh contains %@", string];
+    
+    materialArray = [self fetchRequestWithEntityName:@"Material" andPredicate:predicateZH];
+    
+    for (int i = 0; i < materialArray.count; i++)
+    {
+        NCMaterial *material = [[NCMaterial alloc] init];
+        NSManagedObject *obj = materialArray[i];
+        material = [NCMaterial getNCMaterialFromNSManagedObject:obj];
+        NSString *predicate = [NSString stringWithFormat:@"id == %i", [material.materialID intValue]];
+        NSArray *wordArray = [self fetchRequestWithEntityName:@"Word" andFormatPredicate:predicate];
+        if(wordArray.count > 0)
+        {
+            NCWord *word = [[NCWord alloc] init];
+            word = [NCWord getNCWordFromNSManagedObject:wordArray[0]];
+            word.material = material;
+            [array addObject:word];
+        }
+        
+    }
+    
+    NSPredicate *predicateZH_TR   = [NSPredicate predicateWithFormat:@"zh_tr contains %@", string];
+    
+    materialArray = [self fetchRequestWithEntityName:@"Material" andPredicate:predicateZH_TR];
+    
+    for (int i = 0; i < materialArray.count; i++)
+    {
+        NCMaterial *material = [[NCMaterial alloc] init];
+        NSManagedObject *obj = materialArray[i];
+        material = [NCMaterial getNCMaterialFromNSManagedObject:obj];
+        NSString *predicate = [NSString stringWithFormat:@"id == %i", [material.materialID intValue]];
+        NSArray *wordArray = [self fetchRequestWithEntityName:@"Word" andFormatPredicate:predicate];
+        if(wordArray.count > 0)
+        {
+            NCWord *word = [[NCWord alloc] init];
+            word = [NCWord getNCWordFromNSManagedObject:wordArray[0]];
+            word.material = material;
+            [array addObject:word];
+        }
+        
+    }
+    
     
     return array;
 }

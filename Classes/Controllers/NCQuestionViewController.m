@@ -162,8 +162,6 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 }
 
 - (void)parseAnswer:(int) index {
-    NCQuestion *q = [self.test getQuestionWithIndex:self.currentWord.intValue];
-    
     UIImage *const correctImage = [UIImage imageNamed:@"nc_correct_answer"];
     UIImage *const wrongImage = [UIImage imageNamed:@"nc_wrong_answer"];
     
@@ -306,7 +304,7 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self animationTransitionNextWordWithCompletion:^{
-        [self parseAnswer:indexPath.row-1];
+        [self parseAnswer:(int)indexPath.row-1];
     }];
 }
 
@@ -322,6 +320,8 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 {
     NCTestResultViewController *rc = segue.destinationViewController;
     rc.rightResults = [self.test getMark];
+    rc.rightResult = [NSNumber numberWithInt:[self.test getNumberOfRightAnswers]];
+    rc.badResult = [NSNumber numberWithInt:[self.test getNumberOfQuestions] - rc.rightResult.intValue];
 }
 
 

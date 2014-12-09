@@ -17,7 +17,6 @@
 @property (nonatomic, strong) NSString *materialEN;
 @property (nonatomic, strong) NSString *materialRU;
 @property (nonatomic, strong) NSString *materialSound;
-#warning передалать в NSDate
 @property (nonatomic, strong) NSString *materialLastUpdate;
 
 + (NCMaterial *) getNCMaterialFromNSManagedObject:(NSManagedObject *)object;

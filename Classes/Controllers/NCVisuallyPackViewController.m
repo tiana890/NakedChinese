@@ -20,7 +20,7 @@
 #import "NCMaterial.h"
 
 static CGFloat const NCVisuallyPackMaxBlurRadius = 20.f;
-static CGFloat const NCVisuallySlideViewHeight = 60.f;
+static CGFloat const NCVisuallySlideViewHeight = 75.f;
 
 @interface NCVisuallyPackViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, NCDataManagerProtocol>
 
@@ -158,24 +158,6 @@ static CGFloat const NCVisuallySlideViewHeight = 60.f;
     [self.navigationController.view addSubview:[explanationController view]];
 }
 
-#warning Test data
-- (NSArray *)_explanations {
-    return @[@{NCWordChineseKey: @"讓我們來看看他喜歡什麼，才能發表評論",
-               NCWordPinyinKey: @"Ràng wǒmen lái kàn kàn tā xǐhuān shénme, cáinéng fābiǎo pínglùn",
-               NCWordTranslateKey: @"Lorem ipsum dolor sit amet, consectetur adipiscing elit"},
-             @{NCWordChineseKey: @"該薄膜為絕緣",
-               NCWordPinyinKey: @"Gāi bómó wèi juéyuán",
-               NCWordTranslateKey: @"Mauris in enim velit"},
-             @{NCWordChineseKey: @"市長說貓生活的國家。",
-               NCWordPinyinKey: @"Shìzhǎng shuō māo shēnghuó de guójiā.",
-               NCWordTranslateKey: @"In euismod felis vitae adipiscing dictum"},
-             @{NCWordChineseKey: @"這不止，門廊或設計師的下巴，發酵的非常的事",
-               NCWordPinyinKey: @"Zhè bùzhǐ, ménláng huò shèjì shī de xiàbā, fāxiào de fēicháng de shì",
-               NCWordTranslateKey: @"Etiam lacus quam, vestibulum vel faucibus gravida, fermentum id ipsum"},
-             @{NCWordChineseKey: @"現在，前橄欖球隊。在廣泛的活動數據。",
-               NCWordPinyinKey: @"Xiànzài, qián gǎnlǎnqiú duì. Zài guǎngfàn de huódòng shùjù.",
-               NCWordTranslateKey: @"Nunc eu eleifend ante. Mauris rhoncus congue hendrerit. "}];
-}
 
 - (UIViewController *)viewControllerAtIndex:(NSUInteger)index {
     if (([self.arrayOfWords count] == 0) || (index >= [self.arrayOfWords count])) {

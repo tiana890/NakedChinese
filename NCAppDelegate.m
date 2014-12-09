@@ -31,10 +31,8 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self initDB];
     }
-    else
-    {
-        [self loadPacks];
-    }
+    
+    [self loadPacks];
     
     NSLog(@"%@", NSLocalizedString(@"lang", @""));
     return YES;

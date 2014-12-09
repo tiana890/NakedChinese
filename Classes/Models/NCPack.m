@@ -24,6 +24,11 @@
         pack.partition = [jsonDict objectForKey:@"partition"];
     }
     
+    if([jsonDict objectForKey:@"paid"] != [NSNull null])
+    {
+        pack.paid = [jsonDict objectForKey:@"paid"];
+    }
+    
     return pack;
 }
 
@@ -33,6 +38,7 @@
     
     pack.ID = [object valueForKey:@"id"];
     pack.partition = [object valueForKey:@"partition"];
+    pack.paid = [object valueForKey:@"paid"];
     
     return pack;
 }

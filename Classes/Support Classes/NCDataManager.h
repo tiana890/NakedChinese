@@ -38,7 +38,7 @@
 - (void) removeWordFromFavorites:(NCWord *)word;
 - (BOOL) ifExistsInFavorites:(NCWord *)word;
 - (void) searchWordContainsString:(NSString *)string;
-- (void) setMaterials:(NSArray *)materials andExplanations:(NSArray *)explanations;
+//- (void) setMaterials:(NSArray *)materials andExplanations:(NSArray *)explanations;
 - (void) getMaterialsWithWordID:(int) wordID;
 @property (nonatomic, weak) id<NCDataManagerProtocol> delegate;
 

@@ -12,4 +12,7 @@
 
 @property (nonatomic, strong) NSString *rightResults;
 @property (nonatomic, strong) IBOutlet UILabel *rightResultsLabel;
+
+@property (nonatomic, strong) NSNumber *rightResult;
+@property (nonatomic, strong) NSNumber *badResult;
 @end
