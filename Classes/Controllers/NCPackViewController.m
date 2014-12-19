@@ -72,7 +72,10 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
         case NCPackControllerOfNumber:
         {
             [NCDataManager sharedInstance].delegate = self;
-            [[NCDataManager sharedInstance] getWordsWithPackID:[self.pack.ID intValue]];
+            if([self.pack.paid isEqualToNumber:@1])
+            {
+                [[NCDataManager sharedInstance] getWordsWithPackID:[self.pack.ID intValue]];
+            }
             break;
         }
         case NCPackControllerOfFavorite:
@@ -218,7 +221,12 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     {
         switch ([self type]) {
             case NCPackControllerOfNumber:
-                return self.arrayOfWords.count;
+            {
+                if([self.pack.paid isEqualToNumber:@1])
+                    return self.arrayOfWords.count;
+                else
+                    return 12;
+            }
                 break;
             case NCPackControllerOfFavorite:
                 return self.arrayOfFavorites.count;
@@ -244,7 +252,7 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
                 NCWordCell *openCell = nil;
                 
                 NCWord *word = self.arrayOfWords[indexPath.item];
-                if([word.packID isEqualToNumber:@1])
+                if([self.pack.paid isEqualToNumber:@1])
                 {
                     openCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordCellIdentifier forIndexPath:indexPath];
                     UIImage *image = [UIImage imageNamed:word.image];
@@ -267,21 +275,6 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
                 {
                     NCWordLockCell *lockCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordLockCellIdentifier forIndexPath:indexPath];
                    
-                    NSLog(@"url = %@", [NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]);
-                    NSURLRequest *request = [NSURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, word.image]]];
-                    UIImageView *imageView = [[UIImageView alloc] init];
-                    [imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            //your main thread task here
-                            [lockCell.pictureView setImage:image];
-                            lockCell.blurView.blurEnabled = YES;
-                            lockCell.blurView.blurRadius = 10;
-                        });
-                       
-                    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                        
-                    }];
-                    
                     
                     return lockCell;
                 }
@@ -358,7 +351,9 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     }*/
     if(collectionView == self.collectionView)
     {
-        [self performSegueWithIdentifier:NCVisuallyPackControllerSegueIdentifier sender:@{NCPackControllerWordIndexKey: @(indexPath.item), @"search":@0}];
+        if ([self.pack.paid isEqualToNumber:@1]) {
+            [self performSegueWithIdentifier:NCVisuallyPackControllerSegueIdentifier sender:@{NCPackControllerWordIndexKey: @(indexPath.item), @"search":@0}];
+        }
     }
     else if(collectionView == self.searchCollectionView)
     {

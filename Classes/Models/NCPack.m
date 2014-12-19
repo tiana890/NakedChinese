@@ -27,6 +27,14 @@
     if([jsonDict objectForKey:@"paid"] != [NSNull null])
     {
         pack.paid = [jsonDict objectForKey:@"paid"];
+        if(pack.paid == nil)
+        {
+            pack.paid = @0;
+        }
+    }
+    else
+    {
+        pack.paid = @0;
     }
     
     return pack;

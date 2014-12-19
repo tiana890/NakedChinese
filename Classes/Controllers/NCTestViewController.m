@@ -189,6 +189,14 @@
 {
     NCQuestionViewController *qc = [segue destinationViewController];
     qc.packsArray = [self preparePassPacksArrayForQuestionViewController];
+    if([sender tag] == 0)
+    {
+        qc.type = NCTestTypeLanguageChinese;
+    }
+    else
+    {
+        qc.type = NCTestTypeChineseLanguage;
+    }
 }
 
 - (NSArray *)preparePassPacksArrayForQuestionViewController

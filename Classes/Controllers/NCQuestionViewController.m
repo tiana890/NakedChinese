@@ -126,11 +126,6 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
     return _synthesizer;
 }
 
-/*#warning TEST_DATA
-- (NSDictionary *)testWord {
-    return @{NCWordChineseKey: @"現在，前橄欖球隊",
-             NCWordPinyinKey : @"Zhè bùzhǐ"};
-}*/
 
 #pragma mark - IBActions
 

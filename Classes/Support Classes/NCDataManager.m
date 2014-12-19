@@ -179,17 +179,10 @@
 - (void) getLocalPacks
 {
     NSArray *packsArray = [self.dbHelper getPacks];
-    NSMutableArray *newArray = [[NSMutableArray alloc] init];
-    for(NCPack *pack in packsArray)
-    {
-        if([pack.ID isEqualToNumber:@1])
-        {
-            [newArray addObject:pack];
-        }
-    }
+    
     if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetLocalPacks:)])
     {
-        [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetLocalPacks:newArray];
+        [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetLocalPacks:packsArray];
     }
 }
 
@@ -216,6 +209,7 @@
         [packArray addObject:[NCPack getNCPackFromJson:dict]];
         [self.dbHelper setPackToDB:[NCPack getNCPackFromJson:dict]];
     }
+    /*
     //берем из БД неповторяющиеся пакеты
     NSArray *packsArray = [[NCDataManager sharedInstance].dbHelper getPacks];
     for(NCPack *pack in packsArray)
@@ -232,7 +226,7 @@
         if(!packIsInPackArray)
             [packArray insertObject:pack atIndex:0];
     }
-    
+    */
     if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetPacks:)])
     {
         [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetPacks:packArray];
