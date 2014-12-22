@@ -34,7 +34,7 @@ static NSString *const NCPackControllerSegueIdentifier = @"toPackController";
 static NSString *const NCMenuControllerSegueIdentifier = @"toMenuController";
 static NSString *const NCTestControllerSegueIdentifier = @"toTestController";
 static NSString *const NCGreetingControllerSeguedentifier = @"toGreetingController";
-
+static NSString *const NCJokesControllerSegueIdentifier = @"toJokesController";
 #pragma mark Storyboard controllers identifiers
 static NSString *const NCMenuStoryboardIdentifier = @"menuNavigationController";
 
@@ -327,12 +327,15 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
             [self performSegueWithIdentifier:NCPackControllerSegueIdentifier sender:@{ NCPackControllerTypeKey: @(NCPackControllerOfFavorite)}];
             break;
         case 2:
-            [self performSegueWithIdentifier:NCTestControllerSegueIdentifier sender:self];
+            [self performSegueWithIdentifier:NCJokesControllerSegueIdentifier sender:self];
             break;
         case 3:
+            [self performSegueWithIdentifier:NCTestControllerSegueIdentifier sender:self];
+            break;
+        case 4:
             [self performSegueWithIdentifier:NCMenuControllerSegueIdentifier sender:self];
             break;
-            
+        
         default:
             break;
     }

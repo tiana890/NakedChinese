@@ -106,7 +106,7 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
     if(arrayOfWords.count > 0)
     {
         self.wordsArray = arrayOfWords;
-        [self.test fillTestWithWordsArray:arrayOfWords];
+        [self.test fillTestWithWordsArray:arrayOfWords andTestType:self.type];
     }
 }
 
@@ -130,10 +130,10 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 #pragma mark - IBActions
 
 - (IBAction)toBackAction:(id)sender {
-    [UIAlertView showWithTitle:NSLocalizedString(@"Прервать тест", @"ALERT_TEST_TITLE")
-                       message:NSLocalizedString(@"Вы уверены что хотите прервать тест?", @"ALERT_TEST_MESSAGE")
-             cancelButtonTitle:NSLocalizedString(@"Отмена", @"ALERT_TEST_CANCEL")
-             otherButtonTitles:@[NSLocalizedString(@"Прервать", @"ALERT_TEST_ABORT")]
+    [UIAlertView showWithTitle:NSLocalizedString(@"ALERT_TEST_TITLE", nil)
+                       message:NSLocalizedString(@"ALERT_TEST_MESSAGE", nil)
+             cancelButtonTitle:NSLocalizedString(@"ALERT_TEST_CANCEL", nil)
+             otherButtonTitles:@[NSLocalizedString(@"ALERT_TEST_ABORT", nil)]
                       tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex)
      {
          if (buttonIndex == 1) {
@@ -144,7 +144,10 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 
 - (IBAction)soundWordAction:(id)sender {
     NCQuestion *q = [self.test getQuestionWithIndex:self.currentWord.intValue];
-    [self sayText:q.word.material.materialZH];
+    if(self.type == NCTestTypeLanguageChinese)
+    {
+        [self sayText:q.word.material.materialZH];
+    }
 }
 
 #pragma mark - Private
@@ -260,11 +263,18 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
     if (index == 0) {
         NCTestWordCell *wordCell = [tableView dequeueReusableCellWithIdentifier:NCTestWordCellIdentifier forIndexPath:indexPath];
         
-        //wordCell.chineseLabel.text = self.testWord[NCWordChineseKey];
-        //wordCell.pinyinLabel.text = self.testWord[NCWordPinyinKey];
-        wordCell.chineseLabel.text = q.word.material.materialZH;
-        wordCell.pinyinLabel.text = q.word.material.materialZH_TR;
+        if(self.type == NCTestTypeChineseLanguage)
+        {
+            wordCell.chineseLabel.text = q.word.material.materialWord;
+            wordCell.pinyinLabel.text = @"";
+        }
+        else
+        {
+            wordCell.chineseLabel.text = q.word.material.materialZH;
+            wordCell.pinyinLabel.text = q.word.material.materialZH_TR;
+        }
         wordCell.userInteractionEnabled = NO;
+
         
         [wordCell layoutIfNeeded];
         [wordCell updateConstraintsIfNeeded];

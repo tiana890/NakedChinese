@@ -8,10 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "NCQuestion.h"
+typedef NS_ENUM(NSUInteger, NCTestType) {
+    NCTestTypeLanguageChinese,
+    NCTestTypeChineseLanguage
+};
+
 
 @interface NCTest : NSObject
 
-- (void) fillTestWithWordsArray:(NSArray *)words;
+- (void)fillTestWithWordsArray:(NSArray *)words andTestType:(NCTestType) testType;
 - (BOOL) setAnswerIndex:(int)index forQuestionWithIndex:(int) index;
 - (NCQuestion *) getQuestionWithIndex:(int) questionIndex;
 - (int) getNumberOfQuestions;

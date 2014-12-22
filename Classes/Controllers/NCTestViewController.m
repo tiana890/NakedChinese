@@ -15,6 +15,7 @@
 #import "NCDataManager.h"
 #import "NCPack.h"
 #import "NCQuestionViewController.h"
+#import "NCTest.h"
 
 @interface NCTestViewController () <UICollectionViewDataSource, UICollectionViewDelegate, NCDataManagerProtocol>
 @property (weak, nonatomic) IBOutlet UICollectionView *sexCollectionView;
@@ -70,17 +71,20 @@
     
     for(NCPack *pack in arrayOfPacks)
     {
-        if([pack.partition isEqualToString:@"sex"])
+        if([pack.paid isEqualToNumber:@1])
         {
-            [self.sexArray addObject:pack];
-        }
-        else if([pack.partition isEqualToString:@"swear"])
-        {
-            [self.invectiveArray addObject:pack];
-        }
-        if([pack.partition isEqualToString:@"slang"])
-        {
-            [self.slangArray addObject:pack];
+            if([pack.partition isEqualToString:@"sex"])
+            {
+                [self.sexArray addObject:pack];
+            }
+            else if([pack.partition isEqualToString:@"swear"])
+            {
+                [self.invectiveArray addObject:pack];
+            }
+            if([pack.partition isEqualToString:@"slang"])
+            {
+                [self.slangArray addObject:pack];
+            }
         }
     }
     
@@ -217,6 +221,7 @@
     {
         [passPacksArray addObjectsFromArray:[self.slangArray objectsAtIndexes:self.slangIndexes]];
     }
+    
     return passPacksArray;
 
 }

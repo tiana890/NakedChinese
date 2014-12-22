@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NCTestViewController.h"
+#import "NCTest.h"
 
 @interface NCQuestionViewController : UIViewController
 @property (nonatomic, strong) NSArray *packsArray;

@@ -425,6 +425,12 @@
         [fetchRequest setPredicate:predicate];
     }
     NSError *error = nil;
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
+                                            initWithKey:@"id" ascending:YES];
+    [fetchRequest setSortDescriptors:@[sortDescriptor]];
+    
+    
     NSArray *array = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
     return array;
 }

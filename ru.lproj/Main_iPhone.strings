@@ -33,7 +33,7 @@
 "AjJ-2y-buK.normalTitle" = "НАЗАД";
 
 /* Class = "IBUITabBarItem"; title = "Menu"; ObjectID = "BLA-dr-a7m"; */
-"BLA-dr-a7m.title" = "Menu";
+"BLA-dr-a7m.title" = "Меню";
 
 /* Class = "IBUILabel"; text = "nǐ hǎo"; ObjectID = "Ba5-5U-fhB"; */
 "Ba5-5U-fhB.text" = "nǐ hǎo";
@@ -72,7 +72,7 @@
 "O8o-QI-MqA.text" = "您好！";
 
 /* Class = "IBUITabBarItem"; title = "Test"; ObjectID = "PKl-rQ-N9J"; */
-"PKl-rQ-N9J.title" = "Test";
+"PKl-rQ-N9J.title" = "Тест";
 
 /* Class = "IBUIButton"; normalTitle = "Русский"; ObjectID = "QV6-Es-v0a"; */
 "QV6-Es-v0a.normalTitle" = "Русский";
@@ -102,13 +102,16 @@
 "aho-g5-xKb.text" = "привет!";
 
 /* Class = "IBUINavigationItem"; title = "TEST"; ObjectID = "byU-VO-25N"; */
-"byU-VO-25N.title" = "TEST";
+"byU-VO-25N.title" = "ТЕСТ";
 
 /* Class = "IBUILabel"; text = "Ругательства"; ObjectID = "csC-QM-wN5"; */
 "csC-QM-wN5.text" = "Ругательства";
 
+/* Class = "IBUITabBarItem"; title = "Jokes"; ObjectID = "dap-OT-RsU"; */
+"dap-OT-RsU.title" = "Анекдоты";
+
 /* Class = "IBUINavigationItem"; title = "TEST"; ObjectID = "fi9-48-byV"; */
-"fi9-48-byV.title" = "TEST";
+"fi9-48-byV.title" = "ТЕСТ";
 
 /* Class = "IBUINavigationItem"; title = "NAKED CHINESE"; ObjectID = "fxC-MV-Qs3"; */
 "fxC-MV-Qs3.title" = "NAKED CHINESE";
@@ -138,7 +141,7 @@
 "nyG-Z1-2f5.title" = "NAKED CHINESE";
 
 /* Class = "IBUITabBarItem"; title = "About"; ObjectID = "sf5-tM-21I"; */
-"sf5-tM-21I.title" = "About";
+"sf5-tM-21I.title" = "О программе";
 
 /* Class = "IBUIButton"; normalTitle = "ДАЛЕЕ"; ObjectID = "u5g-a2-2mJ"; */
 "u5g-a2-2mJ.normalTitle" = "ДАЛЕЕ";
@@ -150,13 +153,13 @@
 "vV1-4O-P3C.text" = "1/20";
 
 /* Class = "IBUISegmentedControl"; va1-54-wQJ.segmentTitles[0] = "Sex"; ObjectID = "va1-54-wQJ"; */
-"va1-54-wQJ.segmentTitles[0]" = "Sex";
+"va1-54-wQJ.segmentTitles[0]" = "Секс";
 
 /* Class = "IBUISegmentedControl"; va1-54-wQJ.segmentTitles[1] = "Swear"; ObjectID = "va1-54-wQJ"; */
-"va1-54-wQJ.segmentTitles[1]" = "Swear";
+"va1-54-wQJ.segmentTitles[1]" = "Ругательства";
 
 /* Class = "IBUISegmentedControl"; va1-54-wQJ.segmentTitles[2] = "Slang"; ObjectID = "va1-54-wQJ"; */
-"va1-54-wQJ.segmentTitles[2]" = "Slang";
+"va1-54-wQJ.segmentTitles[2]" = "Слэнг";
 
 /* Class = "IBUINavigationItem"; title = "ВЫБРАТЬ ЯЗЫК"; ObjectID = "weg-7B-F9K"; */
 "weg-7B-F9K.title" = "ВЫБРАТЬ ЯЗЫК";

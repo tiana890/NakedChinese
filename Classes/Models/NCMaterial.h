@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSString *materialZH_TR;
 @property (nonatomic, strong) NSString *materialEN;
 @property (nonatomic, strong) NSString *materialRU;
+@property (nonatomic, strong) NSString *materialWord;
 @property (nonatomic, strong) NSString *materialSound;
 @property (nonatomic, strong) NSString *materialLastUpdate;
 

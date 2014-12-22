@@ -10,6 +10,7 @@
 
 @implementation NCMaterial
 
+
 + (NCMaterial *) getNCMaterialFromNSManagedObject:(NSManagedObject *)object
 {
     NCMaterial *material = [[NCMaterial alloc] init];
@@ -58,6 +59,19 @@
     }
 
     return material;
+}
+
+- (NSString *)materialWord
+{
+    if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
+    {
+        return self.materialRU;
+    }
+    else
+    {
+        return self.materialEN;
+    }
+
 }
 
 @end

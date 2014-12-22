@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) NSMutableArray *questionArray;
 @property (nonatomic, strong) NSMutableArray *rightResults;
+@property (nonatomic) NCTestType type;
 @end
 
 @implementation NCTest
@@ -39,7 +40,7 @@
  
 #pragma mark methods
 
-- (void)fillTestWithWordsArray:(NSArray *)words
+- (void)fillTestWithWordsArray:(NSArray *)words andTestType:(NCTestType) testType
 {
     NSMutableArray *questionArray = [[NSMutableArray alloc] init];
     
@@ -64,35 +65,34 @@
         BOOL ifRightAnswerSet = NO;
         for(int i = 0; i < 4; i++)
         {
-            if(i == randomRightIndex)
+            if(testType == NCTestTypeLanguageChinese)
             {
-                if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
+                if(i == randomRightIndex)
                 {
-                    [question.answerArray addObject:word.material.materialRU];
+                    [question.answerArray addObject:word.material.materialWord];
+                    ifRightAnswerSet = YES;
                 }
                 else
                 {
-                    [question.answerArray addObject:word.material.materialEN];
+                    if(!ifRightAnswerSet)
+                        [question.answerArray addObject:((NCWord *)notRightAnswerArray[i]).material.materialWord];
+                    else
+                        [question.answerArray addObject:((NCWord *)notRightAnswerArray[i-1]).material.materialWord];
                 }
-
-                
-                ifRightAnswerSet = YES;
             }
-            else
+            else if(testType == NCTestTypeChineseLanguage)
             {
-                if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
+                if(i == randomRightIndex)
                 {
-                    if(!ifRightAnswerSet)
-                        [question.answerArray addObject:((NCWord *)notRightAnswerArray[i]).material.materialRU];
-                    else
-                        [question.answerArray addObject:((NCWord *)notRightAnswerArray[i-1]).material.materialRU];
+                    [question.answerArray addObject:word.material.materialZH];
+                    ifRightAnswerSet = YES;
                 }
                 else
                 {
                     if(!ifRightAnswerSet)
-                        [question.answerArray addObject:((NCWord *)notRightAnswerArray[i]).material.materialEN];
+                        [question.answerArray addObject:((NCWord *)notRightAnswerArray[i]).material.materialZH];
                     else
-                        [question.answerArray addObject:((NCWord *)notRightAnswerArray[i-1]).material.materialEN];
+                        [question.answerArray addObject:((NCWord *)notRightAnswerArray[i-1]).material.materialZH];
                 }
             }
         }

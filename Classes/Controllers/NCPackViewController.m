@@ -259,16 +259,8 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
                     [openCell.pictureView setImage:image];
                     [openCell.chineseLabel setText:word.material.materialZH];
                     [openCell.pinyinLabel setText:word.material.materialZH_TR];
-                    if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
-                    {
-                        NSString *str = [self cutFirstWord:word.material.materialRU];
-                        [openCell.translateLabel setText:str];
-                    }
-                    else
-                    {
-                        NSString *str = [self cutFirstWord:word.material.materialEN];
-                        [openCell.translateLabel setText:str];
-                    }
+                    NSString *str = [self cutFirstWord:word.material.materialWord];
+                    [openCell.translateLabel setText:str];
                     return openCell;
                 }
                 else
@@ -292,15 +284,7 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
                     [openCell.pictureView setImage:image];
                     [openCell.chineseLabel setText:word.material.materialZH];
                     [openCell.pinyinLabel setText:word.material.materialZH_TR];
-                    if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
-                    {
-                        [openCell.translateLabel setText:word.material.materialRU];
-                    }
-                    else
-                    {
-                        [openCell.translateLabel setText:word.material.materialEN];
-                    }
-
+                    [openCell.translateLabel setText:word.material.materialWord];
                 }
                 return openCell;
             }
@@ -318,14 +302,7 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
         [openCell.pictureView setImage:image];
         [openCell.chineseLabel setText:word.material.materialZH];
         [openCell.pinyinLabel setText:word.material.materialZH_TR];
-        if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
-        {
-            [openCell.translateLabel setText:word.material.materialRU];
-        }
-        else
-        {
-            [openCell.translateLabel setText:word.material.materialEN];
-        }
+        [openCell.translateLabel setText:word.material.materialWord];
         return openCell;
     }
     return nil;

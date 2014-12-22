@@ -19,7 +19,6 @@
         NCHell hell = [[NCInteractionManager sharedInstance] interactionHell];
         switch (hell) {
             case NCHellNotRequired:
-                
                 break;
             case NCHellMan:
                 hellImageName = @"hellman";

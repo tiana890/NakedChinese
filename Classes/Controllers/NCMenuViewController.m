@@ -25,6 +25,8 @@ static NSString *const NCSubscribeControllerSegueIdentifier = @"toSubscribeContr
 static NSString *const NCTestControllerSegueIdentifier = @"toTestController";
 static NSString *const NCGreetingControllerSegueIdentifier = @"toGreetingController";
 static NSString *const NCFavoritesControllerSegueIdentifier = @"toFavoritesController";
+static NSString *const NCAuthorControllerSegueIdentifier = @"toAuthorController";
+static NSString *const NCPartnersControllerSegueIdentifier = @"toPartnersController";
 
 static NSString *const NCMenuIconKey  = @"icon";
 static NSString *const NCMenuTitleKey = @"title";
@@ -127,6 +129,17 @@ static NSString *const NCMenuTitleKey = @"title";
                 [self performSegueWithIdentifier:NCGreetingControllerSegueIdentifier sender:self];
                 break;
             }
+            case 1:
+            {
+                [self performSegueWithIdentifier:NCAuthorControllerSegueIdentifier sender:self];
+                break;
+            }
+            case 2:
+            {
+                [self performSegueWithIdentifier:NCPartnersControllerSegueIdentifier sender:self];
+                break;
+            }
+                
             case 4:
                 [self performSegueWithIdentifier:NCLanguageControllerSegueIdentifier sender:self];
                 break;
