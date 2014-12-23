@@ -121,7 +121,7 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="dynamic" value="NO"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hJi-TZ-rGa" customClass="NCToolbar">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hJi-TZ-rGa" customClass="NCToolbar">
                                 <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="mlL-XE-Ipj"/>
@@ -1594,11 +1594,11 @@
                         <viewControllerLayoutGuide type="bottom" id="jHa-gx-xbf"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="unb-ZI-dec" customClass="UIImageView">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5qP-pC-oQA" userLabel="Background Blur View" customClass="FXBlurView">
-                                <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
@@ -1611,11 +1611,10 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="66D-kY-Uah">
-                                <rect key="frame" x="0.0" y="84" width="320" height="484"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="320" id="0H3-KO-gsD"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="HYb-RX-piV"/>
                                 </constraints>
                                 <collectionViewLayout key="collectionViewLayout" id="CS6-g6-WHi" customClass="NCCollectionViewCenterLayout"/>
                                 <cells>
@@ -1640,13 +1639,15 @@
                             </collectionView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="jHa-gx-xbf" firstAttribute="top" secondItem="5qP-pC-oQA" secondAttribute="bottom" id="6Ik-gc-Lje"/>
-                            <constraint firstItem="5qP-pC-oQA" firstAttribute="left" secondItem="unb-ZI-dec" secondAttribute="left" id="Glp-WJ-THK"/>
-                            <constraint firstItem="66D-kY-Uah" firstAttribute="bottom" secondItem="jHa-gx-xbf" secondAttribute="top" id="HxQ-ya-T5i"/>
-                            <constraint firstItem="5qP-pC-oQA" firstAttribute="top" secondItem="f5W-AF-xA5" secondAttribute="top" id="MV5-v3-bL0"/>
-                            <constraint firstItem="66D-kY-Uah" firstAttribute="top" secondItem="5qP-pC-oQA" secondAttribute="top" constant="64" id="Y9X-0t-VlQ"/>
-                            <constraint firstItem="5qP-pC-oQA" firstAttribute="right" secondItem="unb-ZI-dec" secondAttribute="right" id="emp-qV-5mr"/>
-                            <constraint firstItem="66D-kY-Uah" firstAttribute="centerX" secondItem="5qP-pC-oQA" secondAttribute="centerX" id="hA9-2U-lU7"/>
+                            <constraint firstItem="66D-kY-Uah" firstAttribute="leading" secondItem="unb-ZI-dec" secondAttribute="leading" id="2Wi-GN-XrU"/>
+                            <constraint firstItem="66D-kY-Uah" firstAttribute="bottom" secondItem="5qP-pC-oQA" secondAttribute="bottom" id="C4s-iu-UkY"/>
+                            <constraint firstItem="5qP-pC-oQA" firstAttribute="top" secondItem="unb-ZI-dec" secondAttribute="top" id="Csi-Vy-8wq"/>
+                            <constraint firstItem="66D-kY-Uah" firstAttribute="trailing" secondItem="5qP-pC-oQA" secondAttribute="trailing" id="T5D-PY-AkP"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="5qP-pC-oQA" secondAttribute="trailing" constant="-16" id="TgU-K1-BV9"/>
+                            <constraint firstItem="66D-kY-Uah" firstAttribute="bottom" secondItem="jHa-gx-xbf" secondAttribute="top" id="Typ-lJ-2vf"/>
+                            <constraint firstItem="jHa-gx-xbf" firstAttribute="top" secondItem="5qP-pC-oQA" secondAttribute="bottom" id="Ya5-FL-ACH"/>
+                            <constraint firstItem="5qP-pC-oQA" firstAttribute="leading" secondItem="unb-ZI-dec" secondAttribute="leading" id="el6-DU-bj4"/>
+                            <constraint firstItem="66D-kY-Uah" firstAttribute="top" secondItem="f5W-AF-xA5" secondAttribute="bottom" id="taY-cf-yLw"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="JOKES" id="Hx3-2N-tVV">
@@ -2222,10 +2223,10 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bmS-xw-hYX" userLabel="Background Blur View" customClass="FXBlurView">
-                                <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="author" translatesAutoresizingMaskIntoConstraints="NO" id="HE4-RM-zyL">
-                                        <rect key="frame" x="11" y="125" width="298" height="298"/>
+                                        <rect key="frame" x="11" y="103" width="298" height="298"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="298" id="DBc-qA-oFo"/>
                                             <constraint firstAttribute="height" constant="298" id="b6b-Lm-SuA"/>
@@ -2285,7 +2286,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="soZ-bA-x9r" userLabel="Background Blur View" customClass="FXBlurView">
-                                <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
@@ -2355,10 +2356,10 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="HHJ-6r-e3v"/>
-        <segue reference="Pw8-Qx-xVT"/>
-        <segue reference="k2M-g0-S2p"/>
-        <segue reference="r70-ye-9gL"/>
+        <segue reference="K16-bG-sWg"/>
+        <segue reference="vtP-ns-RMh"/>
+        <segue reference="Brb-eK-n9d"/>
+        <segue reference="30R-Nr-slG"/>
         <segue reference="cPk-WR-Ftx"/>
     </inferredMetricsTieBreakers>
 </document>
