@@ -10,6 +10,7 @@
 
 @interface NCJoke : NSObject
 
+@property (nonatomic, strong) NSNumber *jokeID;
 @property (nonatomic, strong) NSString *pinyin;
 @property (nonatomic, strong) NSString *chinese;
 @property (nonatomic, strong) NSString *translation;

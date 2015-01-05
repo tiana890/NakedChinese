@@ -11,6 +11,11 @@
 #import "NCDataManager.h"
 #import "NCStartViewController.h"
 
+@protocol AppDelegateHandleURLProtocol <NSObject>
+
+- (void) appDelegateHandleURLProtocolOpenJokeItemWithNumber:(int) number;
+
+@end
 @interface NCAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
@@ -21,5 +26,7 @@
 @property (nonatomic) BOOL ifFirstLaunch;
 
 @property (nonatomic, strong) NCStartViewController *startViewController;
+
+@property (nonatomic, weak) id<AppDelegateHandleURLProtocol> delegate;
 - (void)saveContext;
 @end

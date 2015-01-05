@@ -70,13 +70,13 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
     }];
 }
 
-- (NCExplanationCell *)explanationCellAtIndexPath:(NSIndexPath *)indexPath {
-    NCExplanationCell *cell = [self.tableView dequeueReusableCellWithIdentifier:NCExplanationCellIdentifier forIndexPath:indexPath];
+- (NCExplanationCell *)explanationCellAtIndexPath:(NSIndexPath *)indexPath withIdentifier:(NSString *)identifier{
+    NCExplanationCell *cell = [self.tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
     [self configureExplanationCell:cell atIndexPath:indexPath];
     return cell;
 }
 
-- (void)configureExplanationCell:(NCExplanationCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+- (void)configureExplanationCell:(NCExplanationCell *)cell atIndexPath:(NSIndexPath *)indexPath{
     
     /*
     NSDictionary *object = self.arrayOfExplanations[indexPath.row - 1];
@@ -84,19 +84,28 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
     cell.chineseLabel.text = [NSString stringWithFormat:@"%ld.%@",indexPath.row+1, object[NCWordChineseKey]];
     cell.pinyinLabel.text = object[NCWordPinyinKey];
     cell.translateLabel.text = object[NCWordTranslateKey];*/
-    NCMaterial *material = self.arrayOfExplanations[indexPath.row-1];
-    cell.chineseLabel.text = [NSString stringWithFormat:@"%d.%@",indexPath.row, material.materialZH];
-    cell.pinyinLabel.text = material.materialZH_TR;
-    cell.translateLabel.text = material.materialEN;
+    
+    NCMaterial *material = self.arrayOfExplanations[indexPath.row];
+    if(indexPath.row == 0)
+    {
+        cell.translateLabel.text = material.materialWord;
+    }
+    else
+    {
+        cell.chineseLabel.text = [NSString stringWithFormat:@"%d.%@",indexPath.row, material.materialZH];
+        cell.pinyinLabel.text = material.materialZH_TR;
+        cell.translateLabel.text = material.materialWord;
+    }
+    
 }
 
-- (CGFloat)heightForBasicExplanationAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)heightForBasicExplanationAtIndexPath:(NSIndexPath *)indexPath withIdentifier:(NSString *)identifier {
     static NCExplanationCell *sizingCell = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sizingCell = [self.tableView dequeueReusableCellWithIdentifier:NCExplanationCellIdentifier];
+        sizingCell = [self.tableView dequeueReusableCellWithIdentifier:identifier];
     });
-    
+
     [self configureExplanationCell:sizingCell atIndexPath:indexPath];
     return [self calculateHeightForConfiguredSizingCell:sizingCell];
 }
@@ -114,15 +123,18 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = nil;
     if (indexPath.row == 0) {
-        cell = [tableView dequeueReusableCellWithIdentifier:ExplanationTitleCellIdentifier forIndexPath:indexPath];
+        cell = [self explanationCellAtIndexPath:indexPath withIdentifier:ExplanationTitleCellIdentifier];
+       // cell = [tableView dequeueReusableCellWithIdentifier:ExplanationTitleCellIdentifier forIndexPath:indexPath];
+       // NCMaterial *material = self.arrayOfExplanations[indexPath.row];
+       // [((NCExplanationCell *)cell).translateLabel setText:material.materialWord];
     } else {
-        cell = [self explanationCellAtIndexPath:indexPath];
+        cell = [self explanationCellAtIndexPath:indexPath withIdentifier:NCExplanationCellIdentifier];
     }
     return cell;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.arrayOfExplanations count]+1;
+    return [self.arrayOfExplanations count];
 }
 
 #pragma mark - UITableViewDelegate
@@ -140,9 +152,9 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat rowHeight = .0f;
     if (indexPath.row == 0) {
-        rowHeight = 140.f;
+        rowHeight = [self heightForBasicExplanationAtIndexPath:indexPath withIdentifier:ExplanationTitleCellIdentifier];
     } else {
-        rowHeight = [self heightForBasicExplanationAtIndexPath:indexPath];
+        rowHeight = [self heightForBasicExplanationAtIndexPath:indexPath withIdentifier:NCExplanationCellIdentifier];
     }
     return rowHeight;
 }

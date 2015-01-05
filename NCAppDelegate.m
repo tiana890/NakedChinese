@@ -10,6 +10,7 @@
 #import "NCDataManager.h"
 #import "NCGreetingViewController.h"
 #import "NCPartitionViewController.h"
+#import "NCJokeItemViewController.h"
 
 @interface NCAppDelegate()
 
@@ -134,4 +135,15 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 */
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    NSString *str = [url query];
+    int number = str.intValue;
+    if([self.delegate respondsToSelector:@selector(appDelegateHandleURLProtocolOpenJokeItemWithNumber:)])
+    {
+        [self.delegate appDelegateHandleURLProtocolOpenJokeItemWithNumber:number];
+    }
+    
+    return YES;
+}
 @end

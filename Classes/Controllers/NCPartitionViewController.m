@@ -28,6 +28,9 @@
 #import "NCDataManager.h"
 #import "NCPack.h"
 #import "NCGreetingViewController.h"
+#import "NCJokesViewController.h"
+
+#import "NCAppDelegate.h"
 
 #pragma mark Storyboard segues identifiers
 static NSString *const NCPackControllerSegueIdentifier = @"toPackController";
@@ -42,10 +45,11 @@ static NSString *const NCMenuStoryboardIdentifier = @"menuNavigationController";
 static NSString *const NCPackControllerNumberKey = @"packNumberKey";
 static NSString *const NCPackControllerTypeKey = @"typeKey";
 
-
+static NSString *const NCPressKey = @"fromPress";
+static NSString *const NCAppDelegateKey = @"fromDelegate";
 #pragma mark -
 
-@interface NCPartitionViewController () <UIToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITabBarDelegate, UINavigationControllerDelegate, NCInteractionViewDelegate, NCDataManagerProtocol>
+@interface NCPartitionViewController () <UIToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITabBarDelegate, UINavigationControllerDelegate, NCInteractionViewDelegate, NCDataManagerProtocol, AppDelegateHandleURLProtocol>
 
 @property (weak, nonatomic) IBOutlet FXBlurView *backgroundBlurView;
 
@@ -90,7 +94,7 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
     self.navigationController.navigationBarHidden = NO;
     [self.navigationItem setHidesBackButton:YES];
-    
+   
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -103,12 +107,39 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
     self.dataManager.delegate = self;
     
     self.currentPartition = @[@"sex", @"swear", @"slang"];
+    
+    NCAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    appDelegate.delegate = self;
+    
+}
+
+- (void)appDelegateHandleURLProtocolOpenJokeItemWithNumber:(int)number
+{
+    [self showHiddenUIElements];
+    NCJokesViewController *jc = [self.storyboard instantiateViewControllerWithIdentifier:@"jokesViewController"];
+    jc.jokeNumber = [NSNumber numberWithInt:number];
+    jc.fromAppDelegate = YES;
+    
+    //[self performSegueWithIdentifier:NCJokesControllerSegueIdentifier sender:@{@"key":NCAppDelegateKey,@"number":[NSNumber numberWithInt:number]}];
+    //NCJokesViewController *jc = [self.storyboard instantiateViewControllerWithIdentifier:@"jokesViewController"];
+    //UIStoryboardSegue *segue = [[UIStoryboardSegue alloc] initWithIdentifier:NCJokesControllerSegueIdentifier source:self destination:jc];
+    //[self prepareForSegue:segue sender:@{@"key":NCAppDelegateKey,@"number":[NSNumber numberWithInt:number]}];
+    //[segue perform];
+    //UIStoryboard *storyboard = self.storyboard;
+    //NCJokesViewController *jc = [storyboard instantiateViewControllerWithIdentifier:@"jokesViewController"];
+    //jc.jokeNumber = [NSNumber numberWithInt:number];
+    //jc.fromAppDelegate = YES;
+    //[self.navigationController pushViewController:jc animated:YES];
+    //[self.navigationController presentViewController:jc animated:YES completion:nil];
+    //[self performSegueWithIdentifier:NCJokesControllerSegueIdentifier sender:@{@"key":NCAppDelegateKey,@"number":[NSNumber numberWithInt:number]}];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self disableBlurViews];
 }
+
+
 
 #pragma mark - Getters&Setters
 - (NSArray *)packsArray
@@ -327,7 +358,7 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
             [self performSegueWithIdentifier:NCPackControllerSegueIdentifier sender:@{ NCPackControllerTypeKey: @(NCPackControllerOfFavorite)}];
             break;
         case 2:
-            [self performSegueWithIdentifier:NCJokesControllerSegueIdentifier sender:self];
+            [self performSegueWithIdentifier:NCJokesControllerSegueIdentifier sender:@{@"key":NCPressKey}];
             break;
         case 3:
             [self performSegueWithIdentifier:NCTestControllerSegueIdentifier sender:self];
@@ -372,6 +403,16 @@ static NSString *const NCPackControllerTypeKey = @"typeKey";
     {
         NCGreetingViewController *gc = [segue destinationViewController];
         gc.openFromMenu = YES;
+    }
+    else if([segue.identifier isEqualToString:NCJokesControllerSegueIdentifier])
+    {
+        if([sender[@"key"] isEqualToString:NCAppDelegateKey])
+        {
+            NCJokesViewController *jc = (NCJokesViewController *)segue.destinationViewController;
+            jc.fromAppDelegate = YES;
+            jc.jokeNumber = sender[@"number"];
+           
+        }
     }
 }
 

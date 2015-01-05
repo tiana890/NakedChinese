@@ -41,7 +41,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupBackgroundImage];
-    //[self updateNavigationItemsIfNeeded];
+    [self updateNavigationItemsIfNeeded];
     
     self.sexArray = [[NSMutableArray alloc] init];
     self.invectiveArray = [[NSMutableArray alloc] init];
@@ -53,7 +53,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self updateNavigationItemsIfNeeded];
+    //[self updateNavigationItemsIfNeeded];
     
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
@@ -116,9 +116,15 @@
 }
 
 - (void)updateNavigationItemsIfNeeded {
+    
     if (![self isOpenFromMenu]) {
         self.navigationItem.leftBarButtonItem = [self.navigationItem rightBarButtonItem];
         self.navigationItem.rightBarButtonItem = nil;
+    }
+    else
+    {
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nc_menu"] style:UIBarButtonItemStylePlain target:self action:@selector(popToPartitionControllerAction:)];
+        self.navigationItem.leftBarButtonItem = item;
     }
 }
 

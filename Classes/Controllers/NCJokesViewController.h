@@ -10,4 +10,7 @@
 
 @interface NCJokesViewController : UIViewController
 
+@property (nonatomic) BOOL fromAppDelegate;
+@property (nonatomic, strong) NSNumber *jokeNumber;
+@property (nonatomic) BOOL isOpenFromMenu;
 @end

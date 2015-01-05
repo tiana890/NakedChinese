@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "NCJoke.h"
+#import "NCWord.h"
 
 @interface NCJokeItemViewController : UIViewController
 
-@property (nonatomic, strong) NCJoke *joke;
+@property (nonatomic, strong) NCWord *joke;
 @property (nonatomic, strong) NSNumber *number;
 @end

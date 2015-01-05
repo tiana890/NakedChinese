@@ -21,4 +21,6 @@ typedef NS_ENUM(NSUInteger, NCPackControllerType) {
 @property (assign, nonatomic) NCPackControllerType type;
 
 @property (strong, nonatomic) NCPack *pack;
+
+@property (nonatomic) BOOL isOpenFromMenu;
 @end

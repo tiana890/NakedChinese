@@ -10,8 +10,9 @@
 #import "NCPackView.h"
 #import "UIViewController+nc_interactionImageSetuper.h"
 #import <FXBlurView.h>
+#import "NCNavigationBar.h"
 
-@interface NCJokeItemViewController ()<UIWebViewDelegate>
+@interface NCJokeItemViewController ()<UIWebViewDelegate, UIScrollViewDelegate>
 @property (strong, nonatomic) IBOutlet FXBlurView *backgroundBlurView;
 @property (strong, nonatomic) IBOutlet UIWebView *webView;
 @end
@@ -26,6 +27,7 @@
     
     [self.webView setBackgroundColor:[UIColor clearColor]];
     [self.webView setOpaque:NO];
+    self.webView.scrollView.delegate = self;
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     CGRect frame = [[UIScreen mainScreen] bounds];
@@ -46,53 +48,15 @@
                      }\
                      </style>\
                      <ul>\
-                     <li><p><font color=\"#433a39\">一对夫妇参观一个养牛场, 农场主为他们介绍，说：\
-                     “这头公牛一星期可交配三次。”\
-                     　　老婆回头瞪了一眼丈夫说：“你看人家。”\
-                     　　到第二头公牛前，农场主说：“这头牛一星期交配五次。”\
-                     　　老婆又瞪了丈夫说“你看人家。”\
-                     　　到了第三头牛跟前，\
-                     农场主说：“这头牛一星期里天天都可交配。”\
-                     　　老公问农场主：“你这公牛每天是跟不同的母牛交配呢，\
-                     还是同一头母牛？”\
-                     　　农场主：“当然不同的母牛了。”\
-                     　　老公对老婆大吼：“你看人家！”</font></p></li>\
+                     <li><p><font color=\"#433a39\">%@</font></p></li>\
                      %@\
-                     <li><p><font color=\"#433a39\">Yī duì fūfù cānguān yīgè yǎng niú chǎng,\
-                     nóngchǎng zhǔ wèi tāmen jièshào, shuō:\
-                     “Zhè tóu gōngniú yī xīngqí kě jiāopèi sāncì.”\
-                     Lǎopó huítóu dèngle yīyǎn zhàngfū shuō:“Nǐ kàn rénjiā.”\
-                     Dào dì èr tóu gōngniú qián, nóngchǎng zhǔ shuō:\
-                     “Zhè tóu niú yī xīngqí jiāopèi wǔ cì.”\
-                     Lǎopó yòu dèngle zhàngfū shuō “nǐ kàn rénjiā.”\
-                     Dàole dì sān tóu niú gēnqián,\
-                     nóngchǎng zhǔ shuō:\
-                     “Zhè tóu niú yī xīngqí lǐ tiāntiān dū kě jiāopèi.”\
-                     Lǎogōng wèn nóngchǎng zhǔ:\
-                     “Nǐ zhè gōngniú měitiān shì gēn bùtóng de mǔ niú jiāopèi ne,\
-                     háishì tóngyī tóu mǔ niú?”\
-                     Nóngchǎng zhǔ:“Dāngrán bùtóng de mǔ niúle.”\
-                     Lǎogōng duì lǎopó dà hǒu:“Nǐ kàn rénjiā!”</font></p></li>\
+                     <li><p><font color=\"#433a39\">%@</font></p></li>\
                      %@\
-                     <li><p><font color=\"#433a39\">Супружеская пара пришла с экскурсией на ферму по\
-                     выращиванию крупного рогатого скота\
-                     Работник фермы говорит: “Этот бык каждую неделю\
-                     совокупляется три раза.”\
-                     Жена, глядя на мужа говорит: “Вот где надо учиться.”\
-                     Дойдя до второго быка фермер объясняет: “Этот бык\
-                     кажду неделю совокупляется пять раз.”\
-                     Жена вновь говорит мужу: “Вот где надо учиться.”\
-                     Около третьего быка фермер говорит: “Этот бык\
-                     совокупляется каждый ден.”\
-                     Муж его спрашивает: “А этот бык каждый день \
-                     совокупляется с разными самками или с одной и той же \
-                     коровой?”\
-                     Хермер: “Конечно же с разными.”\
-                     Муж кричит своей жене: “Вот где надо учится!”</font></p></li>\
+                     <li><p><font color=\"#433a39\">%@</font></p></li>\
                      </ul>\
                      <br />\
                      </body>\
-                     </html>",htmlLine, htmlLine];
+                     </html>",self.joke.material.materialZH, htmlLine, self.joke.material.materialZH_TR, htmlLine, self.joke.material.materialWord];
     [self.webView loadHTMLString:str baseURL:nil];
 }
 
@@ -128,7 +92,15 @@
     // Pass the selected object to the new view controller.
 }
 */
+- (void)hideBarsLinesAlgorithmFromCalculationScrollView:(UIScrollView *)scrollView {
+    CGFloat scrollOffset = scrollView.contentOffset.y;
+    BOOL isHideNavLine = !(scrollOffset > 0);
+    [((NCNavigationBar *)self.navigationController.navigationBar) separatorLineHide:isHideNavLine];
+}
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self hideBarsLinesAlgorithmFromCalculationScrollView:scrollView];
+}
 #pragma mark - Web View
 
 @end

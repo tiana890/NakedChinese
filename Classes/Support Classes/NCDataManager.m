@@ -13,6 +13,7 @@
 #import "NCWord.h"
 #import "NCMaterial.h"
 #import "NCExplanation.h"
+#import "NCJoke.h"
 
 @interface NCDataManager()
 

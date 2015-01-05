@@ -20,6 +20,7 @@
 - (void) ncDataManagerProtocolGetLocalWordsWithPackIDs:(NSArray *)arrayOfWords;
 - (void) ncDataManagerProtocolGetSearchWordContainsString:(NSArray *)arrayOfWords;
 - (void) ncDataManagerProtocolGetMaterialsWithWordID:(NSArray *)arrayOfMaterials;
+- (void) ncDataManagerProtocolGetJokes:(NSArray *)arrayOfJokes;
 @end
 
 @interface NCDataManager : NSObject<RequesterProtocol>
@@ -40,6 +41,7 @@
 - (void) searchWordContainsString:(NSString *)string;
 //- (void) setMaterials:(NSArray *)materials andExplanations:(NSArray *)explanations;
 - (void) getMaterialsWithWordID:(int) wordID;
+- (void) getJokes;
 @property (nonatomic, weak) id<NCDataManagerProtocol> delegate;
 
 @end

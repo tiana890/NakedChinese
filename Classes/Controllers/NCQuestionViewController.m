@@ -98,6 +98,7 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
 }
 
 #pragma mark Data Manager methods

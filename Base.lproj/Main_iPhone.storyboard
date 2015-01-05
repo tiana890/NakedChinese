@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="o5E-4Y-dbX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="o5E-4Y-dbX">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -61,7 +61,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4tl-K2-h0t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-513" y="248"/>
+            <point key="canvasLocation" x="-513" y="232"/>
         </scene>
         <!--NAKED CHINESE-->
         <scene sceneID="ufC-wZ-h7g">
@@ -160,7 +160,7 @@
                                 <items>
                                     <tabBarItem title="About" image="nc_lamp.png" id="sf5-tM-21I"/>
                                     <tabBarItem title="Favourites" image="nc_heart.png" id="BnO-OJ-hq9"/>
-                                    <tabBarItem title="Jokes" image="nc_jokes" id="dap-OT-RsU"/>
+                                    <tabBarItem title="Jokes" image="nc_jokes_red" id="dap-OT-RsU"/>
                                     <tabBarItem title="Test" image="nc_exam.png" id="PKl-rQ-N9J"/>
                                     <tabBarItem title="Menu" image="nc_menu.png" id="BLA-dr-a7m"/>
                                 </items>
@@ -213,7 +213,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="24" y="248"/>
+            <point key="canvasLocation" x="24" y="232"/>
         </scene>
         <!--{PACK LOGO}-->
         <scene sceneID="AdC-Yo-lK1">
@@ -503,7 +503,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="603" y="248"/>
+            <point key="canvasLocation" x="603" y="232"/>
         </scene>
         <!--NAKED CHINESE-->
         <scene sceneID="AiW-CE-8rT">
@@ -548,7 +548,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hO4-N7-qET" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1085" y="248"/>
+            <point key="canvasLocation" x="1085" y="232"/>
         </scene>
         <!--Explanation View Controller-->
         <scene sceneID="gix-G4-zgZ">
@@ -563,25 +563,37 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="95" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="t8t-ml-zRk">
-                                <rect key="frame" x="0.0" y="60" width="320" height="508"/>
+                                <rect key="frame" x="0.0" y="85" width="320" height="483"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="titleCell" rowHeight="140" id="8jh-GD-OlE">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="titleCell" rowHeight="50" id="8jh-GD-OlE" customClass="NCExplanationCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="140"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8jh-GD-OlE" id="Heu-4a-EZH">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="140"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Дополнительное пояснение" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MNZ-jS-R0h">
-                                                    <rect key="frame" x="10" y="12" width="245" height="24"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Дополнительное пояснение" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MNZ-jS-R0h">
+                                                    <rect key="frame" x="10" y="10" width="245" height="24"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="24" id="T7c-gw-FfA"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="MNZ-jS-R0h" secondAttribute="trailing" constant="57" id="BoH-x6-JTu"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="MNZ-jS-R0h" secondAttribute="bottom" constant="8" id="CZy-Hj-fgN"/>
+                                                <constraint firstItem="MNZ-jS-R0h" firstAttribute="leading" secondItem="Heu-4a-EZH" secondAttribute="leadingMargin" constant="2" id="N3A-Yn-rXF"/>
+                                                <constraint firstItem="MNZ-jS-R0h" firstAttribute="top" secondItem="Heu-4a-EZH" secondAttribute="topMargin" constant="2" id="pZf-Rc-du4"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="translateLabel" destination="MNZ-jS-R0h" id="4oC-yx-fJE"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="explanationCell" rowHeight="110" id="Te8-uF-ayc" customClass="NCExplanationCell">
                                         <rect key="frame" x="0.0" y="162" width="320" height="110"/>
@@ -659,7 +671,7 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ksw-c6-KLu">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="85"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sGK-Bk-4g7">
                                         <rect key="frame" x="135" y="20" width="40" height="20"/>
@@ -683,7 +695,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="320" id="bFY-MO-ts2"/>
-                                    <constraint firstAttribute="height" constant="60" id="pab-Vz-fcE"/>
+                                    <constraint firstAttribute="height" constant="85" id="pab-Vz-fcE"/>
                                     <constraint firstAttribute="centerX" secondItem="sGK-Bk-4g7" secondAttribute="centerX" constant="5" id="um3-f5-Iuq"/>
                                     <constraint firstItem="sGK-Bk-4g7" firstAttribute="top" secondItem="ksw-c6-KLu" secondAttribute="top" constant="20" id="yYt-SC-wsU"/>
                                 </constraints>
@@ -718,7 +730,7 @@
                     <nil key="highlightedColor"/>
                 </label>
             </objects>
-            <point key="canvasLocation" x="1521" y="248"/>
+            <point key="canvasLocation" x="1553" y="232"/>
         </scene>
         <!--NAKED CHINESE-->
         <scene sceneID="Yfj-zG-33r">
@@ -822,6 +834,7 @@
                         <segue destination="Mnu-l4-pm1" kind="push" identifier="toGreetingController" id="r70-ye-9gL"/>
                         <segue destination="isj-78-XJu" kind="push" identifier="toAuthorController" id="YdA-0R-geS"/>
                         <segue destination="vWF-gg-FKp" kind="push" identifier="toPartnersController" id="daL-z3-ek8"/>
+                        <segue destination="6dH-te-CVx" kind="push" identifier="toJokesController" id="yHq-BM-x8S"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5rs-92-oeh" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -977,7 +990,7 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KUC-Pq-FxQ" userLabel="Heart Button">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KUC-Pq-FxQ" userLabel="Heart Button">
                                 <rect key="frame" x="127" y="151" width="66" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="fvz-Dj-uBK"/>
@@ -1028,7 +1041,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aLk-0b-4HX">
                                 <rect key="frame" x="15" y="436" width="290" height="120"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YQO-bk-heJ">
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YQO-bk-heJ">
                                         <rect key="frame" x="0.0" y="2" width="290" height="58"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
                                         <state key="normal" title="ENGLISH-CHINESE">
@@ -1060,7 +1073,7 @@
                                             <constraint firstAttribute="height" constant="1" id="1Sv-B7-bSo"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZcB-MQ-jb6">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZcB-MQ-jb6">
                                         <rect key="frame" x="0.0" y="62" width="290" height="58"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
                                         <state key="normal" title="CHINESE-ENGLISH">
@@ -1358,7 +1371,7 @@
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DaN-0z-Cqh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2351" y="248"/>
+            <point key="canvasLocation" x="2415" y="232"/>
         </scene>
         <!--Word Content View Controller-->
         <scene sceneID="EBH-fc-HnS">
@@ -1478,7 +1491,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xi7-WF-arE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1957" y="248"/>
+            <point key="canvasLocation" x="1977" y="232"/>
         </scene>
         <!--РАССЫЛКА-->
         <scene sceneID="9Vl-MJ-JMK">
@@ -1527,7 +1540,7 @@
         <!--РАССЫЛКА-->
         <scene sceneID="kLO-Bh-yZx">
             <objects>
-                <viewController id="ow3-nS-y62" customClass="NCJokeItemViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="jokeItemViewController" id="ow3-nS-y62" customClass="NCJokeItemViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="WDL-WK-0Iv"/>
                         <viewControllerLayoutGuide type="bottom" id="bv7-ff-gDP"/>
@@ -1588,7 +1601,7 @@
         <!--JOKES-->
         <scene sceneID="JgQ-7z-Nhu">
             <objects>
-                <viewController id="6dH-te-CVx" customClass="NCJokesViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="jokesViewController" id="6dH-te-CVx" customClass="NCJokesViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="f5W-AF-xA5"/>
                         <viewControllerLayoutGuide type="bottom" id="jHa-gx-xbf"/>
@@ -1628,7 +1641,7 @@
                                         </view>
                                         <size key="customSize" width="70" height="70"/>
                                         <connections>
-                                            <segue destination="ow3-nS-y62" kind="push" id="5i3-Hm-Edt"/>
+                                            <segue destination="ow3-nS-y62" kind="push" identifier="toJokeItem" id="5i3-Hm-Edt"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -1651,9 +1664,16 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="JOKES" id="Hx3-2N-tVV">
-                        <barButtonItem key="leftBarButtonItem" image="nc_packs" id="YC1-bZ-IhQ">
+                        <barButtonItem key="leftBarButtonItem" image="nc_menu" id="YC1-bZ-IhQ">
+                            <color key="tintColor" red="0.57254901960000004" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="toBack:" destination="6dH-te-CVx" id="Tyw-gz-KdS"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="nc_packs" id="mh6-rd-KBf">
+                            <color key="tintColor" red="0.57254901960000004" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="popToPartitionControllerAction:" destination="6dH-te-CVx" id="B6m-Is-dsh"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -2336,7 +2356,7 @@
         <image name="nc_heart_border70r" width="36" height="36"/>
         <image name="nc_heart_fill70r.png" width="36" height="36"/>
         <image name="nc_heart_nav" width="25" height="25"/>
-        <image name="nc_jokes" width="26" height="25"/>
+        <image name="nc_jokes_red" width="26" height="25"/>
         <image name="nc_lamp.png" width="25" height="25"/>
         <image name="nc_lock" width="90" height="90"/>
         <image name="nc_menu" width="25" height="25"/>
@@ -2356,10 +2376,11 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="K16-bG-sWg"/>
-        <segue reference="vtP-ns-RMh"/>
-        <segue reference="Brb-eK-n9d"/>
-        <segue reference="30R-Nr-slG"/>
         <segue reference="cPk-WR-Ftx"/>
+        <segue reference="Brb-eK-n9d"/>
+        <segue reference="vtP-ns-RMh"/>
+        <segue reference="6dd-88-Yr2"/>
+        <segue reference="30R-Nr-slG"/>
+        <segue reference="K16-bG-sWg"/>
     </inferredMetricsTieBreakers>
 </document>

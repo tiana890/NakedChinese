@@ -31,13 +31,7 @@
         NSString *bottomString = [NSString stringWithFormat:@"greet_%i_bottom", i+1];
         [self.greetingView addItemWithUpperText:NSLocalizedString(upString, nil) andBottomText:NSLocalizedString(bottomString, nil) andImage:[NSString stringWithFormat:@"greet_photo%i", i+1]];
     }
-        /*
-    [self.greetingView addItemWithUpperText:@"НЕВАЖНО КАК ДОЛГО ТЫ УЧИШЬ" andBottomText:@"КИТАЙСКИЙ ЯЗЫК" andImage:@"greet_photo1"];
-    [self.greetingView addItemWithUpperText:@"НО ПРИЕХАВ В КИТАЙ, ТЫ СТОЛКНЁШЬСЯ" andBottomText:@"С НАСТОЯЩИМ КИТАЙСКИМ ЯЗЫКОМ" andImage:@"greet_photo2"];
-    [self.greetingView addItemWithUpperText:@"МЫ ДАДИМ ТЕБЕ САМОЕ СИЛЬНОЕ ОРУЖИЕ -" andBottomText:@"ЗНАНИЕ!" andImage:@"greet_photo3"];
-    [self.greetingView addItemWithUpperText:@"ЭТОМУ НЕ УЧАТ В ИНСТИТУТЕ" andBottomText:@"ОБ ЭТОМ НЕ ПИШУТ В УЧЕБНИКАХ" andImage:@"greet_photo4"];
-    [self.greetingView addItemWithUpperText:@"МЫ ОБНАЖИМ ВЕСЬ КИТАЙСКИЙ ЯЗЫК" andBottomText:@"ДЛЯ ТЕБЯ!" andImage:@"greet_photo5"];
-    */
+    
     if(!self.openFromMenu)
     {
         self.navigationController.navigationBarHidden = YES;
@@ -48,8 +42,6 @@
         self.tintColor = self.navigationController.navigationBar.tintColor;
         [self.navigationController.navigationBar setTintColor:[UIColor clearColor]];
     }
-    
-
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -60,11 +52,15 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [super viewWillDisappear:animated];
+    
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
     [self.navigationController.navigationBar setTintColor:self.tintColor];
     self.navigationController.navigationBarHidden = NO;
 }
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -87,7 +87,24 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
         default:
             break;
     }
-    
+    [self updateNavigationItemsIfNeeded];
+}
+
+- (void)updateNavigationItemsIfNeeded {
+    if ([self isOpenFromMenu]) {
+        self.navigationItem.rightBarButtonItem = [self.navigationItem leftBarButtonItem];
+        [self.navigationItem.rightBarButtonItem setAction:@selector(popToPartitionControllerAction:)];
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nc_menu"] style:UIBarButtonItemStylePlain target:self action:@selector(backToMenu)];
+        self.navigationItem.leftBarButtonItem = item;
+    }
+}
+
+- (void) backToMenu
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (IBAction)popToPartitionControllerAction:(id)sender {
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

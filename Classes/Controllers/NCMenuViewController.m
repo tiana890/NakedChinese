@@ -11,6 +11,7 @@
 #import "NCTestViewController.h"
 #import "NCGreetingViewController.h"
 #import "NCPackViewController.h"
+#import "NCJokesViewController.h"
 
 #import "NCNavigationBar.h"
 #import <FXBlurView/FXBlurView.h>
@@ -27,6 +28,7 @@ static NSString *const NCGreetingControllerSegueIdentifier = @"toGreetingControl
 static NSString *const NCFavoritesControllerSegueIdentifier = @"toFavoritesController";
 static NSString *const NCAuthorControllerSegueIdentifier = @"toAuthorController";
 static NSString *const NCPartnersControllerSegueIdentifier = @"toPartnersController";
+static NSString *const NCJokesControllerSegueIdentifier = @"toJokesController";
 
 static NSString *const NCMenuIconKey  = @"icon";
 static NSString *const NCMenuTitleKey = @"title";
@@ -49,6 +51,13 @@ static NSString *const NCMenuTitleKey = @"title";
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = NO;
+    //[self.navigationController.navigationBar setTintColor:[UIColor colorWithRed:146.0f/255.0f green:138.0f/255.0f blue:138.0f/255.0f alpha:1.0f]];
+    
+}
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.navigationController.navigationBar setTintColor:[UIColor colorWithRed:146.0f/255.0f green:138.0f/255.0f blue:138.0f/255.0f alpha:1.0f]];
 }
 #pragma mark - IBActions
 
@@ -86,6 +95,7 @@ static NSString *const NCMenuTitleKey = @"title";
                   //@{NCMenuIconKey: @"nc_globe", NCMenuTitleKey: @}];
     } else if (section == 1) {
         items = @[@{NCMenuIconKey: @"nc_favorite", NCMenuTitleKey: NSLocalizedString(@"fav", nil)},
+                  @{NCMenuIconKey: @"nc_jokes_menu", NCMenuTitleKey: NSLocalizedString(@"jokes", nil)},
                   @{NCMenuIconKey: @"nc_check",    NCMenuTitleKey: NSLocalizedString(@"test", nil)}];
     } else if (section == 2) {
         items = @[@{NCMenuIconKey: @"nc_star",    NCMenuTitleKey: NSLocalizedString(@"rate", nil)},
@@ -150,6 +160,9 @@ static NSString *const NCMenuTitleKey = @"title";
                 [self performSegueWithIdentifier:NCFavoritesControllerSegueIdentifier sender:self];
                 break;
             case 1:
+                [self performSegueWithIdentifier:NCJokesControllerSegueIdentifier sender:self];
+                break;
+            case 2:
                 [self performSegueWithIdentifier:NCTestControllerSegueIdentifier sender:self];
                 break;
         }
@@ -194,6 +207,12 @@ static NSString *const NCMenuTitleKey = @"title";
     {
         NCPackViewController *packController = [segue destinationViewController];
         packController.type = NCPackControllerOfFavorite;
+        packController.isOpenFromMenu = YES;
+    }
+    else if([segue.identifier isEqualToString:NCJokesControllerSegueIdentifier])
+    {
+        NCJokesViewController *jc = [segue destinationViewController];
+        jc.isOpenFromMenu = YES;
     }
 }
 
