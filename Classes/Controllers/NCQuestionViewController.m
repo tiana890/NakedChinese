@@ -80,6 +80,11 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
     [self setupBackgroundImage];
     
     [self.navigationBar separatorLineHide:YES];
+    
+    if(self.type != NCTestTypeLanguageChinese)
+    {
+        [self.soundButton setImage:nil];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {

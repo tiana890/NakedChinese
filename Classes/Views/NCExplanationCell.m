@@ -19,7 +19,6 @@
         _synthesizer = [AVSpeechSynthesizer new];
         _synthesizer.delegate = self;
     }
-    
     //по какой-то причине первая строка не произносится вслух
     AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:@" "];
     utterance.rate = AVSpeechUtteranceMaximumSpeechRate;
@@ -33,7 +32,7 @@
 - (void)sayText:(NSString *)text {
     AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:text];
     utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"zh-CN"];
-    utterance.rate = AVSpeechUtteranceMinimumSpeechRate;
+    utterance.rate = 0.2f;
     [self.synthesizer speakUtterance:utterance];
 }
 - (IBAction)sayAction:(id)sender

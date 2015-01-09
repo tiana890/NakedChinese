@@ -24,7 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.rightResultsLabel setText:[NSString stringWithFormat:@"\"%@\"", self.rightResults]];
+    [self.rightResultsLabel setText:[NSString stringWithFormat:@"“%@”", self.rightResults]];
     [self setupBackgroundImage];
     
     [self.rightResultLabel setText:[NSString stringWithFormat:@"%i", self.rightResult.intValue]];

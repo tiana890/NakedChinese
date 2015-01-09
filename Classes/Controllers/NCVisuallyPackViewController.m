@@ -160,10 +160,14 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
 
 
 - (UIViewController *)viewControllerAtIndex:(NSUInteger)index {
+    
+    NCWord *word = self.arrayOfWords[self.openedWordIndex];
+    [NCDataManager sharedInstance].delegate = self;
+    [[NCDataManager sharedInstance] getMaterialsWithWordID:word.ID.intValue];
+   
     if (([self.arrayOfWords count] == 0) || (index >= [self.arrayOfWords count])) {
         return nil;
     }
-    
     // Create a new view controller and pass suitable data.
     NCWordContentViewController *contentViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"wordContentViewController"];
     
@@ -291,11 +295,17 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
                 [self.userIndexesFavoriteWords addObject:index];
                 [[NCDataManager sharedInstance] setWordToFavorites:self.arrayOfWords[[index intValue]]];
             }
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"add_to_fav_alert", nil) delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            [alert show];
+            [self performSelector:@selector(dismiss:) withObject:alert afterDelay:0.8f];
         }
         else
         {
             [[NCDataManager sharedInstance] removeWordFromFavorites:self.arrayOfWords[[index intValue]]];
             [self.userIndexesFavoriteWords removeObject:index];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"remove_from_fav_alert", nil) delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            [alert show];
+            [self performSelector:@selector(dismiss:) withObject:alert afterDelay:0.8f];
 
         }
     }
@@ -306,14 +316,26 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
         {
             [[NCDataManager sharedInstance] removeWordFromFavorites:self.arrayOfWords[[index intValue]]];
             [self.userIndexesFavoriteWords removeObject:index];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"remove_from_fav_alert", nil) delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            [alert show];
+            [self performSelector:@selector(dismiss:) withObject:alert afterDelay:0.8f];
+
         }
         else
         {
             [self.userIndexesFavoriteWords addObject:index];
             [[NCDataManager sharedInstance] setWordToFavorites:self.arrayOfWords[[index intValue]]];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"add_to_fav_alert", nil) delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            [alert show];
+            [self performSelector:@selector(dismiss:) withObject:alert afterDelay:0.8f];
         }
         sender.selected = !sender.selected;
     }
+}
+
+- (void) dismiss:(UIAlertView *)alert
+{
+    [alert dismissWithClickedButtonIndex:0 animated:YES];
 }
 
 #pragma mark - UIPageViewControllerDataSource
@@ -354,6 +376,8 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
     self.openedWordIndex = currentIndex;
     [self setupFavButton:currentIndex];
     //self.addFavoriteButton.selected = [self.userIndexesFavoriteWords containsObject:@(currentIndex)];
+    
+    
 }
 
 @end

@@ -41,10 +41,19 @@
 
 - (void)customizeTabBar {
     NSArray *items = [self items];
+    
     [items enumerateObjectsUsingBlock:^(UITabBarItem *item, NSUInteger idx, BOOL *stop) {
         UIImage *itemImage = [item image];
+        
         item.image = [itemImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        [item setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor whiteColor] } forState:UIControlStateNormal];
+        if(idx != 2)
+        {
+            [item setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor whiteColor] } forState:UIControlStateNormal];
+        }
+        else
+        {
+            [item setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor redColor] } forState:UIControlStateNormal];
+        }
         [item setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor redColor] } forState:UIControlStateSelected];
     }];
     self.tintColor = [UIColor redColor];

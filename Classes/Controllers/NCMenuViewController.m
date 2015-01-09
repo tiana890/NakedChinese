@@ -12,7 +12,8 @@
 #import "NCGreetingViewController.h"
 #import "NCPackViewController.h"
 #import "NCJokesViewController.h"
-
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
 #import "NCNavigationBar.h"
 #import <FXBlurView/FXBlurView.h>
 
@@ -33,7 +34,7 @@ static NSString *const NCJokesControllerSegueIdentifier = @"toJokesController";
 static NSString *const NCMenuIconKey  = @"icon";
 static NSString *const NCMenuTitleKey = @"title";
 
-@interface NCMenuViewController ()
+@interface NCMenuViewController ()<MFMailComposeViewControllerDelegate>
 @end
 
 @implementation NCMenuViewController
@@ -99,9 +100,9 @@ static NSString *const NCMenuTitleKey = @"title";
                   @{NCMenuIconKey: @"nc_check",    NCMenuTitleKey: NSLocalizedString(@"test", nil)}];
     } else if (section == 2) {
         items = @[@{NCMenuIconKey: @"nc_star",    NCMenuTitleKey: NSLocalizedString(@"rate", nil)},
-                  @{NCMenuIconKey: @"nc_edit",    NCMenuTitleKey: NSLocalizedString(@"feedback", nil)},
-                  @{NCMenuIconKey: @"nc_coffee",  NCMenuTitleKey: NSLocalizedString(@"site", nil)},
-                  @{NCMenuIconKey: @"nc_message", NCMenuTitleKey: NSLocalizedString(@"subscribe", nil)}];
+                  @{NCMenuIconKey: @"nc_edit",    NCMenuTitleKey: NSLocalizedString(@"feedback", nil)}];
+                 // @{NCMenuIconKey: @"nc_coffee",  NCMenuTitleKey: NSLocalizedString(@"site", nil)},
+                  //@{NCMenuIconKey: @"nc_message", NCMenuTitleKey: NSLocalizedString(@"subscribe", nil)}];
     }
     return items;
 }
@@ -168,6 +169,9 @@ static NSString *const NCMenuTitleKey = @"title";
         }
     } else if (indexPath.section == 2) {
         switch (indexPath.row) {
+            case 1:
+                [self sendMail];
+                break;
             case 3:
                 [self performSegueWithIdentifier:NCSubscribeControllerSegueIdentifier sender:self];
                 break;
@@ -175,6 +179,21 @@ static NSString *const NCMenuTitleKey = @"title";
     }
 }
 
+- (void) sendMail
+{
+    MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
+    [mailViewController setToRecipients:@[@"minizayka@gmail.com"]];
+    mailViewController.mailComposeDelegate = self;
+    [mailViewController setSubject:@"Subject Goes Here."];
+    [mailViewController setMessageBody:@"Your message goes here." isHTML:NO];
+    
+    [self presentViewController:mailViewController animated:YES completion:nil];
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == 0) {
         return 5;

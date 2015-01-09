@@ -120,7 +120,7 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
     }
     else
     {*/
-        cell.chineseLabel.text = [NSString stringWithFormat:@"%d.%@",indexPath.row+1, material.materialZH];
+        cell.chineseLabel.text = [NSString stringWithFormat:@"%@", material.materialZH];
         cell.pinyinLabel.text = material.materialZH_TR;
         cell.translateLabel.text = material.materialWord;
         cell.translateLabel.hidden = NO;

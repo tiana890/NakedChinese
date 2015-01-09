@@ -172,7 +172,22 @@
 }
 
 + (NCHell)randomHell {
-    NSUInteger rValue = arc4random_uniform(2) + 1;
+    //изменили randomHell на упорядоченный
+    NSInteger rValue = 1;
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    BOOL ifGirl = [def boolForKey:@"ifGirl"];
+    if(ifGirl)
+    {
+        rValue = 2;
+        [def setBool:NO forKey:@"ifGirl"];
+    }
+    else
+    {
+        rValue = 1;
+        [def setBool:YES forKey:@"ifGirl"];
+    }
+    [def synchronize];
+    //NSUInteger rValue = arc4random_uniform(2) + 1;
     return (NCHell)rValue;
 }
 

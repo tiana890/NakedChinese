@@ -420,7 +420,6 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     {
         NSInteger openedWordIndex = [sender[NCPackControllerWordIndexKey] integerValue];
         NCVisuallyPackViewController *packViewController = [segue destinationViewController];
-        
         packViewController.openedWordIndex = openedWordIndex;
         packViewController.arrayOfWords = self.searchArrayOfWords;
         [self cancelSearch];

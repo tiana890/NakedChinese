@@ -94,7 +94,8 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
     self.navigationController.navigationBarHidden = NO;
     [self.navigationItem setHidesBackButton:YES];
-   
+    
+    self.tabBar.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -249,7 +250,6 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
         self.backgroundBlurView.alpha = 0;
         self.tabBar.alpha = 0;
     } completion:^(BOOL finished) {
-        
         self.backgroundBlurView.hidden = YES;
         self.tabBar.hidden = YES;
         
