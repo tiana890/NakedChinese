@@ -16,6 +16,8 @@ static NSString *const NCExplanationCellIdentifier = @"explanationCell";
 static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
 
 @interface NCExplanationViewController () <NCExplanationCellDelegate>
+@property (strong, nonatomic) IBOutlet UIView *headerView;
+@property (strong, nonatomic) IBOutlet UILabel *mainLabel;
 @property (weak, nonatomic) IBOutlet UIButton *slideImage;
 @property (weak, nonatomic) IBOutlet UILabel *sliderLabel;
 @end
@@ -31,7 +33,31 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
 - (void)setArrayOfExplanations:(NSArray *)arrayOfExplanations
 {
     _arrayOfExplanations = arrayOfExplanations;
-    [self.tableView reloadData];
+    if(arrayOfExplanations)
+    {
+        NSLog(@"load explanations");
+        NCMaterial *material = _arrayOfExplanations[0];
+        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:material.materialWord];
+        //[hogan addAttribute:NSFontAttributeName
+                      //value:[UIFont systemFontOfSize:20.0]
+                     // range:NSMakeRange(24, 11)];
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setHeadIndent:100.0f];
+        [paragraphStyle setTailIndent:-20.0f];
+        paragraphStyle.firstLineHeadIndent = 40.0f;
+        
+        [str setAttributes: @{NSParagraphStyleAttributeName: paragraphStyle} range:NSRangeFromString(material.materialWord)];
+        [self.mainLabel setAttributedText:str];
+        
+        CGSize size = [self.mainLabel systemLayoutSizeFittingSize:UILayoutFittingExpandedSize];
+        [self.mainLabel setFrame:CGRectMake(self.mainLabel.frame.origin.x, self.mainLabel.frame.origin.y, size.width, size.height)];
+        [self.headerView setFrame:CGRectMake(self.headerView.frame.origin.x, self.headerView.frame.origin.y, self.headerView.frame.size.width, self.mainLabel.frame.size.height + 8.0f)];
+        [self.mainLabel updateConstraints];
+        [self.headerView updateConstraints];
+        //[self.tableView updateConstraints];
+        //[self.headerView setFrame:CGRectMake(self.headerView.frame.origin.x, self.headerView.frame.origin.y, self.headerView.frame.size.width, size.height+20.0f)];
+        [self.tableView reloadData];
+    }
 }
 
 #pragma mark - Lifecycle
@@ -85,17 +111,21 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
     cell.pinyinLabel.text = object[NCWordPinyinKey];
     cell.translateLabel.text = object[NCWordTranslateKey];*/
     
-    NCMaterial *material = self.arrayOfExplanations[indexPath.row];
-    if(indexPath.row == 0)
+    NCMaterial *material = self.arrayOfExplanations[indexPath.row+1];
+    /*if(indexPath.row == 0)
     {
-        cell.translateLabel.text = material.materialWord;
+        cell.chineseLabel.text = material.materialWord;
+        cell.translateLabel.hidden = YES;
+        cell.pinyinLabel.hidden = YES;
     }
     else
-    {
-        cell.chineseLabel.text = [NSString stringWithFormat:@"%d.%@",indexPath.row, material.materialZH];
+    {*/
+        cell.chineseLabel.text = [NSString stringWithFormat:@"%d.%@",indexPath.row+1, material.materialZH];
         cell.pinyinLabel.text = material.materialZH_TR;
         cell.translateLabel.text = material.materialWord;
-    }
+        cell.translateLabel.hidden = NO;
+        cell.pinyinLabel.hidden = NO;
+    //}
     
 }
 
@@ -122,19 +152,19 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = nil;
-    if (indexPath.row == 0) {
-        cell = [self explanationCellAtIndexPath:indexPath withIdentifier:ExplanationTitleCellIdentifier];
+    //if (indexPath.row == 0) {
+        //cell = [self explanationCellAtIndexPath:indexPath withIdentifier:ExplanationTitleCellIdentifier];
        // cell = [tableView dequeueReusableCellWithIdentifier:ExplanationTitleCellIdentifier forIndexPath:indexPath];
-       // NCMaterial *material = self.arrayOfExplanations[indexPath.row];
-       // [((NCExplanationCell *)cell).translateLabel setText:material.materialWord];
-    } else {
+        //NCMaterial *material = self.arrayOfExplanations[indexPath.row];
+        //[((NCExplanationCell *)cell).translateLabel setText:material.materialWord];
+   // } else {
         cell = [self explanationCellAtIndexPath:indexPath withIdentifier:NCExplanationCellIdentifier];
-    }
+    //}
     return cell;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.arrayOfExplanations count];
+    return [self.arrayOfExplanations count]-1;
 }
 
 #pragma mark - UITableViewDelegate
@@ -151,11 +181,13 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat rowHeight = .0f;
-    if (indexPath.row == 0) {
-        rowHeight = [self heightForBasicExplanationAtIndexPath:indexPath withIdentifier:ExplanationTitleCellIdentifier];
-    } else {
+    //if (indexPath.row == 0) {
+        //rowHeight = [self heightForBasicExplanationAtIndexPath:indexPath withIdentifier:ExplanationTitleCellIdentifier];
+        //rowHeight = 50.0f;
+    //} else {
         rowHeight = [self heightForBasicExplanationAtIndexPath:indexPath withIdentifier:NCExplanationCellIdentifier];
-    }
+    //}
+    
     return rowHeight;
 }
 - (IBAction)swipeAction:(id)sender {

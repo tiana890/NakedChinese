@@ -228,29 +228,36 @@
     
     if(percent >= 0.01 && percent <= 0.25)
     {
-        result = NSLocalizedString(@"test_result_verybad", nil);
+        result = [self stringTestRandomResultWithBaseString:@"verybad" andModule:5];
     }
     else if(percent >= 0.26 && percent <= 0.43)
     {
-        result = NSLocalizedString(@"test_result_bad", nil);
+        result = [self stringTestRandomResultWithBaseString:@"bad" andModule:4];
     }
     else if(percent >= 0.44 && percent <= 0.59)
     {
-        result = NSLocalizedString(@"test_result_suit", nil);
+        result = [self stringTestRandomResultWithBaseString:@"suit" andModule:3];
     }
     else if(percent >= 0.6 && percent <= 0.74)
     {
-        result = NSLocalizedString(@"test_result_good", nil);
+        result = [self stringTestRandomResultWithBaseString:@"good" andModule:2];
     }
     else if(percent >= 0.75 && percent <= 0.99)
     {
-        result = NSLocalizedString(@"test_result_excellent", nil);
+        result = [self stringTestRandomResultWithBaseString:@"excellent" andModule:3];
     }
     else if(percent == 1)
     {
-        result = NSLocalizedString(@"test_result_ideal", nil);
+        result = [self stringTestRandomResultWithBaseString:@"ideal" andModule:6];
     }
     
     return result;
+}
+
+- (NSString *)stringTestRandomResultWithBaseString:(NSString *) str andModule:(int)module
+{
+    int i = arc4random()%module;
+    NSString *s = [NSString stringWithFormat:@"test_result_%@_%i", str, i+1];
+    return NSLocalizedString(s, nil);
 }
 @end

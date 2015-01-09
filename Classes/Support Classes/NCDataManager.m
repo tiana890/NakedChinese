@@ -393,146 +393,174 @@
                                  @"网络上有很多色狼， 他们经常要求射频."]
                            };
     
-    NSDictionary *ruDict = @{@1:@[@"На день рождения её хорошая подруга послала фаллоимитатор.",
+    NSDictionary *ruDict = @{@1:@[@"Дословно \"искусственный инструмент для влагалища\".\nСинонимы:\n电动鸡巴 diàndòngjībā\n假鸡巴 jiǎjībā",
+                                  @"На день рождения её хорошая подруга послала фаллоимитатор.",
                                   @"Она считает, что каждая девушка должна иметь фаллоимитатор.",
                                   @"Некоторым девушкам нравится коллекционировать фаллосы.",
                                   @"В секс-шопах огромный выбор фаллоимитаторов, ты можешь выбрать любой.",
                                   @"Многие девушки считают, что искусственный пенис не способен сравниться с настоящим."],
                              
-                             @2:@[@"Многие массажистки в саунах на самом деле проститутки.",
+                             @2:@[@"Существует очень много слов со значением “проститутка”, и это, пожалуй, одно из самых безобидных. Это слово должно использоваться с определённой осторожностью, потому как оно также обозначает “мисс” или “юная леди”. Очень часто на улице или даже у себя на двери вы можете найти объявления с тремя иероглифами 包小姐, что обозначает “вызвать проститутку”.",
+                                  @"Многие массажистки в саунах на самом деле проститутки.",
                                   @"Позвони вот этой проститутке, и она даст тебе высочайший сервис для твоего тела и души.",
                                   @"В последнее время по всей стране можно увидеть множество объявлений с проститутками.",
                                   @"И зачем мне надо вызывать проститутку? Я очень сильно люблю свою жену.",
                                   @"Некоторые студентки уходят в проституцию из-за нехватки денег."],
                              
-                             @3:@[@"Не каждая девушка способна достичь оргазма.",
+                             @3:@[@"Дословно переводится \"высокая волна\", что достаточно хорошо описывает то, что  происходит с девушкой во время оргазма. Не используется для мужского оргазма.",
+                                  @"Не каждая девушка способна достичь оргазма.",
                                   @"Ты первый парень, который довёл меня до оргазма.",
                                   @"Прошлой ночью её парень кончил 3 раза, она же так и не дошла до оргазма.",
                                   @"Учёные утверждают, что оргазм полезен для здоровья.",
                                   @"Лучше всего, когда парень и девушка достигают оргазма одновременно."],
                              
-                             @4:@[@"Он мастурбировал как раз в тот момент, когда вошла его мама.",
+                             @4:@[@"Дословно переводится \"поймать самолет\" или \"сбить самолет\". Главным образом используется, когда мужчина сам себя хочет удовлетворить. Также может быть использовано в ситуации, когда кто-то другой удовлетворяет мужчину рукой. В Китае это один из видов проституции, скрывающийся под вывесками массажа. В таких салонах мужчине сперва сделают массаж весьма сомнительного качества, после чего предложат \"побить его самолет\". ",
+                                  @"Он мастурбировал как раз в тот момент, когда вошла его мама.",
                                   @"Некоторые работницы массажных салонов легко могут подрочить тебе.",
                                   @"Пристраститься к мастурбированию очень легко, а это мешает завести настоящую девушку.",
                                   @"Очень многие старшеклассники мастурбируют по утрам.",
                                   @"Его девушка застала его за мастурбированием. Она была просто в гневе."],
                              
-                             @5:@[@"Его девушка еще не достигла оргазма, а он уже кончил.",
+                             @5:@[@"Дословно обозначает \"выстрелить\", \"запустить\" и может быть использовано в очень многих ситуациях от забития гола в ворота до запуска космического шаттла.\nСинонимы:\n发射 fāshè\n射出 shèchū\n来了 láil",
+                                  @"Его девушка еще не достигла оргазма, а он уже кончил.\
+                                  e",
                                   @"Ему нравится кончать внутрь своей девушки.",
                                   @"При их первом занятии любовью, из него вышло немало спермы.",
                                   @"Этот парень за одну ночь способен кончить 4 раза.",
                                   @"Ему нравится, когда он кончает и девушка царапает его спину."],
                              
-                             @6:@[@"Взгляни как тех двух парней влечёт друг к другу. По-любому, геи.",
+                             @6:@[@"Не смотря на то, что традиционные словари дадут вам только одно значение для этого слова - “товарищ”, в последние годы это так же очень популярный сленг для обозначения гея. Дословно 同志 обозначает “иметь общие цели”, и потому используется преимущественно между геями. Когда люди традиционной сексуальной ориентации называют геев, то используются другие синонимы.\nСинонимы:\n同性恋者 tóngxìngliànzhě\n屁精 pìjīng (редко используется в настоящее время)\n玻璃 bōli (созвучно английскому “boy love”)",
+                                  @"Взгляни как тех двух парней влечёт друг к другу. По-любому, геи.",
                                   @"Моя сестрёнка сказала, что в её группе очень много геев, потому она все еще свободна.",
                                   @"В некоторых городах Америки геи могут официально вступить в брак.",
                                   @"Я и мой лучший друг вместе каждый день, поэтому все вокруг думают, что мы геи.",
                                   @"Очень многие девушки хотят иметь близкого друга гея."],
 
-                             @7:@[@"Взгляни как те две девушки одеты. Наверняка лесбиянки.",
+                             @7:@[@"Достаточно обыденное слово для обозначения лесбиянок без какого-либо негативного оттенка.\nСинонимы:\n拉子 lāzi\n女同性恋者 nǚtóngxìngliànzhě\n女同 nǚtóng\n蕾丝边 lěisībiān (созвучно английскому lesbian)",
+                                  @"Взгляни как те две девушки одеты. Наверняка лесбиянки.",
                                   @"У тебя ни единого шанса переспать с ней. Она ведь лесбиянка, и потому ей нравятся только другие девушки.",
                                   @"В последнее время стало нормой увидеть двух целующихся лесби в метро.",
                                   @"Несмотря на то, что современное общество всё ещё не сильно приветствует однополую любовь, в последнее время количество геев и лесбиянок только увеличивается.",
                                   @"Глядя на тех двух девушек я всегда думал, что они лесбиянки, но теперь я знаю, что они просто очень хорошие подруги."],
                              
-                             @8:@[@"У него действительно большой пенис и все его друзья завидуют ему.",
+                             @8:@[@"Является нейтральным словом для обозначения пениса. Другая его вариация 鸡鸡 является более ласкательной и детской.",
+                                  @"У него действительно большой пенис и все его друзья завидуют ему.",
                                   @"Не всем девушкам нравятся большие члены, потому как они боятся, что будет больно.",
                                   @"Парням с большими членами не легко подобрать подходящие презервативы.",
                                   @"Многие считают, что у африканцев члены больше, чем у азиатов и европейцев.",
                                   @"Парни с маленькими членами могут чувствовать себя неуверенно, но большинство девушек не обращают внимание на размер."],
                              
-                             @9:@[@"Импотент - это мужчина, чей пенис совсем не может встать, или же встаёт на очень короткий промежуток времени. Он не может вести полноценную половую жизнь и входить в женское влагалище.",
+                             @9:@[@"Синонимы:\n性无能 (досл. “сексуально беспомощный”)\n弯了 (досл. “кривой”)\n不是直男 (досл. “непрямой мужчина”)",
+                                  @"Импотент - это мужчина, чей пенис совсем не может встать, или же встаёт на очень короткий промежуток времени. Он не может вести полноценную половую жизнь и входить в женское влагалище.",
                                   @"Вчера я смотрел на обнажённую девушку, которая мне очень нравится, и мой член не мог подняться. Боюсь, что я стал импотентом.",
                                   @"Моя мама постоянно спрашивает меня когда же я забеременею. Но не могу же я ей сказать, что мой муж стал импотентом.",
                                   @"Я уже пол часа жду, когда же у тебя встанет. Ты импотент!",
                                   @"Мой парень не может продержаться и несколько минут. По-моему, он просто импотент."],
                              
-                             @10:@[@"У этой девушки очень грязная пи**а.",
+                             @10:@[@"Очень вульгарное и грязное слово для обозначения женской вагины, наиболее подходящий в русском языке аналог - пи**а. Зачастую этот иероглиф, в силу своей даже визуальной вульгарности (尸 - тело, 穴 - дыра, впадина), не используется, а вместо него пишут 逼 или используют английскую букву \"В\". На некоторых операционных системах если вы попытаетесь напечатать этот иероглиф с помощью пиньиня, то вы его просто не найдёте в числе предлагаемых. В таких случаях единственный выход - написать его от руки, и тогда система всё-таки предложит вам его напечатать. Ещё более удивительно то, что многие китайцы вообще не знают этого иероглифа. Также часто используется в различных ругательствах и в составе других фраз разговорного китайского языка. Подробнее об этом можно узнать в разделах \"Ругательства\" и \"Сленг\".\
+                                   Синонимы:\n阴道 yīndào  - официальное обозначение для \"вагины\" (досл. \"Женский путь\")\n小妹妹 xiǎomèimei - имеет оттенок невинности и ласки (досл. \"Маленькая сестричка\")\n白虎 báihǔ - \"бритая киска\"",
+                                  @"У этой девушки очень грязная пи**а.",
                                   @"Порой она несколько раз на дню моет свою пи**у.",
                                   @"Её парень уверен, что у неё очень ароматное влагалище.",
                                   @"Этому мужчине нравится лизать женское влагалище.",
                                   @"У неё между ног очень много волос."],
                              
-                             @11:@[@"Наш начальник спит со своей секретаршей.",
+                             @11:@[@"Дословно переводится \"иметь одну ногу с кем-то\". Фраза может обозначать как просто романтическую, так и сексуальную связь на стороне.\nСинонимы:\n偷情 tōuqíng\n劈腿pītuǐ\n出轨chūguǐ",
+                                   @"Наш начальник спит со своей секретаршей.",
                                    @"Мне кажется мой отец сейчас встречается со своей первой любовью.",
                                    @"Смотри, в новостях пишут, что эта певица спит со своим менеджером.",
                                    @"Сейчас не редко студенты занимаются сексом со своими учителями.",
                                    @"Взгляни на тот магазин, два его работника явно встречаются."],
                              
-                             @12:@[@"Вчера вечером полиция поймала двух извращенцев",
+                             @12:@[@"Дословно переводится “цветной волк”.\
+                                   Синонимы:\
+                                   色鬼 sèguǐ",
+                                   @"Вчера вечером полиция поймала двух извращенцев",
                                    @"Не надо вечермо гулять в одиночку, можно встретить извращенца.",
                                    @"Наш учитель извращенец. Во время урока постоянно пялится на девушек, и полностью игнорирует парней.",
                                    @"Обычные парни мне не интересны. Мне хочется, что бы моим парнем был извращенец, и тогда моя сексуальная жизнь точно станет интереснее.",
                                    @"В интернете очень много извращенцев. Они постоянно просят у меня включить камеру."]
                              };
     
-    NSDictionary *enDict = @{@1:@[@"Her good friend sent her a dildo as a birthday gift.",
+    NSDictionary *enDict = @{@1:@[@"Literally \"fake instrument for vagina\".\nSynonyms:\n电动鸡巴 diàndòngjībā\n假鸡巴 jiǎjībā",
+                                  @"Her good friend sent her a dildo as a birthday gift.",
                                   @"She thinks every girl should have a dildo.",
                                   @"Some girls like to collect dildos.",
                                   @"There's a good choice of dildos in sex shops, you can pick any.",
                                   @"Many girls believe a dildo to be inferior to an actual penis."],
                              
-                             @2:@[@"Many masseuses employed in saunas are actually prostitutes.",
+                             @2:@[@"There are many words to describe a prostitute and this one is perhaps the most innocent. This word should be used very carefully as it literally means “miss” or “little lady” but is also a synonym for “prostitute”. It is very common to find advertisement flyers around the streets and indeed the front door of your apartment. This is an escort service. The ads are recognizable by 3 characters 包小姐, which means “to call a prostitute”.",
+                                  @"Many masseuses employed in saunas are actually prostitutes.",
                                   @"You should call that prostitute, she will give you the best experience in your life.",
                                   @"Recently it is particularly common to find the ads for prostitution all around the country.",
                                   @"Why should I call a prostitute? I love my wife too much.",
                                   @"Some students become prostitutes because of lack of money."],
                              
-                             @3:@[@"Not every girl can reach orgasm.",
+                             @3:@[@"Literally translates as \"high tide\", which is a really quite a good description of the sensation felt by women. It can’t be used for men however.",
+                                  @"Not every girl can reach orgasm.",
                                   @"You're the first boyfriend that made me reach orgasm.",
                                   @"Last night her boyfriend ejaculated 3 times, but she didn’t cum at all.",
                                   @"Scientists claim that orgasms are good for your health.",
                                   @"It's perfect when two sexual partners climax together."],
                              
-                             @4:@[@"He was masturbating when his mom came into the room.",
+                             @4:@[@"Literally translates as \"catch a plane\" or \"hit a plane\". Usually refers to male masturbation, but can also be used when somebody else manually stimulates a man to the point of orgasm. In China it is one of the most common prostitution services that can be found in massage parlors. In such places a man can first enjoy a “massage”, and then will be asked if he wants his \"plane to be bitten\". ",
+                                  @"He was masturbating when his mom came into the room.",
                                   @"Some masseuses can give you a handjob.",
                                   @"It's easy to get addicted to masturbation, and also it may inhibit finding a girlfriend.",
                                   @"Many high school students masturbate in the morning.",
                                   @"His girlfriend caught him masturbating, she was really pissed off."],
                              
-                             @5:@[@"His girlfriend hasn't cum yet, but he has already ejaculated.",
+                             @5:@[@"Literally means \"shoot\", \"launch\" and can be used in many situations from scoring a goal to launching space shuttle.\nSynonyms:\n发射 fāshè\n射出 shèchū\n来了 láile",
+                                  @"His girlfriend hasn't cum yet, but he has already ejaculated.",
                                   @"He likes to cum inside his girlfriend.",
                                   @"The first time they made love he ejaculated quite a lot of semen.",
                                   @"During one night he can cum 4 times.",
                                   @"He likes his girlfriend to scratch his back as he ejaculates."],
                              
-                             @6:@[@"Look how intimate those two guys are. They are gay for sure.",
+                             @6:@[@"Though traditional dictionaries translate this word as “comrade”, recently it’s a very popular slang for “gay”. Literally 同志 means “having the same goal”, so is usually used among gay men to call each other. When heterosexuals talk about homosexuals usually other synonyms are used.\nSynonyms:\n同性恋者 tóngxìngliànzhě\n玻璃 bōli (sounds like “boy love”)\n屁精 pìjīng (not very useful nowadays)\n不是直男 (lit. “not straight man”)",
+                                  @"Look how intimate those two guys are. They are gay for sure.",
                                   @"My sister said there are too many gay men in her class, so she is still single.",
                                   @"In some parts of America homosexuals can legally marry.",
                                   @"My best friend and I spent a lot of time together, everybody thinks we are a gay couple.",
                                   @"Many girls want to have a gay man as a closest friend."],
                              
-                             @7:@[@"Look at how those two girls dress, I am sure they are lesbians.",
+                             @7:@[@"Is a very normal and accepted word for female homosexuals. It is not derogatory.\nSynonyms:\n拉子 lāzi\n女同性恋者 nǚtóngxìngliànzhě\n女同 nǚtóng\n蕾丝边 lěisībiān (sounds like “lesbian”)",
+                                  @"Look at how those two girls dress, I am sure they are lesbians.",
                                   @"You have no chance of spending a night with her. She’s a lesbian, so only likes the girls.",
                                   @"Recently it’s quite normal to see two lesbians kissing on the subway.",
                                   @"Though our society still doesn't really tolerate homosexuality, recently it there seems to be more and more lesbian and gay couples.",
                                   @"When I first looked at those two girls I thought they were lesbians, but now I know they are just good friends."],
                              
-                             @8:@[@"His dick is really big and all his friends envy him.",
+                             @8:@[@"Neutral word for penis. Its variation 鸡鸡 is more puerile.",
+                                  @"His dick is really big and all his friends envy him.",
                                   @"Not all the girls like big cocks because it may hurt.",
                                   @"It's not easy for guys with big cocks to choose the right condom.",
                                   @"Many people believe that Africans have much larger penises than Europeans or Asians.",
                                   @"Guys with smaller dicks may lose confidence, but most girls don't care about the size."],
                              
-                             @9:@[@"Impotent is when a man is unable to engage in sexual intercourse because of inability to have or maintain an erection. He can’t have normal sexual life, his penis can’t enter woman’s vagina.",
+                             @9:@[@"Synonyms:\n性无能 (lit. “sexually incapable”)\n弯了 (lit. “bent”)",
+                                 @"Impotent is when a man is unable to engage in sexual intercourse because of inability to have or maintain an erection. He can’t have normal sexual life, his penis can’t enter woman’s vagina.",
                                   @"Yesterday I was looking at a naked woman that I like very much, but my dick couldn't get hard. I’m afraid I am impotent.",
                                   @"My mom  keeps asking me when I’ll get pregnant. But I can’t tell her that my husband is impotent.",
                                   @"I’ve been waiting for your dick to became erect for half an hour. You are impotent!",
                                   @"If a man and a girl make love, and the man is unable to maintain an erection for even a few minutes then he is an impotent."],
                              
-                             @10:@[@"That girl has a very dirty c*nt.",
+                             @10:@[@"Very vulgar term for the vagina, the closest English equivalent is \"c*nt\". Very often this character is not used because of its visual vulgarity (尸 - body, 穴 - hole). In this case 逼 or \"B\" are used instead. On some computer operational systems if you try to type that character using pinyin you won't find it. In this case the only way is to use handwriting method, only then the system will let you type it. More surprising is that many Chinese don't know that character. This word is also very often used as a part of many different phrases of spoken language. You can learn more about it in sections \"Insults\" and \"Slang\".\nSynonyms:\n阴道 yīndà - medical term for vagina (lit. \"Woman's path\")\n小妹妹 xiǎomèimei - Innocent term for vagina, pussy (lit. \"Little sister\")\n白虎 báihǔ - shaved pussy (lit. “white tiger”)",
+                                   @"That girl has a very dirty c*nt.",
                                    @"Some days she washes her c*nt several times.",
                                    @"Her boyfriend thinks her vagina is very fragrant.",
                                    @"This man likes to lick pussies.",
                                    @"She's got lots of hair between her legs."],
                              
-                             @11:@[@"Our boss sleeps with his secretary.",
+                             @11:@[@"Literally translates as \"to have one leg with smb\". It may mean just romantic or sexual relationship as well as to cheat on somebody.\nSynonims:\n偷情 tōuqíng\n劈腿pītuǐ\n出轨chūguǐ",
+                                   @"Our boss sleeps with his secretary.",
                                    @"I think my father dates his first love now.",
                                    @"Look, the news says that this singer has had an affair with her producer.",
                                    @"Nowadays it’s normal for some students to have an affair with their teachers.",
                                    @"Look at that store, these two workers are definitely having an affair."],
                              
-                             @12:@[@"Yesterday night police cought two perverts.",
+                             @12:@[@"Literally translates “colorful wolf”.\nSynonyms:\n色鬼 sèguǐ",
+                                   @"Yesterday night police cought two perverts.",
                                    @"Don't walk alone in the evening in the park, you may meet a pervert.",
                                    @"Our teacher is a pervert. He stares at the girls all the time and ignores the boys.",
                                    @"Normal boys are too boring, I want to have a pervert as my boyfriend and then my sexual life will become more interesting.",
@@ -547,14 +575,15 @@
         NSArray *chArray = chDict[[NSNumber numberWithInt:i+1]];
         NSArray *ruArray = ruDict[[NSNumber numberWithInt:i+1]];
         NSArray *enArray = enDict[[NSNumber numberWithInt:i+1]];
-        for(int j = 0; j < 5; j++)
+        for(int j = 0; j < 6; j++)
         {
             NCMaterial *material = [[NCMaterial alloc] init];
             material.materialID = [NSNumber numberWithInt:12+materialCount];
             materialCount ++;
             material.materialEN = enArray[j];
             material.materialRU = ruArray[j];
-            material.materialZH = chArray[j];
+            if(j > 0)
+                material.materialZH = chArray[j-1];
             [materialsArray addObject:material];
         }
     }
@@ -568,7 +597,7 @@
     int count = 1;
     for(int i = 0; i < 12; i++)
     {
-        for(int j = 0; j < 5; j++)
+        for(int j = 0; j < 6; j++)
         {
             NCExplanation *exp = [[NCExplanation alloc] init];
             exp.ID = [NSNumber numberWithInt:12+count];

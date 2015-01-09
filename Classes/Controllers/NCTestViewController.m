@@ -16,8 +16,9 @@
 #import "NCPack.h"
 #import "NCQuestionViewController.h"
 #import "NCTest.h"
+#import "NCNavigationBar.h"
 
-@interface NCTestViewController () <UICollectionViewDataSource, UICollectionViewDelegate, NCDataManagerProtocol>
+@interface NCTestViewController () <UICollectionViewDataSource, UICollectionViewDelegate, NCDataManagerProtocol, UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *sexCollectionView;
 @property (weak, nonatomic) IBOutlet UICollectionView *invectiveCollectionView;
 @property (weak, nonatomic) IBOutlet UICollectionView *slangCollectionView;
@@ -243,5 +244,16 @@
         return NO;
     }
 }
+
+- (void)hideBarsLinesAlgorithmFromCalculationScrollView:(UIScrollView *)scrollView {
+    CGFloat scrollOffset = scrollView.contentOffset.y;
+    BOOL isHideNavLine = !(scrollOffset > 0);
+    [((NCNavigationBar *)self.navigationController.navigationBar) separatorLineHide:isHideNavLine];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self hideBarsLinesAlgorithmFromCalculationScrollView:scrollView];
+}
+
 
 @end
