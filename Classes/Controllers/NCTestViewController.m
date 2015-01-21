@@ -23,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *invectiveCollectionView;
 @property (weak, nonatomic) IBOutlet UICollectionView *slangCollectionView;
 
+@property (weak, nonatomic) IBOutlet UIButton *favButton;
+
 @property (nonatomic, strong) NSArray *numbersAndPacks;
 @property (nonatomic, strong) NSArray *packsArray;
 @property (strong, nonatomic) NSMutableIndexSet *sexIndexes;
@@ -32,6 +34,8 @@
 @property (strong, nonatomic) NSMutableArray *sexArray;
 @property (strong, nonatomic) NSMutableArray *invectiveArray;
 @property (strong, nonatomic) NSMutableArray *slangArray;
+
+@property (nonatomic) BOOL ifFavorite;
 
 @end
 
@@ -60,6 +64,8 @@
     
     [NCDataManager sharedInstance].delegate = self;
     [[NCDataManager sharedInstance] getLocalPacks];
+    
+    [[NCDataManager sharedInstance] getFavorites];
 }
 
 - (void)ncDataManagerProtocolGetLocalPacks:(NSArray *)arrayOfPacks
@@ -94,6 +100,20 @@
     [self.slangCollectionView reloadData];
 }
 
+- (void)ncDataManagerProtocolGetFavorites:(NSArray *)arrayOfFavorites
+{
+    if(arrayOfFavorites.count < 4)
+    {
+        self.favButton.userInteractionEnabled = NO;
+        [self.favButton setAlpha:0.3f];
+        self.ifFavorite = NO;
+    }
+    else
+    {
+        self.ifFavorite = YES;
+    }
+}
+
 #pragma mark - IBActions
 
 - (IBAction)popToPartitionControllerAction:(id)sender {
@@ -106,6 +126,45 @@
 
 - (IBAction)heartButtonAction:(UIButton *)heartButton {
     heartButton.selected = !heartButton.selected;
+    if(heartButton.selected)
+    {
+        [self setCollectionViewInteractionEnabled:NO];
+    }
+    else
+    {
+        [self setCollectionViewInteractionEnabled:YES];
+    }
+}
+
+- (void)setCollectionViewInteractionEnabled:(BOOL) value
+{
+    self.invectiveCollectionView.userInteractionEnabled = value;
+    self.slangCollectionView.userInteractionEnabled = value;
+    self.sexCollectionView.userInteractionEnabled = value;
+    
+    
+    if(value)
+    {
+        //[self.sexArray removeAllObjects];
+        //[self.slangArray removeAllObjects];
+        //[self.invectiveArray removeAllObjects];
+        
+        [UIView animateWithDuration:0.5f animations:^{
+            [self.invectiveCollectionView setAlpha:1.0f];
+            [self.slangCollectionView setAlpha:1.0f];
+            [self.sexCollectionView setAlpha:1.0f];
+            
+        }];
+    }
+    else
+    {
+        [UIView animateWithDuration:0.5f animations:^{
+            [self.invectiveCollectionView setAlpha:0.3f];
+            [self.slangCollectionView setAlpha:0.3f];
+            [self.sexCollectionView setAlpha:0.3f];
+            
+        }];
+    }
 }
 
 #pragma mark - Private
@@ -191,6 +250,24 @@
     }
     
     packCell.packView.fill = [currentIndexes containsIndex:index];
+    
+    if(self.ifFavorite)
+    {
+        if([currentIndexes count] == 0)
+        {
+            self.favButton.userInteractionEnabled = YES;
+            [UIView animateWithDuration:0.5f animations:^{
+                    [self.favButton setAlpha:1.0f];
+            }];
+        }
+        else
+        {
+            self.favButton.userInteractionEnabled = NO;
+            [UIView animateWithDuration:0.5f animations:^{
+                    [self.favButton setAlpha:0.3f];
+            }];
+        }
+    }
 }
 
 #pragma mark - Navigation
@@ -207,6 +284,10 @@
     else
     {
         qc.type = NCTestTypeChineseLanguage;
+    }
+    if(self.favButton.selected)
+    {
+        qc.ifFavorites = YES;
     }
 }
 
@@ -229,6 +310,7 @@
         [passPacksArray addObjectsFromArray:[self.slangArray objectsAtIndexes:self.slangIndexes]];
     }
     
+    
     return passPacksArray;
 
 }
@@ -236,6 +318,8 @@
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
     if ([self preparePassPacksArrayForQuestionViewController].count > 0)
+        return YES;
+    else if(self.favButton.selected)
         return YES;
     else
     {

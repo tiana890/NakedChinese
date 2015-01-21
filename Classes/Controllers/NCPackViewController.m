@@ -24,8 +24,10 @@
 #import "NCDataManager.h"
 #import "NCWord.h"
 
+#import "NCIAHelper.h"
 
-#define SERVER_ADDRESS @"http://china:8901/upload/picture/"
+
+#define SERVER_ADDRESS @"http://nakedchineseapp.com/upload/picture/"
 
 static NSString *const NCPackControllerWordIndexKey = @"NCPackControllerWordIndexKey";
 
@@ -40,7 +42,7 @@ static NSString *const NCWordLockCellIdentifier = @"wordLockCell";
 const CGFloat KeyboardHeight = 216.f;
 const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 
-@interface NCPackViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UIToolbarDelegate, UIGestureRecognizerDelegate, UISearchBarDelegate, NCDataManagerProtocol>
+@interface NCPackViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UIToolbarDelegate, UIGestureRecognizerDelegate, UISearchBarDelegate, NCDataManagerProtocol, NCDataManagerLoadBuyProductProtocol, UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet FXBlurView *navigationBlurView;
 @property (weak, nonatomic) IBOutlet FXBlurView *searchBlurView;
@@ -53,6 +55,10 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 @property (nonatomic, strong) NSArray *arrayOfWords;
 @property (nonatomic, strong) NSArray *arrayOfFavorites;
 @property (nonatomic, strong) NSMutableArray *searchArrayOfWords;
+
+@property (nonatomic, strong) NSArray *products;
+
+@property (nonatomic) BOOL ifReloadIsAble;
 @end
 
 @implementation NCPackViewController
@@ -62,10 +68,15 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupNavigationItem];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:IAPHelperProductPurchasedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:IAHelperProductNotPurchasedNotification object:nil];
+    
+
     [self disableBlurView];
     
     switch ([self type]) {
@@ -75,6 +86,10 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
             if([self.pack.paid isEqualToNumber:@1])
             {
                 [[NCDataManager sharedInstance] getWordsWithPackID:[self.pack.ID intValue]];
+            }
+            else
+            {
+                [[NCDataManager sharedInstance] getWordsWithPackIDPreview:[self.pack.ID intValue]];
             }
             break;
         }
@@ -88,6 +103,7 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
             break;
     }
     [self updateNavigationItemsIfNeeded];
+
 }
 
 - (void)updateNavigationItemsIfNeeded {
@@ -109,6 +125,8 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
+     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self disableBlurView];
 }
 
@@ -122,6 +140,12 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 #pragma  mark DataManager Protocol methods
 
 - (void)ncDataManagerProtocolGetWordsWithPackID:(NSArray *)arrayOfWords
+{
+    self.arrayOfWords = arrayOfWords;
+    [self.collectionView reloadData];
+}
+
+- (void)ncDataManagerProtocolGetWordsWithPackIDPreview:(NSArray *)arrayOfWords
 {
     self.arrayOfWords = arrayOfWords;
     [self.collectionView reloadData];
@@ -239,10 +263,8 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
         switch ([self type]) {
             case NCPackControllerOfNumber:
             {
-                if([self.pack.paid isEqualToNumber:@1])
-                    return self.arrayOfWords.count;
-                else
-                    return 12;
+                
+                return self.arrayOfWords.count;
             }
                 break;
             case NCPackControllerOfFavorite:
@@ -256,7 +278,7 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
         return self.searchArrayOfWords.count;
     }
     
-        return 0;
+    return 0;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -268,7 +290,11 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
             {
                 NCWordCell *openCell = nil;
                 
-                NCWord *word = self.arrayOfWords[indexPath.item];
+                NCWord *word = [[NCWord alloc] init];
+                if(self.arrayOfWords.count > 0)
+                {
+                   word = self.arrayOfWords[indexPath.item];
+                }
                 if([self.pack.paid isEqualToNumber:@1])
                 {
                     openCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordCellIdentifier forIndexPath:indexPath];
@@ -276,6 +302,8 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
                     [openCell.pictureView setImage:image];
                     [openCell.chineseLabel setText:word.material.materialZH];
                     [openCell.pinyinLabel setText:word.material.materialZH_TR];
+                    openCell.blurView.blurRadius = 10.0f;
+                    openCell.blurView.dynamic = YES;
                     NSString *str = [self cutFirstWord:word.material.materialWord];
                     [openCell.translateLabel setText:str];
                     return openCell;
@@ -283,7 +311,29 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
                 else
                 {
                     NCWordLockCell *lockCell = [collectionView dequeueReusableCellWithReuseIdentifier:NCWordLockCellIdentifier forIndexPath:indexPath];
-                   
+                    
+                    if(word.image)
+                    {
+                        //lockCell.blurView.hidden = YES;
+                        //[lockCell.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", SERVER_ADDRESS,word.image]]];
+                        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", SERVER_ADDRESS,word.image]]];
+                        
+                        //[lockCell.pictureView setImage:[UIImage imageNamed:@"12_img_small"]];
+                        __weak typeof(lockCell) weakLockCell = lockCell;
+                        weakLockCell.blurView.dynamic = YES;
+                        [lockCell.pictureView setImageWithURLRequest:request placeholderImage:[UIImage imageNamed:@"12_img_small"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                            
+                                [weakLockCell.pictureView setImage:image];
+                                weakLockCell.blurView.blurEnabled = YES;
+                                weakLockCell.blurView.alpha = 1.0f;
+                                weakLockCell.blurView.blurRadius = 10.0f;
+                                [weakLockCell.blurView updateAsynchronously:YES completion:nil];
+                                weakLockCell.blurView.dynamic = YES;
+                            
+                            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error){
+                            
+                        }];
+                    }
                     
                     return lockCell;
                 }
@@ -325,6 +375,11 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     return nil;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplaySupplementaryView:(UICollectionReusableView *)view forElementKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
 - (NSString *) cutFirstWord:(NSString *) str
 {
     NSArray * words = [str componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -348,23 +403,21 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
         if ([self.pack.paid isEqualToNumber:@1]) {
             [self performSegueWithIdentifier:NCVisuallyPackControllerSegueIdentifier sender:@{NCPackControllerWordIndexKey: @(indexPath.item), @"search":@0}];
         }
+        else
+        {
+            self.collectionView.userInteractionEnabled = NO;
+            [self reload];
+            
+        }
     }
     else if(collectionView == self.searchCollectionView)
     {
         [self performSegueWithIdentifier:NCVisuallyPackControllerSearchSegueIdentifier sender:@{NCPackControllerWordIndexKey: @(indexPath.item), @"search":@1}];
         
     }
-    
 }
 
-//Enable blur effect before scrolls
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if (scrollView == [self collectionView]) {
-        self.navigationBlurView.blurEnabled = YES;
-    }
-}
 
-//Disabling blur after scrolling to prevent power shortage due to the effect of renovation
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if (scrollView == [self collectionView]) {
         self.navigationBlurView.blurEnabled = NO;
@@ -393,7 +446,6 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if([sender[@"search"] intValue] == 0)
     {
-        
         NSInteger openedWordIndex = [sender[NCPackControllerWordIndexKey] integerValue];
         NCVisuallyPackViewController *packViewController = [segue destinationViewController];
         
@@ -425,6 +477,77 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
         [self cancelSearch];
     }
     
+}
+
+
+//Enable blur effect before scrolls
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if (scrollView == [self collectionView]) {
+        self.navigationBlurView.blurEnabled = YES;
+        
+        
+    }
+}
+
+#pragma mark In-App Purchases
+- (void)reload {
+    _products = nil;
+    [[NCIAHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success, NSArray *products) {
+        if (success) {
+            _products = products;
+            SKProduct * product = (SKProduct *) _products[0];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:product.localizedDescription delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+            [alert show];
+            
+        }
+    }];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex == 1)
+    {
+        SKProduct * product = (SKProduct *) _products[0];
+        [[NCIAHelper sharedInstance] buyProduct:product];
+    }
+    else
+        self.collectionView.userInteractionEnabled = YES;
+    
+}
+
+- (void)productPurchased:(NSNotification *)notification {
+    if([notification.name isEqualToString:@"IAPHelperProductPurchasedNotification"])
+    {
+        NSString * productIdentifier = notification.object;
+        [_products enumerateObjectsUsingBlock:^(SKProduct * product, NSUInteger idx, BOOL *stop) {
+            if ([product.productIdentifier isEqualToString:productIdentifier]) {
+                
+                *stop = YES;
+                self.collectionView.userInteractionEnabled = YES;
+                UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                [indicator setFrame:CGRectMake(100, 100, indicator.frame.size.width, indicator.frame.size.height)];
+                [indicator startAnimating];
+                [indicator setTag:1234];
+                [self.view addSubview:indicator];
+                
+                [NCDataManager sharedInstance].delegateLoadProduct = self;
+                //[[NCDataManager sharedInstance] loadBuyProduct:product.productIdentifier];
+            }
+            
+        }];
+    }
+    [self.collectionView setUserInteractionEnabled:YES];
+    
+}
+
+
+
+#pragma mark NCDataManagerLoadBuyProductProtocol
+- (void)ncDataManagerLoadBuyProductProtocolProductLoaded
+{
+    [[self.view viewWithTag:1234] removeFromSuperview];
+    [NCDataManager sharedInstance].delegate = self;
+    [[NCDataManager sharedInstance] getWordsWithPackID:self.pack.ID.intValue];
 }
 
 @end

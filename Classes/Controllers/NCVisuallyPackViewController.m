@@ -48,6 +48,7 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
     [super viewDidLoad];
     [self setupPageViewController];
     [self setupExplanationViewController];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -58,6 +59,8 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
     NCWord *word = self.arrayOfWords[self.openedWordIndex];
     [NCDataManager sharedInstance].delegate = self;
     [[NCDataManager sharedInstance] getMaterialsWithWordID:word.ID.intValue];
+    
+    [self setupExplanationViewController];
     
 }
 

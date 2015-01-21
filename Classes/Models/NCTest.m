@@ -197,14 +197,14 @@
             [mutArray addObject:[NSIndexSet indexSetWithIndex:i]];
         }
     }
-    //NSLog(@"except index %i", (int)indexSet.lastIndex);
+    NSLog(@"except index %i", (int)indexSet.lastIndex);
     NSMutableIndexSet *resultIndexSet = [[NSMutableIndexSet alloc] init];
     for(int i = 0; i < 3; i++)
     {
         int randomIndex = arc4random()%mutArray.count;
         
         NSIndexSet *inSet = mutArray[randomIndex];
-        //NSLog(@"index = %i", (int)inSet.lastIndex);
+        NSLog(@"index = %i", (int)inSet.lastIndex);
         [resultIndexSet addIndexes:inSet];
         [mutArray removeObjectAtIndex:randomIndex];
     }
@@ -226,7 +226,7 @@
     NSString *result = [[NSString alloc] init];
     float percent = (float)[self getNumberOfRightAnswers]/(float)[self getNumberOfQuestions];
     
-    if(percent >= 0.01 && percent <= 0.25)
+    if(percent >= 0.00 && percent <= 0.25)
     {
         result = [self stringTestRandomResultWithBaseString:@"verybad" andModule:5];
     }

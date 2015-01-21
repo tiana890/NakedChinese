@@ -8,8 +8,10 @@
 
 #import "NCSubscribeViewController.h"
 #import "UIViewController+nc_interactionImageSetuper.h"
+#import "NCNavigationBar.h"
 
-@interface NCSubscribeViewController ()
+@interface NCSubscribeViewController ()<UIScrollViewDelegate>
+@property (strong, nonatomic) IBOutlet UIScrollView *scroll;
 
 @end
 
@@ -21,6 +23,14 @@
 {
     [super viewDidLoad];
     [self setupBackgroundImage];
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    if([NSLocalizedString(@"lang", <#comment#>) isEqualToString:@"en"])
+    {
+        self.scroll.hidden = YES;
+    }
+    
 }
 
 #pragma mark - IBActions
@@ -43,5 +53,20 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+- (void)hideBarsLinesAlgorithmFromCalculationScrollView:(UIScrollView *)scrollView {
+    CGFloat scrollOffset = scrollView.contentOffset.y;
+    BOOL isHideNavLine = !(scrollOffset > 0);
+    [((NCNavigationBar *)self.navigationController.navigationBar) separatorLineHide:isHideNavLine];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self hideBarsLinesAlgorithmFromCalculationScrollView:scrollView];
+}
+- (IBAction)goToSite:(id)sender
+{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://newwaytochina.com"]];
+}
+
 
 @end

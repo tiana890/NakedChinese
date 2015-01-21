@@ -16,6 +16,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *chineseLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pinyinLabel;
+@property (strong, nonatomic) IBOutlet UIView *lineView;
 @property (weak, nonatomic) IBOutlet UILabel *translateLabel;
 @end
 

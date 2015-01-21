@@ -91,13 +91,21 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    NSMutableArray *idsArray = [[NSMutableArray alloc] init];
-    for(NCPack *pack in self.packsArray)
+    if(!self.ifFavorites)
     {
-        [idsArray addObject:pack.ID];
+        NSMutableArray *idsArray = [[NSMutableArray alloc] init];
+        for(NCPack *pack in self.packsArray)
+        {
+            [idsArray addObject:pack.ID];
+        }
+        [NCDataManager sharedInstance].delegate = self;
+        [[NCDataManager sharedInstance] getLocalWordsWithPackIDs:idsArray];
     }
-    [NCDataManager sharedInstance].delegate = self;
-    [[NCDataManager sharedInstance] getLocalWordsWithPackIDs:idsArray];
+    else
+    {
+        [NCDataManager sharedInstance] .delegate = self;
+        [[NCDataManager sharedInstance] getFavorites];
+    }
     
 }
 
@@ -116,6 +124,14 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
     }
 }
 
+- (void)ncDataManagerProtocolGetFavorites:(NSArray *)arrayOfFavorites
+{
+    if(arrayOfFavorites.count > 0)
+    {
+        self.wordsArray = arrayOfFavorites;
+        [self.test fillTestWithWordsArray:arrayOfFavorites andTestType:self.type];
+    }
+}
 #pragma mark - Custom Accessors
 
 - (AVSpeechSynthesizer *)synthesizer {

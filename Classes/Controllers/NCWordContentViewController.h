@@ -14,6 +14,8 @@
 
 @property (strong, nonatomic) NCWord *word;
 @property (assign, nonatomic) NSInteger pageIndex;
+@property (strong, nonatomic) IBOutlet UIView *hiddenView;
+@property (strong, nonatomic) IBOutlet UIImageView *hiddenViewPicture;
 
 @property (nonatomic) BOOL ifFavourite;
 @end

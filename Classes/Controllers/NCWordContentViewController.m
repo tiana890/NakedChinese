@@ -8,10 +8,12 @@
 
 #import "NCWordContentViewController.h"
 #import "NCConstants.h"
-
+#import "NCAppDelegate.h"
 
 #import <AVFoundation/AVFoundation.h>
 #import "UIImageView+AFNetworking.h"
+
+#import "NCWordImageViewController.h"
 
 #define SERVER_ADDRESS @"http://china:8901/upload/picture/"
 
@@ -22,6 +24,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *chineseLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pinyinLabel;
 @property (weak, nonatomic) IBOutlet UILabel *translationLabel;
+@property (strong, nonatomic) IBOutlet UIButton *hiddenViewButton;
+@property (strong, nonatomic) IBOutlet UIView *helpView;
+
 
 @end
 
@@ -34,10 +39,13 @@
     if([self.word.packID isEqualToNumber:@1])
     {
         [self.pictureView setImage:[UIImage imageNamed:self.word.bigImage]];
+        [self.hiddenViewPicture setImage:[UIImage imageNamed:self.word.bigImage]];
     }
     else
     {
         [self.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, self.word.image]]];
+        [self.hiddenViewPicture setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, self.word.image]]];
+        
     }
     self.chineseLabel.text = self.word.material.materialZH;
     self.pinyinLabel.text = self.word.material.materialZH_TR;
@@ -49,7 +57,7 @@
     {
         [self.translationLabel setText:self.word.material.materialEN];
     }
-
+   
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -113,5 +121,47 @@
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance {
     NSLog(@"End utterance: %@",utterance.speechString);
 }
+
+- (IBAction)zoomButtonPressed:(id)sender
+{
+    /*
+    UIWindow *keyWindow = [[[UIApplication sharedApplication] delegate] window];
+    [self.hiddenView setFrame:keyWindow.frame];
+    //[keyWindow addSubview:self.hiddenView];
+    
+    self.hiddenView.hidden = NO;
+    [UIView animateWithDuration:1.0f animations:^{
+        [self.hiddenView setAlpha:1.0f];
+        self.hiddenViewButton.userInteractionEnabled = YES;
+    }];
+    self.helpView.userInteractionEnabled = NO;
+     */
+    [self performSegueWithIdentifier:@"imageSegue" sender:self];
+    
+}
+
+- (IBAction)closeZoomImage:(id)sender
+{
+    self.hiddenViewButton.userInteractionEnabled = NO;
+    
+    [UIView animateWithDuration:1.0f animations:^{
+        [self.hiddenView setAlpha:0.0f];
+        self.hiddenViewButton.userInteractionEnabled = NO;
+    }];
+    self.helpView.userInteractionEnabled = YES;
+    //UIWindow *keyWindow = [[[UIApplication sharedApplication] delegate] window];
+    //[self.hiddenView removeFromSuperview];
+}
+
+#pragma mark Segues
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if([segue.identifier isEqualToString:@"imageSegue"])
+    {
+        NCWordImageViewController *ic = segue.destinationViewController;
+        ic.img = self.pictureView.image;
+    }
+}
+
 
 @end

@@ -11,6 +11,8 @@
 #import "NCGreetingViewController.h"
 #import "NCPartitionViewController.h"
 #import "NCJokeItemViewController.h"
+#import "NCIAHelper.h"
+#import "IAPHelper.h"
 
 @interface NCAppDelegate()
 
@@ -22,6 +24,7 @@
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [NCIAHelper sharedInstance];
     
     BOOL ifFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"];
     self.ifFirstLaunch = ifFirstLaunch;
@@ -46,6 +49,7 @@
 - (void) loadPacks
 {
     [[NCDataManager sharedInstance] getPacksWithNewLaunch];
+    [[NCDataManager sharedInstance] getJokesWithNewLaunch];
 }
 
 #pragma mark - Core Data Stack

@@ -69,19 +69,19 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
         switch (state) {
             case NCExplanationSliderVisible:
                 [self animationSlideReplaceWithAngle:M_PI];
-                self.sliderLabel.text = NSLocalizedString(@"Вернуться назад", @"pull to down");
+                self.sliderLabel.text = NSLocalizedString(@"explanation_return", nil);
                 break;
             case NCExplanationSliderHidden:
                 [self animationSlideReplaceWithAngle:0];
-                self.sliderLabel.text = NSLocalizedString(@"Дополнительная информация", @"pull to up");
+                self.sliderLabel.text = NSLocalizedString(@"explanation_add_info", nil);
                 break;
             case NCExplanationSliderDragToDown:
                 [self animationSlideReplaceWithAngle:M_PI];
-                self.sliderLabel.text = NSLocalizedString(@"", @"continue to pull down");
+                self.sliderLabel.text = NSLocalizedString(@"", @"");
                 break;
             case NCExplanationSliderDragToUp:
                 [self animationSlideReplaceWithAngle:0];
-                self.sliderLabel.text = NSLocalizedString(@"", @"continue to pull up");
+                self.sliderLabel.text = NSLocalizedString(@"", @"");
                 break;
         }
         _state = state;
@@ -159,6 +159,14 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
         //[((NCExplanationCell *)cell).translateLabel setText:material.materialWord];
    // } else {
         cell = [self explanationCellAtIndexPath:indexPath withIdentifier:NCExplanationCellIdentifier];
+        if(indexPath.row == [self.arrayOfExplanations count]-2)
+        {
+            ((NCExplanationCell *)cell).lineView.hidden = YES;
+        }
+        else
+        {
+            ((NCExplanationCell *)cell).lineView.hidden = NO;
+        }
     //}
     return cell;
 }

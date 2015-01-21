@@ -182,10 +182,10 @@ static NSString *const NCMenuTitleKey = @"title";
 - (void) sendMail
 {
     MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
-    [mailViewController setToRecipients:@[@"minizayka@gmail.com"]];
+    [mailViewController setToRecipients:@[@"nakedchinese@yahoo.com"]];
     mailViewController.mailComposeDelegate = self;
-    [mailViewController setSubject:@"Subject Goes Here."];
-    [mailViewController setMessageBody:@"Your message goes here." isHTML:NO];
+    [mailViewController setSubject:@""];
+    [mailViewController setMessageBody:NSLocalizedString(@"feedback_body", nil) isHTML:NO];
     
     [self presentViewController:mailViewController animated:YES completion:nil];
 }

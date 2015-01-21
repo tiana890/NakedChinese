@@ -48,11 +48,11 @@
                      }\
                      </style>\
                      <ul>\
-                     <li><p><font color=\"#433a39\">%@</font></p></li>\
+                     <li><p><font color=\"#2B2727\" size=\"4\">%@</font></p></li>\
                      %@\
-                     <li><p><font color=\"#433a39\">%@</font></p></li>\
+                     <li><p><font color=\"#2B2727\" size=\"4\">%@</font></p></li>\
                      %@\
-                     <li><p><font color=\"#433a39\">%@</font></p></li>\
+                     <li><p><font color=\"#2B2727\" size=\"4\">%@</font></p></li>\
                      </ul>\
                      <br />\
                      </body>\

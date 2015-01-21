@@ -14,9 +14,11 @@
 #import "NCDataManager.h"
 #import "NCWord.h"
 #import "NCNavigationBar.h"
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
 
-@interface NCJokesViewController ()<UICollectionViewDataSource, UICollectionViewDelegate, NCDataManagerProtocol>
+@interface NCJokesViewController ()<UICollectionViewDataSource, UICollectionViewDelegate, NCDataManagerProtocol, MFMailComposeViewControllerDelegate>
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet FXBlurView *backgroundBlurView;
 @property (nonatomic, strong) NSArray *arrayOfJokes;
@@ -38,6 +40,7 @@
         jc.number = self.jokeNumber;
         [self.navigationController pushViewController:jc animated:YES];
     }
+    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -46,6 +49,21 @@
     //[self updateNavigationItemsIfNeeded];
     [NCDataManager sharedInstance].delegate = self;
     [[NCDataManager sharedInstance] getWordsWithPackID:16];
+}
+- (IBAction)sendJoke:(id)sender
+{
+    MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
+    [mailViewController setToRecipients:@[@"nakedjokes@yahoo.com"]];
+    mailViewController.mailComposeDelegate = self;
+    //[mailViewController setSubject:NSLocalizedString(@"send_joke_subject", nil)];
+    [mailViewController setMessageBody:NSLocalizedString(@"send_joke_body", nil) isHTML:NO];
+    
+    [self presentViewController:mailViewController animated:YES completion:nil];
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)ncDataManagerProtocolGetWordsWithPackID:(NSArray *)arrayOfWords

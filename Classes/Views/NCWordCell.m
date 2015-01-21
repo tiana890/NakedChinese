@@ -7,11 +7,10 @@
 //
 
 #import "NCWordCell.h"
-
 #import <FXBlurView/FXBlurView.h>
 
 @interface NCWordCell ()
-@property (weak, nonatomic) IBOutlet FXBlurView *blurView;
+
 @end
 
 @implementation NCWordCell

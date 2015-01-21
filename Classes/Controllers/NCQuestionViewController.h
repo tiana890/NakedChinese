@@ -11,6 +11,7 @@
 
 @interface NCQuestionViewController : UIViewController
 @property (nonatomic, strong) NSArray *packsArray;
+@property (nonatomic) BOOL ifFavorites;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *soundButton;
 @property (nonatomic) NCTestType type;
 @end

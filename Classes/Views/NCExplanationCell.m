@@ -32,7 +32,7 @@
 - (void)sayText:(NSString *)text {
     AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:text];
     utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"zh-CN"];
-    utterance.rate = 0.2f;
+    utterance.rate = 0.15f;
     [self.synthesizer speakUtterance:utterance];
 }
 - (IBAction)sayAction:(id)sender
