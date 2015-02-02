@@ -39,25 +39,17 @@
     if([self.word.packID isEqualToNumber:@1])
     {
         [self.pictureView setImage:[UIImage imageNamed:self.word.bigImage]];
-        [self.hiddenViewPicture setImage:[UIImage imageNamed:self.word.bigImage]];
     }
     else
     {
-        [self.pictureView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, self.word.image]]];
-        [self.hiddenViewPicture setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", SERVER_ADDRESS, self.word.image]]];
+        UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfFile:self.word.bigImage]];
+        [self.pictureView setImage:img];
         
     }
     self.chineseLabel.text = self.word.material.materialZH;
     self.pinyinLabel.text = self.word.material.materialZH_TR;
-    if([NSLocalizedString(@"lang", nil) isEqualToString:@"ru"])
-    {
-        [self.translationLabel setText:self.word.material.materialRU];
-    }
-    else
-    {
-        [self.translationLabel setText:self.word.material.materialEN];
-    }
-   
+    [self.translationLabel setText:self.word.material.materialWord];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -93,7 +85,7 @@
 #pragma mark IBActions
 
 - (IBAction)shareAction:(id)sender {
-    [self shareWithActivityItems:@[@"say"]];
+    [self shareWithActivityItems:@[NSLocalizedString(@"share_text", nil), self.pictureView.image]];
 }
 - (IBAction)sayAction:(id)sender {
     [self sayText:self.chineseLabel.text];

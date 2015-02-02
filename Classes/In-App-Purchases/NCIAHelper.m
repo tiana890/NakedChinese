@@ -17,7 +17,8 @@
     dispatch_once(&once, ^{
         NSSet * productIdentifiers = [NSSet setWithObjects:
                                       @"com.nakedchineseapp.nakedchinese.product.packsex2",
-                                     
+                                      @"com.nakedchineseapp.nakedchinese.product.packslangone",
+                                      @"com.nakedchineseapp.nakedchinese.product.packswearone",
                                       nil];
         sharedInstance = [[self alloc] initWithProductIdentifiers:productIdentifiers];
     });

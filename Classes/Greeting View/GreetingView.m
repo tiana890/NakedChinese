@@ -171,7 +171,7 @@
     if(page != [self.currentPage intValue])
     {
         self.currentPage = [NSNumber numberWithInt:page];
-        NSLog(@"%i", [self.currentPage intValue]);
+        //NSLog(@"%i", [self.currentPage intValue]);
     }
     
     //чтобы альфа у последней страницы не менялся

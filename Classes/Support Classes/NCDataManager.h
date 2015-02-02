@@ -9,26 +9,22 @@
 #import <Foundation/Foundation.h>
 #import "Requester.h"
 #import "NCWord.h"
-
+#import "NCPack.h"
 
 @protocol NCDataManagerProtocol <NSObject>
 @optional
 - (void) ncDataManagerProtocolGetWordsWithPackID:(NSArray *)arrayOfWords;
-- (void) ncDataManagerProtocolGetPacks:(NSArray *)arrayOfPacks;
 - (void) ncDataManagerProtocolGetLocalPacks:(NSArray *)arrayOfPacks;
 - (void) ncDataManagerProtocolGetFavorites:(NSArray *)arrayOfFavorites;
 - (void) ncDataManagerProtocolGetLocalWordsWithPackIDs:(NSArray *)arrayOfWords;
+- (void) ncDataManagerProtocolGetLocalWordsWithPackID:(NSArray *)arrayOfWords;
 - (void) ncDataManagerProtocolGetSearchWordContainsString:(NSArray *)arrayOfWords;
 - (void) ncDataManagerProtocolGetMaterialsWithWordID:(NSArray *)arrayOfMaterials;
 - (void) ncDataManagerProtocolGetJokes:(NSArray *)arrayOfJokes;
 - (void) ncDataManagerProtocolGetWordsWithPackIDPreview:(NSArray *)arrayOfWords;
+- (void)ncDataManagerProtocolGetWordsWithPackIDProgressBarDeltaValue:(NSDictionary *) dict;
 @end
 
-@protocol NCDataManagerLoadBuyProductProtocol <NSObject>
-
-- (void) ncDataManagerLoadBuyProductProtocolProductLoaded;
-
-@end
 
 @interface NCDataManager : NSObject<RequesterProtocol>
 
@@ -36,26 +32,33 @@
 +(NCDataManager*) sharedInstance;
 
 //NCDataManagerProtocol
+//First initialization and Pack launch
 - (void) firstDBInitialization;
-- (void) getWordsWithPackID:(int)packID;
-- (void) getFavorites;
-- (void) getPacks;
 - (void) getPacksWithNewLaunch;
-- (void) getJokesWithNewLaunch;
 - (void) getLocalPacks;
+- (void) getJokesWithNewLaunch;
+
+//Word launch
+- (void) getWordsWithPackID:(int)packID;
+- (void) getLocalWordsWithPackID:(NSNumber *)packID;
 - (void) getLocalWordsWithPackIDs:(NSArray *)idsArray;
+- (void) getWordsWithPackIDPreview:(int)packID;
+
+//Favorites
+- (void) getFavorites;
 - (void) setWordToFavorites:(NCWord *)word;
 - (void) removeWordFromFavorites:(NCWord *)word;
 - (BOOL) ifExistsInFavorites:(NCWord *)word;
+
+//Search
 - (void) searchWordContainsString:(NSString *)string;
 //- (void) setMaterials:(NSArray *)materials andExplanations:(NSArray *)explanations;
 - (void) getMaterialsWithWordID:(int) wordID;
-- (void) getJokes;
-- (void) getWordsWithPackIDPreview:(int)packID;
 
-//NCDataManagerLoadBuyProductProtocol
-- (void) loadBuyProduct:(NSString *) productIdentifier;
+//set methods
+- (void) setPackIsPaid:(NCPack *)pack;
 
+- (BOOL) ifPaidPack:(NCPack *) pack;
 @property (nonatomic, weak) id<NCDataManagerProtocol> delegate;
-@property (nonatomic, weak) id<NCDataManagerLoadBuyProductProtocol> delegateLoadProduct;
+
 @end

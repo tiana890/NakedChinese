@@ -40,7 +40,7 @@
  
 #pragma mark methods
 
-- (void)fillTestWithWordsArray:(NSArray *)words andTestType:(NCTestType) testType
+- (int)fillTestWithWordsArray:(NSArray *)words andTestType:(NCTestType) testType
 {
     NSMutableArray *questionArray = [[NSMutableArray alloc] init];
     
@@ -119,7 +119,8 @@
         NSLog(@"***********************************");
     }
      */
-    
+    //возвращает количество слов в тесте
+    return shuffledArray.count;
 }
 
 - (int)getNumberOfQuestions

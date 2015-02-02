@@ -11,7 +11,8 @@
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "nc_heart_a_nav@3x.png"
     }
   ],
   "info" : {

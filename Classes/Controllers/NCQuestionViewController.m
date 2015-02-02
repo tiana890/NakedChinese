@@ -53,6 +53,7 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
 @property (nonatomic, strong) NSNumber *currentWord;
 
 @property (nonatomic, strong) NCTest *test;
+@property (nonatomic, strong) NSNumber *numberOfTestWords;
 @end
 
 @implementation NCQuestionViewController
@@ -120,7 +121,7 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
     if(arrayOfWords.count > 0)
     {
         self.wordsArray = arrayOfWords;
-        [self.test fillTestWithWordsArray:arrayOfWords andTestType:self.type];
+        self.numberOfTestWords = [NSNumber numberWithInt:[self.test fillTestWithWordsArray:arrayOfWords andTestType:self.type]];
     }
 }
 
@@ -129,7 +130,7 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
     if(arrayOfFavorites.count > 0)
     {
         self.wordsArray = arrayOfFavorites;
-        [self.test fillTestWithWordsArray:arrayOfFavorites andTestType:self.type];
+        self.numberOfTestWords = [NSNumber numberWithInt:[self.test fillTestWithWordsArray:arrayOfFavorites andTestType:self.type]];
     }
 }
 #pragma mark - Custom Accessors
@@ -198,7 +199,8 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
         [self hideAnswerIndicator:NO completion:^{
             int value = [self.currentWord intValue];
             value++;
-            if(value < self.wordsArray.count)
+            
+            if(value < self.numberOfTestWords.intValue)
             {
                 self.currentWord = [NSNumber numberWithInt:value];
                 [self.tableView reloadData];
@@ -207,6 +209,7 @@ const CGFloat NCTestTranslationWordCellHeight = 55.f;
             {
                 [self performSegueWithIdentifier:@"resultSegue" sender:self];
             }
+            
             [self hideAnswerIndicator:YES completion:^{
                 [self hideUIItems:NO completion:^{
                     

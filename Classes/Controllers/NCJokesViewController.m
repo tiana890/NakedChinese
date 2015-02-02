@@ -48,7 +48,7 @@
     [super viewWillAppear:animated];
     //[self updateNavigationItemsIfNeeded];
     [NCDataManager sharedInstance].delegate = self;
-    [[NCDataManager sharedInstance] getWordsWithPackID:16];
+    [[NCDataManager sharedInstance] getLocalWordsWithPackID:@16];
 }
 - (IBAction)sendJoke:(id)sender
 {
@@ -66,7 +66,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)ncDataManagerProtocolGetWordsWithPackID:(NSArray *)arrayOfWords
+- (void)ncDataManagerProtocolGetLocalWordsWithPackID:(NSArray *)arrayOfWords
 {
     self.arrayOfJokes = arrayOfWords;
     [self.collectionView reloadData];

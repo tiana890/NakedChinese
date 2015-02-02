@@ -28,7 +28,7 @@
                 break;
         }
         view.image = [UIImage imageNamed:hellImageName];
-        view.contentMode = UIViewContentModeScaleAspectFit;
+        view.contentMode = UIViewContentModeScaleAspectFill;
     } else {
         NSAssert(NO, @"setup UIImageView class to ViewController view.");
     }

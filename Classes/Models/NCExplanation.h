@@ -8,10 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "NCMaterial.h"
 
 @interface NCExplanation : NSObject
 @property (nonatomic, strong) NSNumber *ID;
 @property (nonatomic, strong) NSNumber *wordID;
+@property (nonatomic, strong) NCMaterial *material;
 
++ (NCExplanation *) getNCExplanationFromJSON:(NSDictionary *)jsonDict;
 + (NCExplanation *) getNCExplanationdFromNSManagedObject:(NSManagedObject *)object;
 @end

@@ -8,10 +8,15 @@
 
 #import "Requester.h"
 #import "AFNetworking.h"
+#import "BackgroundSessionManager.h"
 
 //#define SERVER_ADDRESS @"http://nakedchinese.bb777.ru/api/get/"
 //#define SERVER_ADDRESS @"http://china:8901/api/get/"
 #define SERVER_ADDRESS @"http://www.nakedchineseapp.com/api/get/"
+
+@interface Requester()<NSURLSessionDelegate, NSURLSessionDownloadDelegate>
+
+@end
 
 @implementation Requester
 
@@ -43,13 +48,14 @@
         
         AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
         // manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
-        NSLog(@"%@", url.absoluteString);
+        //NSLog(@"%@", url.absoluteString);
+    
         [manager GET:url.absoluteString parameters:params success:^(NSURLSessionDataTask *task , id responseObject)
          {
              if([_delegate respondsToSelector:method])
              {
                  NSDictionary *d = responseObject;
-                 NSLog(@"%@", responseObject);
+                 //NSLog(@"%@", responseObject);
                  [_delegate performSelector:method withObject:d];
              }
 
@@ -66,82 +72,150 @@
     }
 }
 
-/*- (void) requestAuthorizedPath:(NSString*)pathString withParameters:(NSDictionary*) params isPOST:(BOOL) isPost delegate:(SEL) method
+- (void)backgroundRequest:(NSString *)pathString withParameters:(NSDictionary *)params delegate:(SEL)method
 {
     NSURL *baseURL = [NSURL URLWithString:SERVER_ADDRESS];
     NSURL *url = [NSURL URLWithString:pathString relativeToURL:baseURL];
+    //NSURL *url = [baseURL URLByAppendingPathComponent:filename];
+    //NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+    //NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:@"com.nakedchineseapp.nakedchinese.backgroundDownloadSession"];
+    /*
+        [[ downloadTaskWithRequest:request progress:nil destination:nil completionHandler:nil] resume];
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    AFJSONResponseSerializer *responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
-    [manager setResponseSerializer:responseSerializer];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-    [manager.requestSerializer setHTTPShouldHandleCookies:YES];
     
+    NSURL *baseURL = [NSURL URLWithString:SERVER_ADDRESS];
+    NSURL *url = [NSURL URLWithString:pathString relativeToURL:baseURL];
+*/
     
-    if(![pathString isEqualToString:@"login"])
-    {
-        [self loadCookies];
-        if([[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies].count >0)
-        {
-            NSHTTPCookie *cookie = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies][0];
-            [manager.requestSerializer setValue:[NSString stringWithFormat:@"PHPSESSID=%@", cookie.value] forHTTPHeaderField:@"Cookie"];
-            [manager.requestSerializer setValue:@"text/html" forHTTPHeaderField:@"Content-type"];
-            [manager.requestSerializer setValue:@"text/html" forHTTPHeaderField:@"Accept"];
-        }
-    }
-    
-   if(!isPost)
-    {
-        [manager GET:url.absoluteString parameters:params success:^(NSURLSessionDataTask *task , id responseObject)
+    [[BackgroundSessionManager sharedManager] GET:url.absoluteString parameters:params success:^(NSURLSessionDataTask *task , id responseObject)
+     {
+         if([_delegate respondsToSelector:method])
          {
-             if([_delegate respondsToSelector:method])
-             {
-                 if([pathString isEqualToString:@"login"])
-                 {
-                     [self saveCookies];
-                     
-                 }
-                 NSLog(@"%@", task.response.description);
-                 
-                 NSDictionary *d = responseObject;
-            
-                 [_delegate performSelector:method withObject:d];
-             }
+             NSDictionary *d = responseObject;
+             //NSLog(@"%@", responseObject);
+             [_delegate performSelector:method withObject:d];
+         }
+         
+     }failure:^(NSURLSessionDataTask *task , NSError *error )
+     {
+         NSLog(@"Error %@", error.description);
+         if([_delegate respondsToSelector:@selector(requesterProtocolRequestFailure:)])
+         {
              
-         }failure:^(NSURLSessionDataTask *task , NSError *error)
-         {
-              NSLog(@"%@", task.response.description);
-             if([_delegate respondsToSelector:@selector(requesterProtocolRequestFailure:)])
-             {
-                 [_delegate performSelector:@selector(requesterProtocolRequestFailure:) withObject:[self errorMessage:error]];
-             }
-         }];
-    }
-    else
+             [_delegate performSelector:@selector(requesterProtocolRequestFailure:) withObject:[self errorMessage:error]];
+         }
+     }];
+}
+
+- (void) downloadTaskFromURL:(NSString *)url toFile:(NSString *)filePath progressBarDelegate:(SEL)method andWordID:(NSNumber *) wordID
+{
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
+    [request setValue:wordID.stringValue forHTTPHeaderField:@"wordID"];
+    //[request setValue:NSStringFromSelector(method) forHTTPHeaderField:@"select"];
+    //[request setValue:filePath forHTTPHeaderField:@"filePath"];
+    
+    NSURLSessionDownloadTask *downloadTask = [[BackgroundSessionManager sharedManager] downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+        
+        UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:targetPath]];
+        NSData *data = [NSData dataWithData:UIImagePNGRepresentation(image)];
+        [data writeToFile:filePath atomically:YES];
+        
+        NSNumber *wID = [NSNumber numberWithInt:[request valueForHTTPHeaderField:@"wordID"].intValue];
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        [dict setObject:wID forKey:@"wordID"];
+        [dict setObject:@1 forKey:@"percent"];
+        if([_delegate respondsToSelector:method])
+        {
+            [_delegate performSelector:method withObject:dict];
+        }
+        
+        return targetPath;
+        
+    } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+    
+    }];
+    
+    [[BackgroundSessionManager sharedManager] setDownloadTaskDidWriteDataBlock:^(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
+        if([_delegate respondsToSelector:method])
+        {
+            NSNumber *wID = [NSNumber numberWithInt:[downloadTask.currentRequest valueForHTTPHeaderField:@"wordID"].intValue];
+            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+            [dict setObject:wID forKey:@"wordID"];
+            NSNumber *bytesPercentage = [NSNumber numberWithFloat:(float)totalBytesWritten/(float)totalBytesExpectedToWrite];
+            [dict setObject:bytesPercentage forKey:@"percent"];
+            if(![bytesPercentage isEqualToNumber:@1])
+                [_delegate performSelector:method withObject:dict];
+        }
+    }];
+   // NSURLSessionDownloadTask *downLoadTask = [[BackgroundSessionManager sharedManager].session downloadTaskWithRequest:request];
+    [downloadTask resume];
+}
+
+#pragma mark URLSession methods
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes
+{
+    NSLog(@"didResumeAtOffset %i", (int)fileOffset);
+}
+
+
+- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error
+{
+    NSLog(@"didBecomeInvalidWithError %@", error.description);
+}
+
+- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
+{
+    NSLog(@"didFinishEventsForBackgroundURLSession");
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+{
+    NSLog(@"didCompleteWithError = %@", error.description);
+}
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
+{
+   /* NSURLRequest *request =  [downloadTask currentRequest];
+   // NSNumber *number = [NSNumber numberWithInt:[request valueForHTTPHeaderField:@"wordID"].intValue];
+    SEL method = NSSelectorFromString([request valueForHTTPHeaderField:@"select"]);
+    NSString *filePath = [request valueForHTTPHeaderField:@"filePath"];
+    
+    UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:location]];
+    NSData *data = [NSData dataWithData:UIImagePNGRepresentation(image)];
+    [data writeToFile:filePath atomically:YES];
+    
+    NSNumber *wID = [NSNumber numberWithInt:[request valueForHTTPHeaderField:@"wordID"].intValue];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:wID forKey:@"wordID"];
+    [dict setObject:@1 forKey:@"percent"];
+    if([_delegate respondsToSelector:method])
     {
-        [manager POST:pathString parameters:params success:^(NSURLSessionDataTask *task, id responseObject)
-        {
-            if([_delegate respondsToSelector:method])
-            {
-                NSDictionary *d = responseObject;
-                
-                [_delegate performSelector:method withObject:d];
-            }
-            
-        } failure:^(NSURLSessionDataTask *task, NSError *error)
-        {
-            if([_delegate respondsToSelector:@selector(requesterProtocolRequestFailure:)])
-            {
-                [_delegate performSelector:@selector(requesterProtocolRequestFailure:) withObject:[self errorMessage:error]];
-            }
-            
-        }];
+        [_delegate performSelector:method withObject:dict];
     }
-   
+    */
 
 }
-*/
 
+-(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+{/*
+    NSURLRequest *request =  [downloadTask currentRequest];
+    // NSNumber *number = [NSNumber numberWithInt:[request valueForHTTPHeaderField:@"wordID"].intValue];
+    SEL method = NSSelectorFromString([request valueForHTTPHeaderField:@"select"]);
+    //NSString *filePath = [request valueForHTTPHeaderField:@"filePath"];
+
+    if([_delegate respondsToSelector:method])
+    {
+        NSNumber *wID = [NSNumber numberWithInt:[downloadTask.currentRequest valueForHTTPHeaderField:@"wordID"].intValue];
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        [dict setObject:wID forKey:@"wordID"];
+        NSNumber *bytesPercentage = [NSNumber numberWithFloat:(float)totalBytesWritten/(float)totalBytesExpectedToWrite];
+        [dict setObject:bytesPercentage forKey:@"percent"];
+        if(![bytesPercentage isEqualToNumber:@1])
+            [_delegate performSelector:method withObject:dict];
+    }*/
+}
 - (NSString*) errorMessage:(NSError*) error
 {
     NSString *errorMessage = [[NSString alloc] init];

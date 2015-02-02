@@ -33,11 +33,11 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
 - (void)setArrayOfExplanations:(NSArray *)arrayOfExplanations
 {
     _arrayOfExplanations = arrayOfExplanations;
-    if(arrayOfExplanations)
+    if(arrayOfExplanations.count > 0)
     {
-        NSLog(@"load explanations");
+        //NSLog(@"load explanations");
         NCMaterial *material = _arrayOfExplanations[0];
-        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:material.materialWord];
+        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:[self stringWithLineBreaks:material.materialWord]];
         //[hogan addAttribute:NSFontAttributeName
                       //value:[UIFont systemFontOfSize:20.0]
                      // range:NSMakeRange(24, 11)];
@@ -58,6 +58,11 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
         //[self.headerView setFrame:CGRectMake(self.headerView.frame.origin.x, self.headerView.frame.origin.y, self.headerView.frame.size.width, size.height+20.0f)];
         [self.tableView reloadData];
     }
+}
+
+- (NSString *)stringWithLineBreaks:(NSString *)str
+{
+    return [str stringByReplacingOccurrencesOfString:@"\\n" withString:@"\r"];
 }
 
 #pragma mark - Lifecycle

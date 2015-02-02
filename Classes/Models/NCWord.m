@@ -38,6 +38,7 @@
     if([jsonDict objectForKey:@"image"] != [NSNull null])
     {
         word.image = [jsonDict objectForKey:@"image"];
+        
     }
     if([jsonDict objectForKey:@"imageBig"] != [NSNull null])
     {
@@ -73,7 +74,8 @@
     word.paid = [object valueForKey:@"paid"];
     word.show = [object valueForKey:@"show"];
     word.bigImage = [object valueForKey:@"imageBig"];
-    
+    word.imageBlur = [object valueForKey:@"image"];
+    word.imageHalfBlur = [object valueForKey:@"image"];
     //NSLog(@"DEBUG word id %i", [word.ID intValue]);
     //NSLog(@"DEBUG word pack id %i", [word.packID intValue]);
     //NSLog(@"DEBUG word image %@", word.image);
@@ -82,5 +84,46 @@
     return word;
 }
 
+- (NSString *)bigImage
+{
+    if(_packID.intValue != 1)
+    {
+        NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        return [NSString stringWithFormat:@"%@/%@", docDir, _bigImage];
+    }
+    else
+    {
+        return _bigImage;
+    }
+}
+
+- (NSString *)imageHalfBlur
+{
+    /*_imageHalfBlur = [self.bigImage stringByReplacingOccurrencesOfString:@".png" withString:@"_halfblur.png"];
+    if(_packID.intValue != 1)
+    {
+        NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        return [NSString stringWithFormat:@"%@/%@", docDir, _imageHalfBlur];
+    }
+    else
+    {*/
+    if(self.packID.intValue != 1)
+    {
+        _imageHalfBlur = [self.bigImage stringByReplacingOccurrencesOfString:@".png" withString:@"_halfblur.png"];
+            return _imageHalfBlur;
+    }
+    return _imageHalfBlur;
+    //}
+}
+
+- (NSString *)imageBlur
+{
+    if(self.packID.intValue != 1)
+    {
+    _imageBlur = [self.image stringByReplacingOccurrencesOfString:@".png" withString:@"_blur.png"];
+        return _imageBlur;
+    }
+    return _imageBlur;
+}
 
 @end

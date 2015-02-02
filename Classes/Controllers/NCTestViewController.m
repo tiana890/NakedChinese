@@ -37,6 +37,7 @@
 
 @property (nonatomic) BOOL ifFavorite;
 
+
 @end
 
 @implementation NCTestViewController

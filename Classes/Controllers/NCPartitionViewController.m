@@ -85,7 +85,16 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
     [self.toolBar separatorLineHide:YES];
     
     [[NCInteractionManager sharedInstance] setInteractionHell:self.interactionView.hell];
-    [[NCInteractionManager sharedInstance] setSoundLanguage:NCSoundLanguageRussian];
+    if([NSLocalizedString(@"lang", nil) isEqualToString:@"en"])
+    {
+         [[NCInteractionManager sharedInstance] setSoundLanguage:NCSoundLanguageEnglish];
+    }
+    else
+    {
+        [[NCInteractionManager sharedInstance] setSoundLanguage:NCSoundLanguageRussian];
+
+    }
+   
     
     self.interactionView.delegate = self;
     
@@ -104,13 +113,13 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
     [self hideBarLine];
     [self disableBlurViews];
     
-    self.dataManager = [NCDataManager sharedInstance];
-    self.dataManager.delegate = self;
-    
     self.currentPartition = @[@"sex", @"swear", @"slang"];
     
     NCAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     appDelegate.delegate = self;
+    
+    self.dataManager = [NCDataManager sharedInstance];
+    self.dataManager.delegate = self;
     
 }
 
@@ -313,7 +322,7 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
     packCell.packView.packNumber = indexPath.row+1;
 //  packCell.packNumber = indexPath.row+1;
     
-    NSLog(@"row %li frame %@", (long)indexPath.row, NSStringFromCGRect(packCell.frame));
+    //NSLog(@"row %li frame %@", (long)indexPath.row, NSStringFromCGRect(packCell.frame));
     return packCell;
 }
 

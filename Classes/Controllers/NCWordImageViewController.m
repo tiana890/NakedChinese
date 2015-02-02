@@ -22,12 +22,12 @@
     [self.image setImage:self.img];
     
     [self.image setFrame:CGRectMake(self.image.frame.origin.x, self.image.frame.origin.y, self.image.image.size.width, self.image.image.size.height)];
-    NSLog(@"%@", NSStringFromCGRect(CGRectMake(self.image.frame.origin.x, self.image.frame.origin.y, self.image.image.size.width, self.image.image.size.height)));
-    NSLog(@"%@", NSStringFromCGRect(CGRectMake(self.image.frame.origin.x, self.image.frame.origin.y, self.image.frame.size.width, self.image.frame.size.height)));
+    //NSLog(@"%@", NSStringFromCGRect(CGRectMake(self.image.frame.origin.x, self.image.frame.origin.y, self.image.image.size.width, self.image.image.size.height)));
+    //NSLog(@"%@", NSStringFromCGRect(CGRectMake(self.image.frame.origin.x, self.image.frame.origin.y, self.image.frame.size.width, self.image.frame.size.height)));
     
     [self.scroll setFrame:self.image.frame];
     [self.scroll setContentSize:self.image.frame.size];
-    NSLog(@"%@", NSStringFromCGRect(CGRectMake(self.scroll.frame.origin.x, self.scroll.frame.origin.y, self.scroll.frame.size.width, self.scroll.frame.size.height)));
+    //NSLog(@"%@", NSStringFromCGRect(CGRectMake(self.scroll.frame.origin.x, self.scroll.frame.origin.y, self.scroll.frame.size.width, self.scroll.frame.size.height)));
     
     UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollViewDoubleTapped:)];
     doubleTapRecognizer.numberOfTapsRequired = 2;
@@ -85,7 +85,7 @@
     {
         newZoomScale = MIN(newZoomScale, self.scroll.maximumZoomScale);
     }
-    NSLog(@"new zoom scale = %f", newZoomScale);
+   // NSLog(@"new zoom scale = %f", newZoomScale);
     
     CGSize scrollViewSize = self.scroll.bounds.size;
     float w = scrollViewSize.width / newZoomScale;

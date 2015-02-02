@@ -16,7 +16,7 @@ typedef NS_ENUM(NSUInteger, NCTestType) {
 
 @interface NCTest : NSObject
 
-- (void)fillTestWithWordsArray:(NSArray *)words andTestType:(NCTestType) testType;
+- (int)fillTestWithWordsArray:(NSArray *)words andTestType:(NCTestType) testType;
 - (BOOL) setAnswerIndex:(int)index forQuestionWithIndex:(int) index;
 - (NCQuestion *) getQuestionWithIndex:(int) questionIndex;
 - (int) getNumberOfQuestions;

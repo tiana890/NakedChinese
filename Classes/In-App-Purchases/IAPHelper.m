@@ -9,19 +9,22 @@
 // 1
 #import "IAPHelper.h"
 #import <StoreKit/StoreKit.h>
+#import "NCProductDownloader.h"
 
 NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurchasedNotification";
 NSString *const IAHelperProductNotPurchasedNotification = @"IAHelperProductNotPurchasedNotification";
+NSString *const IAPHelperProductPurchasedFailedTransactionNotification = @"IAPHelperProductPurchasedFailedTransactionNotification";
 // 2
 @interface IAPHelper () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
+@property (nonatomic, readwrite, copy) RequestProductsCompletionHandler _completionHandler;
 @end
 
 @implementation IAPHelper {
     // 3
     SKProductsRequest * _productsRequest;
     // 4
-    RequestProductsCompletionHandler _completionHandler;
+    //RequestProductsCompletionHandler _completionHandler;
     NSSet * _productIdentifiers;
     NSMutableSet * _purchasedProductIdentifiers;
 }
@@ -53,7 +56,7 @@ NSString *const IAHelperProductNotPurchasedNotification = @"IAHelperProductNotPu
 - (void)requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler {
     
     // 1
-    _completionHandler = [completionHandler copy];
+    self._completionHandler = [completionHandler copy];
     
     // 2
     _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:_productIdentifiers];
@@ -77,19 +80,23 @@ NSString *const IAHelperProductNotPurchasedNotification = @"IAHelperProductNotPu
               skProduct.price.floatValue);
     }
     
-    _completionHandler(YES, skProducts);
-    _completionHandler = nil;
+    if (self._completionHandler) {
+        self._completionHandler(YES, skProducts);
+        self._completionHandler = nil;
+    }
     
 }
+
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
     
     NSLog(@"Failed to load list of products.");
     _productsRequest = nil;
-    
-    _completionHandler(NO, nil);
-    _completionHandler = nil;
-    
+
+    if (self._completionHandler) {
+        self._completionHandler(NO, nil);
+        self._completionHandler = nil;
+    }
 }
 
 - (BOOL)productPurchased:(NSString *)productIdentifier {
@@ -136,18 +143,48 @@ NSString *const IAHelperProductNotPurchasedNotification = @"IAHelperProductNotPu
     
     [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier];
     [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+    
+    
 }
 
 - (void)failedTransaction:(SKPaymentTransaction *)transaction {
     
     NSLog(@"failedTransaction...");
-    [[NSNotificationCenter defaultCenter] postNotificationName:IAHelperProductNotPurchasedNotification object:nil userInfo:nil];
+
     if (transaction.error.code != SKErrorPaymentCancelled)
     {
         NSLog(@"Transaction error: %@", transaction.error.localizedDescription);
     }
-    
     [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
+   // [[NSNotificationCenter defaultCenter] postNotificationName:IAHelperProductNotPurchasedNotification object:transaction.error.localizedDescription userInfo:nil];
+}
+
+- (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue
+{
+    NSLog(@"%@",queue );
+    NSLog(@"Restored Transactions are once again in Queue for purchasing %@",[queue transactions]);
+    
+    NSMutableArray *purchasedItemIDs = [[NSMutableArray alloc] init];
+    NSLog(@"received restored transactions: %i", queue.transactions.count);
+    
+    for (SKPaymentTransaction *transaction in queue.transactions) {
+        NSString *productID = transaction.payment.productIdentifier;
+        [purchasedItemIDs addObject:productID];
+        NSLog (@"product id is %@" , productID);
+        // here put an if/then statement to write files based on previously purchased items
+        // example if ([productID isEqualToString: @"youruniqueproductidentifier]){write files} else { nslog sorry}
+        dispatch_async(dispatch_queue_create("com.nakedchineseapp.nakedchinese.background_thread", NULL), ^{
+            [[NCProductDownloader sharedInstance] loadBoughtProduct:productID];
+        });
+        
+    }
+}
+
+
+
+- (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error
+{
+    NSLog(@"Restore completed transaction failed with error: %@", error);
 }
 
 - (void)provideContentForProductIdentifier:(NSString *)productIdentifier {
@@ -157,5 +194,9 @@ NSString *const IAHelperProductNotPurchasedNotification = @"IAHelperProductNotPu
     [[NSUserDefaults standardUserDefaults] synchronize];
     [[NSNotificationCenter defaultCenter] postNotificationName:IAPHelperProductPurchasedNotification object:productIdentifier userInfo:nil];
     
+}
+
+- (void)restoreCompletedTransactions {
+    [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
 }
 @end

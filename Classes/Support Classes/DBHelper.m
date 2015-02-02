@@ -12,6 +12,8 @@
 #import "NCMaterial.h"
 #import "NCExplanation.h"
 
+#define SERVER_ADDRESS @"http://nakedchineseapp.com/upload/picture/"
+
 @implementation DBHelper
 
 - (NSArray *)getWordsFromDBWithPackID:(int)packID
@@ -77,17 +79,17 @@
     return array;
 }
 
-- (void)setWordsToDB:(NSArray *)wordsArray
+- (void)setWordsToDB:(NSArray *)wordsArray withImages:(BOOL)ifSaveImages
 {
     NCAppDelegate *appDelegate = (NCAppDelegate *)[[UIApplication sharedApplication]delegate];
     
     NSManagedObject *words = [NSEntityDescription insertNewObjectForEntityForName:@"Words"
-                                                          inManagedObjectContext:appDelegate.managedObjectContext];
+                                                           inManagedObjectContext:appDelegate.managedObjectContext];
     
     NSMutableSet *containWords = [words mutableSetValueForKey:@"containWords"];
     
     NSManagedObject *materials = [NSEntityDescription insertNewObjectForEntityForName:@"Materials"
-                                                           inManagedObjectContext:appDelegate.managedObjectContext];
+                                                               inManagedObjectContext:appDelegate.managedObjectContext];
     
     NSMutableSet *containMaterials = [materials mutableSetValueForKey:@"containMaterials"];
     
@@ -95,28 +97,40 @@
     {
         //проверяем есть ли такой элемент в базе
         //Word
-       
+        
         NSString *formatPredicate = [NSString stringWithFormat:@"id == %i", [word.ID intValue]];
-    
+        
         NSArray *wordArray = [self fetchRequestWithEntityName:@"Word" andFormatPredicate:formatPredicate];
         if(wordArray.count > 0)
         {
-            [appDelegate.managedObjectContext deleteObject:wordArray[0]];
+            for(int i = 0; i < wordArray.count; i++)
+                [appDelegate.managedObjectContext deleteObject:wordArray[i]];
         }
         
         //Material
         NSArray *materialArray = [self fetchRequestWithEntityName:@"Material" andFormatPredicate:formatPredicate];
         if(materialArray.count > 0)
         {
-            [appDelegate.managedObjectContext deleteObject:materialArray[0]];
+            for(int i = 0; i < materialArray.count; i++)
+            {
+                [appDelegate.managedObjectContext deleteObject:materialArray[i]];
+            }
         }
         
         //вставляем его в базу
         NSManagedObject *newWord = [NSEntityDescription insertNewObjectForEntityForName:@"Word"
-                                                              inManagedObjectContext:appDelegate.managedObjectContext];
+                                                                 inManagedObjectContext:appDelegate.managedObjectContext];
         [newWord setValue:word.ID forKey:@"id"];
-        [newWord setValue:word.image forKey:@"image"];
-        [newWord setValue:word.bigImage forKey:@"imageBig"];
+        
+        if(ifSaveImages)
+        {
+            [newWord setValue:[self getImagePathAndSaveImageFromWord:word] forKey:@"imageBig"];
+        }
+        else
+        {
+            [newWord setValue:word.image forKey:@"image"];
+            [newWord setValue:word.bigImage forKey:@"imageBig"];
+        }
         [newWord setValue:word.packID forKey:@"pack_id"];
         [newWord setValue:word.paid forKey:@"paid"];
         [newWord setValue:word.show forKey:@"show"];
@@ -124,8 +138,6 @@
         [containWords addObject:newWord];
         
         NSManagedObject *newMaterial = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:appDelegate.managedObjectContext];
-        
-        NSLog(@"material %@", word.material.materialZH);
         
         [newMaterial setValue:word.material.materialID forKey:@"id"];
         [newMaterial setValue:word.material.materialZH forKey:@"zh"];
@@ -140,6 +152,50 @@
     //    сохраняем данные в хранилище
     [appDelegate saveContext];
 
+}
+
+- (NSString *)getImagePathAndSaveImageFromWord:(NCWord *)word
+{
+    /*
+    NSLog(@"Downloading...");
+    // Get an image from the URL below
+    NSString *imageURLString = [NSString stringWithFormat:@"%@%@", SERVER_ADDRESS, word.image];
+    UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURLString]]];
+    
+    NSLog(@"%f,%f",image.size.width,image.size.height);
+    
+    // Let's save the file into Document folder.
+    // You can also change this to your desktop for testing. (e.g. /Users/kiichi/Desktop/)
+    // NSString *deskTopDir = @"/Users/kiichi/Desktop";
+    
+    NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    
+    // If you go to the folder below, you will find those pictures
+    NSLog(@"%@",docDir);
+    
+    NSLog(@"saving png");
+    NSString *pngFilePath = [NSString stringWithFormat:@"%@/%@",docDir, word.image];
+    NSData *data1 = [NSData dataWithData:UIImagePNGRepresentation(image)];
+    [data1 writeToFile:pngFilePath atomically:YES];
+    
+    
+    NSLog(@"saving image done");
+    */
+    //NSString *imageURLString = [NSString stringWithFormat:@"%@%@", SERVER_ADDRESS, word.image];
+    //UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURLString]]];
+   // NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+   // NSString *pngFilePath = [NSString stringWithFormat:@"%@/%@",docDir, word.image];
+    return word.image;
+}
+
+- (void)setWordsToDB:(NSArray *)wordsArray
+{
+    [self setWordsToDB:wordsArray withImages:NO];
+}
+
+- (void)setWordsAndImagesToDB:(NSArray *)wordsArray
+{
+    
 }
 
 - (void)setMaterialsToDB:(NSArray *)materialsArray andExplanations:(NSArray *)explanationsArray
@@ -323,19 +379,63 @@
     //проверяем есть ли такой элемент в БД
     NSString *formatPredicate = [NSString stringWithFormat:@"id == %i", [pack.ID intValue]];
     NSArray *packArray = [self fetchRequestWithEntityName:@"Pack" andFormatPredicate:formatPredicate];
+    
+    
+    NSManagedObject *newPack = [NSEntityDescription insertNewObjectForEntityForName:@"Pack"
+                                                             inManagedObjectContext:appDelegate.managedObjectContext];
     if(packArray.count > 0)
     {
         for(int i = 0; i < packArray.count; i++)
+        {
+            NCPack *oldPack = [NCPack getNCPackFromNSManagedObject:packArray[i]];
+            NSNumber *oldPaidValue = oldPack.paid;
             [appDelegate.managedObjectContext deleteObject:packArray[i]];
+           
+            [newPack setValue:oldPaidValue forKey:@"paid"];
+            
+        }
     }
-   
-    NSManagedObject *newPack = [NSEntityDescription insertNewObjectForEntityForName:@"Pack"
-                                                                 inManagedObjectContext:appDelegate.managedObjectContext];
+    else
+    {
+        [newPack setValue:pack.paid forKey:@"paid"];
+    }
+    
     [newPack setValue:pack.ID forKey:@"id"];
     [newPack setValue:pack.partition forKey:@"partition"];
-    [newPack setValue:pack.paid forKey:@"paid"];
     [containPacks addObject:newPack];
-        
+    //    сохраняем данные в хранилище
+    [appDelegate saveContext];
+    
+}
+
+- (void)setPackPaid:(NCPack *)pack
+{
+    NCAppDelegate *appDelegate = (NCAppDelegate *)[[UIApplication sharedApplication]delegate];
+    
+    NSManagedObject *packs = [NSEntityDescription insertNewObjectForEntityForName:@"Packs"
+                                                           inManagedObjectContext:appDelegate.managedObjectContext];
+    
+    NSMutableSet *containPacks = [packs mutableSetValueForKey:@"containPacks"];
+    
+    //проверяем есть ли такой элемент в БД
+    NSString *formatPredicate = [NSString stringWithFormat:@"id == %i", [pack.ID intValue]];
+    NSArray *packArray = [self fetchRequestWithEntityName:@"Pack" andFormatPredicate:formatPredicate];
+    
+    
+    NSManagedObject *newPack = [NSEntityDescription insertNewObjectForEntityForName:@"Pack"
+                                                             inManagedObjectContext:appDelegate.managedObjectContext];
+    if(packArray.count > 0)
+    {
+        for(int i = 0; i < packArray.count; i++)
+        {
+            [appDelegate.managedObjectContext deleteObject:packArray[i]];
+        }
+    }
+    
+    [newPack setValue:@1 forKey:@"paid"];
+    [newPack setValue:pack.ID forKey:@"id"];
+    [newPack setValue:pack.partition forKey:@"partition"];
+    [containPacks addObject:newPack];
     //    сохраняем данные в хранилище
     [appDelegate saveContext];
 
@@ -363,7 +463,8 @@
             NCWord *word = [[NCWord alloc] init];
             word = [NCWord getNCWordFromNSManagedObject:wordArray[0]];
             word.material = material;
-            [array addObject:word];
+            if(word.packID.intValue != 16)
+                [array addObject:word];
         }
        
     }
@@ -384,7 +485,8 @@
             NCWord *word = [[NCWord alloc] init];
             word = [NCWord getNCWordFromNSManagedObject:wordArray[0]];
             word.material = material;
-            [array addObject:word];
+            if(word.packID.intValue != 16)
+                [array addObject:word];
         }
         
     }
@@ -405,7 +507,8 @@
             NCWord *word = [[NCWord alloc] init];
             word = [NCWord getNCWordFromNSManagedObject:wordArray[0]];
             word.material = material;
-            [array addObject:word];
+            if(word.packID.intValue != 16)
+                [array addObject:word];
         }
         
     }
@@ -414,6 +517,25 @@
     return array;
 }
 
+- (BOOL) ifPaidPack:(NCPack *)pack
+{
+       //проверяем есть ли такой элемент в БД
+    NSString *formatPredicate = [NSString stringWithFormat:@"id == %i", [pack.ID intValue]];
+    NSArray *packArray = [self fetchRequestWithEntityName:@"Pack" andFormatPredicate:formatPredicate];
+    
+    if(packArray.count > 0)
+    {
+        NCPack *pack = [NCPack getNCPackFromNSManagedObject:packArray[0]];
+        if([pack.paid isEqualToNumber:@1])
+            return YES;
+        else
+            return NO;
+    }
+    else
+        return NO;
+    
+
+}
 
 - (NSArray *) fetchRequestWithEntityName:(NSString *) entityName andFormatPredicate:(NSString *)formatPredicate
 {

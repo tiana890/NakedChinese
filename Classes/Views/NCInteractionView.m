@@ -410,9 +410,10 @@
             [self addConstraintsForHellMan];
             break;
     }
-    
-    [self setupHorizontalCenterOfView:self.backgroundView andAttachByAttribute:NSLayoutAttributeBottom withConstant:-50];
+    //-50
+    [self setupHorizontalCenterOfView:self.backgroundView andAttachByAttribute:NSLayoutAttributeBottom withConstant:-150];
     [self setupHorizontalCenterOfView:self.cloudView andAttachByAttribute:NSLayoutAttributeTop withConstant:-80];
+   
     
     [super updateConstraints];
     

@@ -16,6 +16,7 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "NCNavigationBar.h"
 #import <FXBlurView/FXBlurView.h>
+#import "NCIAHelper.h"
 
 #import "NCInteractionView.h"
 
@@ -148,6 +149,11 @@ static NSString *const NCMenuTitleKey = @"title";
             case 2:
             {
                 [self performSegueWithIdentifier:NCPartnersControllerSegueIdentifier sender:self];
+                break;
+            }
+            case 3:
+            {
+                [[NCIAHelper sharedInstance] restoreCompletedTransactions];
                 break;
             }
                 

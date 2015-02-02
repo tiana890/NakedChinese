@@ -17,6 +17,7 @@
 @interface DBHelper : NSObject
 
 - (NSArray *) getWordsFromDBWithPackID:(int)packID;
+- (void) setWordsToDB:(NSArray *)wordsArray withImages:(BOOL)ifSaveImages;
 - (void) setWordsToDB:(NSArray *)wordsArray;
 - (NSArray *) getFavorites;
 - (void) setWordToFavorites:(NCWord *)word;
@@ -24,6 +25,8 @@
 - (BOOL) ifExistsInFavorites:(NCWord *)word;
 - (NSArray *) getPacks;
 - (void) setPackToDB:(NCPack *)pack;
+- (void) setPackPaid:(NCPack *)pack;
+- (BOOL) ifPaidPack:(NCPack *)pack;
 - (NCWord *) getWordWithID:(int)wordID;
 - (NSArray *) searchWordContainsString:(NSString *)string;
 - (void)setMaterialsToDB:(NSArray *)materialsArray andExplanations:(NSArray *)explanationsArray;
