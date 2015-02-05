@@ -94,7 +94,6 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
         [[NCInteractionManager sharedInstance] setSoundLanguage:NCSoundLanguageRussian];
 
     }
-   
     
     self.interactionView.delegate = self;
     
@@ -246,6 +245,7 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
     }];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+    //[[UIApplication sharedApplication] setStatusBarHidden:YES];
 }
 
 - (void)hideShownUIElements {

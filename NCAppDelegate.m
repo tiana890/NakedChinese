@@ -25,6 +25,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [NCIAHelper sharedInstance];
+    //[[UIApplication sharedApplication] setStatusBarHidden:YES];
     
     BOOL ifFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"];
     self.ifFirstLaunch = ifFirstLaunch;
