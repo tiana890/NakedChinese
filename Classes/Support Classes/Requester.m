@@ -133,7 +133,7 @@
         return targetPath;
         
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
-    
+        NSLog(@"ERROR %@", error.description);
     }];
     
     [[BackgroundSessionManager sharedManager] setDownloadTaskDidWriteDataBlock:^(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {

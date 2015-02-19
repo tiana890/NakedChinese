@@ -15,9 +15,10 @@
 
 #import "NCWordImageViewController.h"
 
+#import <QuartzCore/QuartzCore.h>
 #define SERVER_ADDRESS @"http://china:8901/upload/picture/"
 
-@interface NCWordContentViewController () <AVSpeechSynthesizerDelegate>
+@interface NCWordContentViewController () <AVSpeechSynthesizerDelegate, UIActivityItemSource>
 @property (strong, nonatomic) AVSpeechSynthesizer *synthesizer;
 
 @property (weak, nonatomic) IBOutlet UIImageView *pictureView;
@@ -26,6 +27,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *translationLabel;
 @property (strong, nonatomic) IBOutlet UIButton *hiddenViewButton;
 @property (strong, nonatomic) IBOutlet UIView *helpView;
+@property (strong, nonatomic) IBOutlet UIView *embedView;
 
 
 @end
@@ -85,7 +87,17 @@
 #pragma mark IBActions
 
 - (IBAction)shareAction:(id)sender {
-    [self shareWithActivityItems:@[NSLocalizedString(@"share_text", nil), self.pictureView.image]];
+   
+    if(self.word.packID.intValue == 1)
+    {
+        [self shareWithActivityItems:@[NSLocalizedString(@"share_twitter_text", @"share_link"), self.pictureView.image]];
+    }
+    else
+    {
+        [self shareWithActivityItems:@[NSLocalizedString(@"share_twitter_text", @"share_link")]];
+    }
+    
+    
 }
 - (IBAction)sayAction:(id)sender {
     [self sayText:self.chineseLabel.text];
@@ -104,9 +116,82 @@
 
 - (void)shareWithActivityItems:(NSArray *)activityItems {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+    [activityController setCompletionWithItemsHandler:^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+        if(completed)
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"share_completed_success", nil) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alert show];
+            
+        }
+        else if(activityError)
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"share_completed_unsuccess", nil) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alert show];
+        }
+        
+    }];
     activityController.excludedActivityTypes = @[UIActivityTypeAirDrop, UIActivityTypeCopyToPasteboard, UIActivityTypePrint];
     [self presentViewController:activityController animated:YES completion:nil];
 }
+
+-(void)share
+{
+    NSArray *activityItems = @[NSLocalizedString(@"share_twitter_text", @"share_link"), self.pictureView.image];
+    UIActivityItemProvider *provider = [[UIActivityItemProvider alloc] initWithPlaceholderItem:activityItems];
+    UIActivityViewController *shareController =
+    [[UIActivityViewController alloc] initWithActivityItems:@[provider] applicationActivities:nil];
+     // actual items are prepared by UIActivityItemSource protocol methods below
+    
+    shareController.excludedActivityTypes = @[UIActivityTypeAirDrop, UIActivityTypeCopyToPasteboard, UIActivityTypePrint];
+    
+    [self presentViewController: shareController animated: YES completion: nil];
+}
+
+- (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
+{
+    /*
+    static UIActivityViewController *shareController;
+    static int itemNo;
+    if (shareController == activityViewController && itemNo < numberOfSharedItems - 1)
+        itemNo++;
+    else {
+        itemNo = 0;
+        shareController = activityViewController;
+    }
+    
+    switch (itemNo) {
+        case 0: return @""; // intro in email
+        case 1: return @""; // email text
+        case 2: return [NSURL new]; // link
+        case 3: return [UIImage new]; // picture
+        case 4: return @""; // extra text (via in twitter, signature in email)
+        default: return nil;
+    }*/
+    
+    if(self.word.packID.intValue == 1)
+    {
+        if(activityType == UIActivityTypePostToTwitter)
+        {
+            return @[NSLocalizedString(@"share_twitter_text", @"share_link"), self.pictureView.image];
+        }
+        else
+        {
+            return @[NSLocalizedString(@"share_text", @"share_link"), self.pictureView.image];
+        }
+    }
+    else
+    {
+        if(activityType == UIActivityTypePostToTwitter)
+        {
+            return @[NSLocalizedString(@"share_twitter_text", @"share_link")];
+        }
+        else
+        {
+            return @[NSLocalizedString(@"share_text", @"share_link")];
+        }
+    }
+}
+
 
 #pragma mark - AVSpeechSynthesizerDelegate
 

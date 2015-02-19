@@ -25,7 +25,7 @@
     //sex - 2
     else if(packID == 18)
     {
-        return @"com.nakedchineseapp.nakedchinese.product.packsex2";
+        return @"com.nakedchineseapp.nakedchinese.sex2";
     }
     else
         return @"";
@@ -48,7 +48,7 @@
         pack.ID = @20;
     }
     //sex - 2
-    if([identifier isEqualToString:@"com.nakedchineseapp.nakedchinese.product.packsex2"])
+    if([identifier isEqualToString:@"com.nakedchineseapp.nakedchinese.sex2"])
     {
         pack.partition = @"sex";
         pack.ID = @18;

@@ -29,6 +29,9 @@
 #import "NCProductDownloader.h"
 #import "NCStaticPackIdentifier.h"
 
+#import "NakedChinese-Swift.h"
+
+#import <UIKit/UIKit.h>
 
 #define SERVER_ADDRESS @"http://nakedchineseapp.com/upload/picture/"
 
@@ -62,7 +65,9 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 @property (nonatomic, strong) NSArray *products;
 @property (nonatomic, strong) SKProduct *prod;
 @property (strong, nonatomic) IBOutlet UIProgressView *progress;
-
+@property (nonatomic, strong) KYCircularProgress *circularProgress;
+@property (nonatomic, strong) UILabel *textLabel;
+@property (nonatomic) float progressCount;
 
 @end
 
@@ -77,6 +82,7 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     self.progress.progress = 0.0f;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -630,8 +636,9 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 {
     //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.razeware.imagegrabber.bgqueue", NULL);
     self.collectionView.hidden = YES;
-    self.progress.hidden = NO;
+    //self.progress.hidden = NO;
     
+    [self setupCircularProgress];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
             [[NCProductDownloader sharedInstance] loadBoughtProduct:identifier];
         
@@ -645,21 +652,23 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     self.pack = pack;
     self.pack.paid = @1;
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.progress.hidden = YES;
-        UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        //self.progress.hidden = YES;
+        //UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         
-        CGRect mainFrame = [[UIScreen mainScreen] bounds];
-        [indicator setFrame:CGRectMake(mainFrame.size.width/2-indicator.frame.size.width/2, 140, indicator.frame.size.width, indicator.frame.size.height)];
-        [indicator startAnimating];
-        [indicator setTag:1234];
-        [self.view addSubview:indicator];
-        
+        //CGRect mainFrame = [[UIScreen mainScreen] bounds];
+        //[indicator setFrame:CGRectMake(mainFrame.size.width/2-indicator.frame.size.width/2, 140, indicator.frame.size.width, indicator.frame.size.height)];
+        //[indicator startAnimating];
+        //[indicator setTag:1234];
+        //[self.view addSubview:indicator];
+        [self performSelectorOnMainThread:@selector(updateProgress:) withObject:@100 waitUntilDone:YES];
+        [self.circularProgress removeFromSuperview];
+        [self.textLabel removeFromSuperview];
         [self.collectionView reloadData];
         
         [[self.view viewWithTag:1234] removeFromSuperview];
         
         self.collectionView.hidden = NO;
-        self.progress.progress = 0.0f;
+        //self.progress.progress = 0.0f;
     });
     
 }
@@ -667,9 +676,10 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 - (void)ncProductDownloaderProtocolProductProgressPercentValue:(NSNumber *)number
 {
     self.collectionView.hidden = YES;
-    self.progress.hidden = NO;
-    [self performSelectorOnMainThread:@selector(updateProgressView:) withObject:number waitUntilDone:NO];
-    
+    //[self updateProgress:number.floatValue];
+    [self performSelectorOnMainThread:@selector(updateProgress:) withObject:number waitUntilDone:NO];
+    //self.progress.hidden = NO;
+    //[self performSelectorOnMainThread:@selector(updateProgressView:) withObject:number waitUntilDone:NO];
     //NSLog(@"Loading ... %f", number.floatValue);
 }
 
@@ -677,6 +687,75 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 {
     NSLog(@"Loading ... %f", value.floatValue);
     [self.progress setProgress:value.floatValue/100 animated:YES];
+    
+    
+}
+
+#pragma mark Progress
+/*
+func setupKYCircularProgress1() {
+    circularProgress1 = KYCircularProgress(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2))
+    let center = (CGFloat(160.0), CGFloat(200.0))
+    circularProgress1.path = UIBezierPath(arcCenter: CGPointMake(center.0, center.1), radius: CGFloat(circularProgress1.frame.size.width/3.0), startAngle: CGFloat(M_PI), endAngle: CGFloat(0.0), clockwise: true)
+    circularProgress1.lineWidth = 8.0
+    
+    let textLabel = UILabel(frame: CGRectMake(self.view.frame.size.width/2 - 30.0, 170.0, 80.0, 32.0))
+    textLabel.font = UIFont(name: "HelveticaNeue-UltraLight", size: 32)
+    textLabel.textAlignment = .Center
+    textLabel.textColor = circularProgress1.colorHex(0xA6E39D)
+    textLabel.backgroundColor = UIColor.clearColor()
+    self.view.addSubview(textLabel)
+    
+    circularProgress1.progressChangedBlock({ (progress: Double, circular: KYCircularProgress) in
+        println("progress: \(progress)")
+        textLabel.text = "\(Int(progress * 100.0))%"
+    })
+    
+    self.view.addSubview(circularProgress1)
+}*/
+
+/*
+ func updateProgress() {
+ progress = progress &+ 1
+ let normalizedProgress = Double(progress) / 255.0
+ 
+ circularProgress1.progress = normalizedProgress
+ circularProgress2.progress = normalizedProgress
+ circularProgress3.progress = normalizedProgress
+ }
+ */
+
+- (void) setupCircularProgress
+{
+    self.circularProgress = [[KYCircularProgress alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height/2)];
+    CGPoint center = CGPointMake(self.view.frame.size.width/2, 200.0f);
+    self.circularProgress.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(center.x, center.y) radius:self.circularProgress.frame.size.width/3.0f startAngle:M_PI endAngle:0.0f clockwise:YES];
+    self.circularProgress.lineWidth = 8.0f;
+    
+    self.textLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-40.0f, 170.0f, 80.0f, 32.0f)];
+    NSLog(@"%@", NSStringFromCGRect(self.textLabel.frame));
+    self.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:32.0f];
+    self.textLabel.textAlignment = NSTextAlignmentCenter;
+    self.textLabel.textColor = [UIColor lightGrayColor];
+    self.textLabel.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.textLabel];
+    
+    [self.circularProgress progressChangedBlock:^(double progress, KYCircularProgress *circular) {
+       dispatch_async(dispatch_get_main_queue(), ^{
+           int result = progress * 100;
+           [self.textLabel setText:[NSString stringWithFormat:@"%i%%", result]];
+       });
+        
+    }];
+     
+    [self.view addSubview:self.circularProgress];
+}
+
+- (void) updateProgress:(NSNumber *)number
+{
+    float normalizedProgress = number.floatValue/100;
+    NSLog(@"value = %f", normalizedProgress);
+    self.circularProgress.progress = number.floatValue/100;
 }
 
 @end

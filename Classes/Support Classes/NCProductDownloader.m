@@ -88,7 +88,7 @@
     if([self.delegate respondsToSelector:@selector(ncProductDownloaderProtocolProductProgressPercentValue:)])
     {
         [self.delegate ncProductDownloaderProtocolProductProgressPercentValue:[NSNumber numberWithFloat:(100*sum/12)]];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NCProductDownloaderNotificationProgressBarValue object:[NSNumber numberWithFloat:(100*sum/12)] userInfo:nil];
+        //[[NSNotificationCenter defaultCenter] postNotificationName:NCProductDownloaderNotificationProgressBarValue object:[NSNumber numberWithFloat:(100*sum/12)] userInfo:nil];
     }
     if(sum >= 12.0f)
     {
@@ -96,7 +96,7 @@
         if([self.delegate respondsToSelector:@selector(ncProductDownloaderProtocolProductDownloaded:)])
         {
             [self.delegate ncProductDownloaderProtocolProductDownloaded:self.pack];
-            [[NSNotificationCenter defaultCenter] postNotificationName:NCProductDownloaderNotificationProductDownloaded object:nil];
+            //[[NSNotificationCenter defaultCenter] postNotificationName:NCProductDownloaderNotificationProductDownloaded object:nil];
         }
     }
 }

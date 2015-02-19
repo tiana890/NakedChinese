@@ -19,12 +19,15 @@
 #import "NCWord.h"
 #import "NCMaterial.h"
 
+#import "NCSlidingViewController.h"
+
 static CGFloat const NCVisuallyPackMaxBlurRadius = 20.f;
 static CGFloat const NCVisuallySlideViewHeight = 75.f;
 
-@interface NCVisuallyPackViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, NCDataManagerProtocol>
+@interface NCVisuallyPackViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, NCDataManagerProtocol, NCSLidingViewControllerProtocol>
 
 @property (strong, nonatomic) UIPageViewController *pageViewController;
+@property (strong, nonatomic) NCSlidingViewController *slidingViewController;
 
 @property (weak, nonatomic) IBOutlet UIButton *addFavoriteButton;
 
@@ -104,6 +107,15 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
     return _pageViewController;
 }
 
+- (NCSlidingViewController *)slidingViewController
+{
+    if(!_slidingViewController){
+        _slidingViewController = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"slidingViewController"];
+        _slidingViewController.delegate = self;
+    }
+    return _slidingViewController;
+}
+
 - (NSMutableSet *)userIndexesFavoriteWords {
     if (!_userIndexesFavoriteWords) {
         _userIndexesFavoriteWords = [NSMutableSet set];
@@ -132,6 +144,7 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
 #pragma mark - Private
 
 - (void)setupPageViewController {
+    /*
     NCWordContentViewController *contentViewController = (id)[self viewControllerAtIndex:[self openedWordIndex]];
     NSArray *viewControllers = @[contentViewController];
     [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
@@ -142,6 +155,27 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
     [self addChildViewController:[self pageViewController]];
     [self.view addSubview:[self.pageViewController view]];
     [self.pageViewController didMoveToParentViewController:self];
+    
+    [self setupFavButton:[self openedWordIndex]];
+     */
+    
+    for(int i = 0; i < self.arrayOfWords.count; i++)
+    {
+        NCWordContentViewController *contentViewController = (id)[self viewControllerAtIndex:i];
+        [self.slidingViewController addController:contentViewController];
+    }
+    [self.slidingViewController setOpenedIndex:[self openedWordIndex]];
+    
+    /*NCWordContentViewController *contentViewController = (id)[self viewControllerAtIndex:[self openedWordIndex]];
+    [self.slidingViewController addController:contentViewController];
+    */
+    self.slidingViewController.view.frame =
+    CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+    
+    
+    [self addChildViewController:[self slidingViewController]];
+    [self.view addSubview:[self.slidingViewController view]];
+    [self.slidingViewController didMoveToParentViewController:self];
     
     [self setupFavButton:[self openedWordIndex]];
 }
@@ -380,7 +414,16 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
     [self setupFavButton:currentIndex];
     //self.addFavoriteButton.selected = [self.userIndexesFavoriteWords containsObject:@(currentIndex)];
     
-    
+}
+
+#pragma mark - NCSlidingViewControllerProtocol
+- (void)ncSLidingViewControllerProtocolCurrentIndexChanged:(int)index
+{
+    self.openedWordIndex = index;
+    [self setupFavButton:index];
+    NCWord *word = self.arrayOfWords[self.openedWordIndex];
+    [NCDataManager sharedInstance].delegate = self;
+    [[NCDataManager sharedInstance] getMaterialsWithWordID:word.ID.intValue];
 }
 
 @end

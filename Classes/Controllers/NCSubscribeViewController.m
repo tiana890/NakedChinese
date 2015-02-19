@@ -11,7 +11,11 @@
 #import "NCNavigationBar.h"
 
 @interface NCSubscribeViewController ()<UIScrollViewDelegate>
+@property (strong, nonatomic) IBOutlet UIButton *siteLink;
+@property (strong, nonatomic) IBOutlet UILabel *descriptionLabel;
+@property (strong, nonatomic) IBOutlet UIView *lineView;
 @property (strong, nonatomic) IBOutlet UIScrollView *scroll;
+@property (strong, nonatomic) IBOutlet UILabel *descr;
 
 @end
 
@@ -29,6 +33,10 @@
     if([NSLocalizedString(@"lang", <#comment#>) isEqualToString:@"en"])
     {
         self.scroll.hidden = YES;
+        self.siteLink.hidden = YES;
+        self.lineView.hidden = YES;
+        self.descriptionLabel.hidden = YES;
+        self.descr.hidden = YES;
     }
     
 }

@@ -14,7 +14,7 @@
 #import "NCIAHelper.h"
 #import "IAPHelper.h"
 
-@interface NCAppDelegate()
+@interface NCAppDelegate()<UIAlertViewDelegate>
 
 @end
 @implementation NCAppDelegate
@@ -38,8 +38,10 @@
     
     [self loadPacks];
     
+    
     return YES;
 }
+
 
 #pragma mark - Data Manager methods
 - (void) initDB
@@ -151,4 +153,6 @@
     
     return YES;
 }
+
+
 @end
