@@ -360,8 +360,8 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
                     [openCell.pinyinLabel setText:word.material.materialZH_TR];
                     openCell.blurView.blurRadius = 10.0f;
                     openCell.blurView.dynamic = YES;
-                    NSString *str = [self cutFirstWord:word.material.materialWord];
-                    [openCell.translateLabel setText:str];
+                    //NSString *str = [self cutFirstWord:word.material.materialWord];
+                    [openCell.translateLabel setText:word.material.materialWord];
                     return openCell;
                 }
                 else
@@ -419,8 +419,8 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
                 [openCell.pinyinLabel setText:word.material.materialZH_TR];
                 openCell.blurView.blurRadius = 10.0f;
                 openCell.blurView.dynamic = YES;
-                NSString *str = [self cutFirstWord:word.material.materialWord];
-                [openCell.translateLabel setText:str];
+                //NSString *str = [self cutFirstWord:word.material.materialWord];
+                [openCell.translateLabel setText:word.material.materialWord];
                 return openCell;
                 
             }
@@ -637,7 +637,7 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.razeware.imagegrabber.bgqueue", NULL);
     self.collectionView.hidden = YES;
     //self.progress.hidden = NO;
-    
+    self.progressCount = 0.0f;
     [self setupCircularProgress];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
             [[NCProductDownloader sharedInstance] loadBoughtProduct:identifier];
@@ -724,7 +724,7 @@ func setupKYCircularProgress1() {
  circularProgress3.progress = normalizedProgress
  }
  */
-
+/*
 - (void) setupCircularProgress
 {
     self.circularProgress = [[KYCircularProgress alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height/2)];
@@ -750,12 +750,68 @@ func setupKYCircularProgress1() {
      
     [self.view addSubview:self.circularProgress];
 }
+ */
+/*
+func setupKYCircularProgress2() {
+    circularProgress2 = KYCircularProgress(frame: CGRectMake(0, circularProgress1.frame.size.height, self.view.frame.size.width/2, self.view.frame.size.height/3))
+    circularProgress2.colors = [circularProgress2.colorHex(0xA6E39D).CGColor!,
+                                circularProgress2.colorHex(0xAEC1E3).CGColor!,
+                                circularProgress2.colorHex(0xE1A5CB).CGColor!,
+                                circularProgress2.colorHex(0xF3C0AB).CGColor!
+                                ]
+    
+    self.view.addSubview(circularProgress2)
+}*/
+
+- (void) setupCircularProgress
+{
+    CGRect mainScreenFrame = [[UIScreen mainScreen] bounds];
+    CGRect frame = CGRectZero;
+    frame.size.width = 100.0f;
+    frame.size.height = 100.0f;
+    frame.origin.x = (mainScreenFrame.size.width - 100.0f)/2;
+    frame.origin.y = 100.0f;
+    
+    self.circularProgress = [[KYCircularProgress alloc] initWithFrame:frame];
+    
+   /* NSArray *colorsArray = @[(id)[UIColor colorWithRed:166.0f/255.0f green:227.0f/255.0f blue:157.0f/255.0f alpha:1.0f].CGColor,
+                             (id)[UIColor colorWithRed:174.0f/255.0f green:193.0f/255.0f blue:227.0f/255.0f alpha:1.0f].CGColor,
+                             (id)[UIColor colorWithRed:225.0f/255.0f green:165.0f/255.0f blue:203.0f/255.0f alpha:1.0f].CGColor,
+                             (id)[UIColor colorWithRed:243.0f/255.0f green:192.0f/255.0f blue:171.0f/255.0f alpha:1.0f].CGColor];
+    */
+    NSArray *colorsArray = @[(id)[UIColor redColor].CGColor,
+                             (id)[UIColor redColor].CGColor,
+                             (id)[UIColor redColor].CGColor,
+                             (id)[UIColor redColor].CGColor];
+    
+    self.circularProgress.colors = colorsArray;
+    [self.view addSubview:self.circularProgress];
+    
+    self.textLabel = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + frame.size.width/2, frame.origin.y + frame.size.height/2, 70.0f, 30.0f)];
+    [self.textLabel setCenter:self.circularProgress.center];
+    self.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:28.0f];
+    self.textLabel.textAlignment = NSTextAlignmentCenter;
+    self.textLabel.textColor = [UIColor lightGrayColor];
+    self.textLabel.backgroundColor = [UIColor clearColor];
+    [self.textLabel setText:@"0%"];
+    [self.view addSubview:self.textLabel];
+
+}
 
 - (void) updateProgress:(NSNumber *)number
 {
-    float normalizedProgress = number.floatValue/100;
-    NSLog(@"value = %f", normalizedProgress);
-    self.circularProgress.progress = number.floatValue/100;
+    //NSLog(@"%f", self.progressCount);
+    float delta = (number.floatValue/100 - self.progressCount)/100;
+    
+    
+    for(int i = 0; i < 100; i++)
+    {
+        self.circularProgress.progress = self.progressCount + delta;
+        self.progressCount += delta;
+    }
+    //self.circularProgress.progress = number.floatValue/100;
+    self.progressCount = number.floatValue/100;
+    [self.textLabel setText:[NSString stringWithFormat:@"%i%%", number.intValue]];
 }
 
 @end

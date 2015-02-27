@@ -47,16 +47,24 @@ static NSString *const ExplanationTitleCellIdentifier = @"titleCell";
         paragraphStyle.firstLineHeadIndent = 40.0f;
         
         [str setAttributes: @{NSParagraphStyleAttributeName: paragraphStyle} range:NSRangeFromString(material.materialWord)];
-        [self.mainLabel setAttributedText:str];
-        
-        CGSize size = [self.mainLabel systemLayoutSizeFittingSize:UILayoutFittingExpandedSize];
-        [self.mainLabel setFrame:CGRectMake(self.mainLabel.frame.origin.x, self.mainLabel.frame.origin.y, size.width, size.height)];
-        [self.headerView setFrame:CGRectMake(self.headerView.frame.origin.x, self.headerView.frame.origin.y, self.headerView.frame.size.width, self.mainLabel.frame.size.height + 8.0f)];
+        if(![str isEqualToAttributedString:[[NSAttributedString alloc] initWithString:@"none"]])
+        {
+            [self.mainLabel setAttributedText:str];
+            
+            CGSize size = [self.mainLabel systemLayoutSizeFittingSize:UILayoutFittingExpandedSize];
+            [self.mainLabel setFrame:CGRectMake(self.mainLabel.frame.origin.x, self.mainLabel.frame.origin.y, size.width, size.height)];
+            [self.headerView setFrame:CGRectMake(self.headerView.frame.origin.x, self.headerView.frame.origin.y, self.headerView.frame.size.width, self.mainLabel.frame.size.height + 8.0f)];
+        }
+        else
+        {
+            [self.headerView setFrame:CGRectZero];
+        }
         [self.mainLabel updateConstraints];
         [self.headerView updateConstraints];
         //[self.tableView updateConstraints];
         //[self.headerView setFrame:CGRectMake(self.headerView.frame.origin.x, self.headerView.frame.origin.y, self.headerView.frame.size.width, size.height+20.0f)];
         [self.tableView reloadData];
+        
     }
 }
 

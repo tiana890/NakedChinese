@@ -103,6 +103,7 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
         _pageViewController = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"pageController"];
         _pageViewController.dataSource = self;
         _pageViewController.delegate = self;
+    
     }
     return _pageViewController;
 }
@@ -157,18 +158,17 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
     [self.pageViewController didMoveToParentViewController:self];
     
     [self setupFavButton:[self openedWordIndex]];
-     */
-    
+     
+    */
     for(int i = 0; i < self.arrayOfWords.count; i++)
     {
         NCWordContentViewController *contentViewController = (id)[self viewControllerAtIndex:i];
         [self.slidingViewController addController:contentViewController];
     }
-    [self.slidingViewController setOpenedIndex:[self openedWordIndex]];
     
-    /*NCWordContentViewController *contentViewController = (id)[self viewControllerAtIndex:[self openedWordIndex]];
-    [self.slidingViewController addController:contentViewController];
-    */
+    [self.slidingViewController setOpenedIndex:[self openedWordIndex]];
+    //[self.slidingViewController scrollToPage:[self openedWordIndex]];
+    
     self.slidingViewController.view.frame =
     CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
     
@@ -178,6 +178,7 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
     [self.slidingViewController didMoveToParentViewController:self];
     
     [self setupFavButton:[self openedWordIndex]];
+     
 }
 
 - (void)setupExplanationViewController {

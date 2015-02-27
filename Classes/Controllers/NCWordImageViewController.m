@@ -11,7 +11,7 @@
 
 @interface NCWordImageViewController ()<UIScrollViewDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *scroll;
-
+@property (nonatomic) CGRect scrollFrame;
 @end
 
 @implementation NCWordImageViewController
@@ -25,7 +25,7 @@
     //NSLog(@"%@", NSStringFromCGRect(CGRectMake(self.image.frame.origin.x, self.image.frame.origin.y, self.image.image.size.width, self.image.image.size.height)));
     //NSLog(@"%@", NSStringFromCGRect(CGRectMake(self.image.frame.origin.x, self.image.frame.origin.y, self.image.frame.size.width, self.image.frame.size.height)));
     
-    [self.scroll setFrame:self.image.frame];
+    //[self.scroll setFrame:self.image.frame];
     [self.scroll setContentSize:self.image.frame.size];
     //NSLog(@"%@", NSStringFromCGRect(CGRectMake(self.scroll.frame.origin.x, self.scroll.frame.origin.y, self.scroll.frame.size.width, self.scroll.frame.size.height)));
     
@@ -35,6 +35,7 @@
     [self.scroll addGestureRecognizer:doubleTapRecognizer];
     
     CGRect scrollViewFrame = self.scroll.frame;
+    self.scrollFrame = self.scroll.frame;
     //float scaleWidth = scrollViewFrame.size.width / self.scroll.contentSize.width;
    // float scaleHeight = scrollViewFrame.size.height / self.scroll.contentSize.height;
     //float minScale = MIN(scaleHeight, scaleWidth);
@@ -44,6 +45,9 @@
     self.scroll.zoomScale = 1;
     
     [self centerScrollViewContents];
+    
+    //self.scroll.layer.borderWidth =  0.3f;
+    //self.scroll.layer.borderColor = [[UIColor redColor] CGColor];
 }
 
 - (void) centerScrollViewContents
@@ -68,7 +72,7 @@
     {
         contentsFrame.origin.y = 0.0f;
     }
-    
+   
     self.image.frame = contentsFrame;
 }
 
@@ -77,16 +81,34 @@
     CGPoint pointInView = [recognizer locationInView:self.image];
     
     float  newZoomScale = self.scroll.zoomScale * 2.0f;
-    if(newZoomScale == 4.0f)
+   /* if(newZoomScale == 4.0f)
     {
         newZoomScale = 1.0f;
+        [self setScrollFrameAnimated:CGRectMake(self.scrollFrame.origin.x, self.scrollFrame.origin.y, 320.0f, 320.0f)];
+//        [self.scroll setFrame:CGRectMake(self.scrollFrame.origin.x, self.scrollFrame.origin.y, 320.0f, 320.0f)];
+
     }
     else
     {
         newZoomScale = MIN(newZoomScale, self.scroll.maximumZoomScale);
+        [self setScrollFrameAnimated:CGRectMake(0.0f, 64.0f, 320.0f, 504.0f)];
+       // [self.scroll setFrame:CGRectMake(0.0f, 64.0f, 320.0f, 504.0f)];
     }
-   // NSLog(@"new zoom scale = %f", newZoomScale);
-    
+    */
+    if(newZoomScale == 4.0f)
+    {
+        newZoomScale = 1.0f;
+        //[self setScrollFrameAnimated:CGRectMake(self.scrollFrame.origin.x, self.scrollFrame.origin.y, 320.0f, 320.0f)];
+        //[self.scroll setFrame:CGRectMake(self.scrollFrame.origin.x, self.scrollFrame.origin.y, 320.0f, 320.0f)];
+        
+    }
+    else
+    {
+        newZoomScale = MIN(newZoomScale, self.scroll.maximumZoomScale);
+        //[self setScrollFrameAnimated:CGRectMake(0.0f, 64.0f, 320.0f, 504.0f)];
+        //[self.scroll setFrame:CGRectMake(0.0f, 64.0f, 320.0f, 504.0f)];
+    }
+
     CGSize scrollViewSize = self.scroll.bounds.size;
     float w = scrollViewSize.width / newZoomScale;
     float h = scrollViewSize.height / 2.0f;
@@ -94,8 +116,14 @@
     float y = pointInView.y - (h/2.0f);
     
     CGRect rectToZoomTo = CGRectMake(x, y, w, h);
-    
     [self.scroll zoomToRect:rectToZoomTo animated:YES];
+}
+
+- (void) setScrollFrameAnimated:(CGRect)frame
+{
+    
+    [self.scroll setFrame:frame];
+   
 }
 
 - (void)didReceiveMemoryWarning {
@@ -125,6 +153,27 @@
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
+    float  newZoomScale = self.scroll.zoomScale * 2.0f;
+    //if(newZoomScale == 4.0f)
+    if(newZoomScale > 2.0f)
+    {
+        newZoomScale = 1.0f;
+        
+        //[self.image setFrame:CGRectMake(0.0f, 120.0f, self.image.frame.size.width, self.image.frame.size.height)];
+        [self setScrollFrameAnimated:CGRectMake(0.0f, 64.0f, 320.0f, 504.0f)];
+        
+        //[self.scroll setFrame:CGRectMake(self.scrollFrame.origin.x, self.scrollFrame.origin.y, 320.0f, 320.0f)];
+        
+    }
+    else
+    {
+        newZoomScale = MIN(newZoomScale, self.scroll.maximumZoomScale);
+        
+        [self setScrollFrameAnimated:CGRectMake(self.scrollFrame.origin.x, self.scrollFrame.origin.y, 320.0f, 320.0f)];
+        
+        //[self.scroll setFrame:CGRectMake(0.0f, 64.0f, 320.0f, 504.0f)];
+    }
+
     [self centerScrollViewContents];
 }
 

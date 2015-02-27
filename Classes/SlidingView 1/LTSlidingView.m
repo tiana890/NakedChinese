@@ -14,6 +14,7 @@
 @property(nonatomic,strong) NSMutableArray* views;
 @property(nonatomic,strong) UIScrollView* scrollView;
 @property(nonatomic) CGFloat beginOffset;
+@property (nonatomic) SlideDirection decelerateDirection;
 @property int currentIndex;
 
 @end
@@ -105,14 +106,19 @@
         ((NCWordView *)destView).embedView.layer.borderColor = [[[UIColor lightGrayColor] colorWithAlphaComponent:percent/2] CGColor];
     }
     
+    
     ((NCWordView *)sourceView).embedView.layer.borderWidth = 1.0f;
     ((NCWordView *)destView).embedView.layer.borderWidth = 1.0f;
     
     SlideDirection direction = (offset - self.beginOffset>0)?right:left;
+    self.decelerateDirection = direction;
     if(self.animator){
+       // NSLog(@"percent = %f", percent);
         [self.animator updateSourceView:sourceView destinationView:destView withPercent:percent direction:direction];
     }
 }
+
+
 
 -(void) scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
@@ -142,10 +148,7 @@
             if(((NCWordView *)v).embedView.layer.borderColor != [[UIColor clearColor] CGColor])
             {
                 CABasicAnimation *color = [CABasicAnimation animationWithKeyPath:@"borderColor"];
-                // animate from red to blue border ...
-                UIColor *currentBorderColor = [UIColor colorWithCGColor:((NCWordView *)v).embedView.layer.borderColor];
-                
-                
+            
                 color.fromValue = (id)[[[UIColor lightGrayColor] colorWithAlphaComponent:0.5f] CGColor];
                 color.toValue = (id)[[[UIColor lightGrayColor] colorWithAlphaComponent:0.0f] CGColor];
                 color.duration = 0.5f;
@@ -154,7 +157,6 @@
                 ((NCWordView *)v).embedView.layer.borderColor = [[[UIColor lightGrayColor] colorWithAlphaComponent:0.0f] CGColor];
             }
         }
-
     }
     
     if(newIndex >= 0 && newIndex < self.views.count)
@@ -165,6 +167,87 @@
             [self.delegate ltSlidingViewProtocolCurrentIndexChanged:newIndex];
         }
     }
+    
+    //protocol
+    //CGFloat pageWidth = self.scrollView.frame.size.width;
+    //CGFloat offset = self.scrollView.contentOffset.x;
+    
+    CGFloat percent = MIN(1,fabs((offset - self.beginOffset)/pageWidth));
+    
+    UIView* sourceView =self.views[self.currentIndex];
+    UIView* destView;
+    
+    int nextIndex = (offset - self.beginOffset)>0? self.currentIndex+1 :self.currentIndex-1;
+    if(nextIndex>=0 && nextIndex<self.views.count){
+        
+        destView = self.views[nextIndex];
+    }
+    SlideDirection direction = (offset - self.beginOffset>0)?right:left;
+    NSLog(@"new index = %i next index = %i", newIndex, nextIndex);
+    NSLog(@"self.currentIndex = %i", self.currentIndex);
+    if(newIndex != self.currentIndex)
+    {
+        if(self.animator)
+        {
+            if(abs(self.currentIndex-newIndex) > 1)
+            {
+                [self.animator updateSourceView:sourceView destinationView:destView withPercent:1.0f direction:direction];
+            }
+            else
+            {
+                [self.animator updateSourceView:sourceView destinationView:destView withPercent:1.0f direction:direction];
+            }
+            
+            NSLog(@"end decelerating percent 1.0f");
+        }
+    }
+    else
+    {
+
+        if(self.animator)
+        {
+            if(abs(newIndex-nextIndex) > 1)
+            {
+                [self.animator updateSourceView:sourceView destinationView:destView withPercent:0.0f direction:direction];
+            }
+            else
+            {
+                [self.animator updateSourceView:sourceView destinationView:destView withPercent:0.0f direction:direction];
+            }
+
+            NSLog(@"end decelerating percent 0.0f");
+        }
+
+    }
+    /*
+    SlideDirection direction = (offset - self.beginOffset>0)?right:left;
+    if(newIndex == 0 || newIndex == self.views.count-1)
+    {
+        if(newIndex == nextIndex)
+        {
+            [self.animator updateSourceView:sourceView destinationView:destView withPercent:1.0f direction:direction];
+        }
+        else
+        {
+            [self.animator updateSourceView:sourceView destinationView:destView withPercent:0.0f direction:direction];
+        }
+    }
+    else
+    {
+        if(abs(newIndex-self.currentIndex) > 1)
+        {
+            [self.animator updateSourceView:sourceView destinationView:destView withPercent:0.0f direction:direction];
+        }
+        else if(newIndex == nextIndex)
+        {
+            [self.animator updateSourceView:sourceView destinationView:destView withPercent:1.0f direction:direction];
+        }
+        else
+        {
+            [self.animator updateSourceView:sourceView destinationView:destView withPercent:1.0f direction:direction];
+        }
+    }*/
+    
 }
 
 

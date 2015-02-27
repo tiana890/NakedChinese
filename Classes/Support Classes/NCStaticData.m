@@ -23,8 +23,8 @@
     NSArray *pinyin = @[@"jǐayángjǜ", @"tóngzhì", @"lāla", @"xiǎojiě", @"biǎo zi", @"dǎfēijī",
                         @"shè", @"gāo cháo", @"yángwěi", @"bī", @"jībā", @"sèláng"];
     NSArray *russian = @[@"Фаллоимитатор", @"Гей", @"Лесбиянка", @"Проститутка", @"Шлюха", @"Мастурбировать", @"Кончить", @"Оргазм", @"Импотент", @"Пи*да", @"Х*й", @"Извращенец"];
-    NSArray *english = @[@"Dildo", @"Gay, Homosexual", @"Lesbian", @"Prostitute", @"Whore", @"Handjob",
-                         @"Cum", @"Orgasm", @"Impotent", @"Vagina", @"Dick", @"Pervert"];
+    NSArray *english = @[@"Dildo", @"Gay", @"Lesbian", @"Prostitute", @"Whore", @"Handjob",
+                         @"Cum", @"Orgasm", @"Impotent", @"C*nt", @"Dick", @"Pervert"];
     
     for(int i = 0; i < 12; i++)
     {
@@ -63,7 +63,7 @@
       @3:@[@"看着俩女孩穿成这样， 肯定是拉拉",
            @"你没机会跟她过夜，她是个拉拉，只喜欢女生",
            @"最近在地铁里两个拉拉亲亲是很正常的事情",
-           @"虽然现在的社会还不能接受同性恋，但最近同志和拉拉似乎越来越多",
+           @"虽然现在的社会还不能接受同性恋，但最近同志和拉拉似乎越来越多了",
            @"第一次见这两个女孩，我曾以为她们是拉拉，不过现在我知道了，她们只是很好的朋友"],
       
       @4:@[@"很多洗浴中心的按摩师都是小姐.",
@@ -75,7 +75,7 @@
       @5:@[@"这个婊子太不要脸了.",
            @"这个婊子跟你就是为了钱!",
            @"现在的学生也会去找鸡.",
-           @"她从小就是个妓女，已经根几百男人打跑了.",
+           @"她从小就是个妓女，已经跟几百男人打跑了.",
            @"你打这个电话号码， 给我们叫三个鸡."],
       
       @6:@[@"他妈妈进屋的时候，他正在打飞机.",
@@ -128,7 +128,7 @@
                                   @"В секс-шопах огромный выбор фаллоимитаторов, ты можешь выбрать любой.",
                                   @"Многие девушки считают, что искусственный пенис не способен сравниться с настоящим."],
                              
-                             @2:@[@"Не смотря на то, что традиционные словари дадут вам только одно значение для этого слова - “товарищ”, в последние годы это так же очень популярный сленг для обозначения гея. Дословно 同志 обозначает “иметь общие цели”, и потому используется преимущественно между геями. Когда люди традиционной сексуальной ориентации называют геев, то используются другие синонимы.\n\nСинонимы:\n同性恋者 tóngxìngliànzhě\n屁精 pìjīng (редко используется в настоящее время)\n玻璃 bōli (созвучно английскому “boy love”)",
+                             @2:@[@"Не смотря на то, что традиционные словари дадут вам только одно значение для этого слова - “товарищ”, в последние годы это так же очень популярный сленг для обозначения гея. Дословно 同志 обозначает “иметь общие цели”, и потому используется преимущественно между геями. Когда люди традиционной сексуальной ориентации называют геев, то используются другие синонимы.\n\nСинонимы:\n同性恋者 tóngxìngliànzhě\n屁精 pìjīng (редко используется в настоящее время)\n玻璃 bōli (созвучно английскому “boy love”)\n不是直男 búshìzhínán",
                                   @"Взгляни как тех двух парней влечёт друг к другу. По-любому, геи.",
                                   @"Моя сестрёнка сказала, что в её группе очень много геев, потому она все еще свободна.",
                                   @"В некоторых городах Америки геи могут официально вступить в брак.",
@@ -216,20 +216,15 @@
                                    @"Этому мужчине нравится лизать женское влагалище.",
                                    @"У неё между ног очень много волос."],
                              
-                             @11:@[@"Является сравнительно нейтральным словом обозначающим пенис. Это слово также может выступать в роли определения в значении “ох*енный”, к примеру：\n\
-                                   这是啥鸡吧东西？(Что за х*ета тут?)\n\
-                                   真鸡巴爽了。(Просто ох*енно)\n\
-                                   我太鸡巴累了。 (Я ох*енно устал)\n\nСинонимы:\n阴茎 или 阴径 yīnjīng, yīnjìng (официальный термин)\n阳具 yángjù\n阳道 yángdào\n鸡鸡 jījī (“детская“ версия от 鸡巴)\n小鸟  xiǎoniǎo (досл. “маленький птенчик”)\n小弟弟 xiǎo dìdì (досл. “маленький братец”)",
+                             @11:@[@"Является сравнительно нейтральным словом обозначающим пенис. Это слово также может выступать в роли определения в значении “ох*енный”, к примеру：\n这是啥鸡吧东西？(Что за х*ета тут?)\n真鸡巴爽了。(Просто ох*енно)\n我太鸡巴累了。(Я ох*енно устал)\n\nСинонимы:\n阴茎 или 阴径 yīnjīng, yīnjìng (официальный термин)\n阳具 yángjù\n阳道 yángdào\n鸡鸡 jījī (“детская“ версия от 鸡巴)\n小鸟  xiǎoniǎo (досл. “маленький птенчик”)\n小弟弟 xiǎo dìdì (досл. “маленький братец”)",
                                    @"У него такой большой пенис, что все друзья завидуют ему.",
                                    @"Не всем девушкам нравятся большие члены, потому как они боятся, что будет больно.",
                                    @"Парням с большими членами нелегко подобрать подходящие презервативы.",
                                    @"Многие считают, что у африканцев члены больше, чем у азиатов и европейцев.",
                                    @"Парни с маленькими членами могут чувствовать себя неуверенно, но большинство девушек не обращают внимание на размер."],
                              
-                             @12:@[@"Дословно переводится “цветной волк”.\
-                                   Синонимы:\
-                                   色鬼 sèguǐ",
-                                   @"Вчера вечером полиция поймала двух извращенцев",
+                             @12:@[@"Дословно переводится “цветной волк”.\nСинонимы:\n色鬼 sèguǐ",
+                                   @"Вчера вечером полиция поймала двух извращенцев.",
                                    @"Не надо вечермо гулять в одиночку, можно встретить извращенца.",
                                    @"Наш учитель извращенец. Во время урока постоянно пялится на девушек, и полностью игнорирует парней.",
                                    @"Обычные парни мне не интересны. Мне хочется, что бы моим парнем был извращенец, и тогда моя сексуальная жизнь точно станет интереснее.",
@@ -243,7 +238,7 @@
                                   @"There's a good choice of dildos in sex shops, you can pick any.",
                                   @"Many girls believe a dildo to be inferior to an actual penis."],
                              
-                             @2:@[@"Though traditional dictionaries translate this word as “comrade”, recently it’s a very popular slang for “gay”. Literally 同志 means “having the same goal”, so is usually used among gay men to call each other. When heterosexuals talk about homosexuals usually other synonyms are used.\n\nSynonyms:\n同性恋者 tóngxìngliànzhě\n玻璃 bōli (sounds like “boy love”)\n屁精 pìjīng (not very useful nowadays)\n不是直男 (lit. “not straight man”)",
+                             @2:@[@"Though traditional dictionaries translate this word as “comrade”, recently it’s a very popular slang for “gay”. Literally 同志 means “having the same goal”, so is usually used among gay men to call each other. When heterosexuals talk about homosexuals usually other synonyms are used.\n\nSynonyms:\n同性恋者 tóngxìngliànzhě\n玻璃 bōli (sounds like “boy love”)\n屁精 pìjīng (not very useful nowadays)\n不是直男 (lit. “not straight man”)\n不是直男 búshìzhínán",
                                   @"Look how intimate those two guys are. They are gay for sure.",
                                   @"My sister said there are too many gay men in her class, so she is still single.",
                                   @"In some parts of America homosexuals can legally marry.",
@@ -254,7 +249,7 @@
                                   @"Look at how those two girls dress, I am sure they are lesbians.",
                                   @"You have no chance of spending a night with her. She’s a lesbian, so only likes the girls.",
                                   @"Recently it’s quite normal to see two lesbians kissing on the subway.",
-                                  @"Though our society still doesn't really tolerate homosexuality, recently it there seems to be more and more lesbian and gay couples.",
+                                  @"Though our society still doesn't really tolerate homosexuality, 4. it seems to be more and more lesbian and gay couples.",
                                   @"When I first looked at those two girls I thought they were lesbians, but now I know they are just good friends."],
                              
                              
@@ -267,7 +262,7 @@
                              
                              @5:@[@"婊子 and its symonyms which listed below are more vulgar ways to say “prostitute” just like English “whore”. This word can be used to call a real prostitute as well as be just an abuse.\n\nSynonims:\n鸡 jī (literally “chick”, commonly used)\n妓女 jìnǚ\n娼妓 chāngjì\n援交妹 yuánjiāo mèi (more popular in the South of China)",
                                   @"That whore is shameless.",
-                                  @"That whore is with you just because of yout money!",
+                                  @"That whore is with you just because of your money!",
                                   @"Nowadays students also call prostutes.",
                                   @"She's been a prostitute since very young age, and f*cked with lots of men.",
                                   @"Call that number and let three chicks come for us."],
@@ -310,9 +305,7 @@
                                    @"She's got lots of hair between her legs."],
                              
                              @11:@[@"Relatively neutral word for penis. This word can also serve as a definition meaning “f*cking”. For example:\n\
-                                   这是啥鸡吧东西？(What the f*uck is that?)\n\
-                                   真鸡巴爽了。(It's f*cking awesome)\n\
-                                   我太鸡巴累了。 (I'm f*cking tired)\n\nSynonyms:\n阴茎 or 阴径 yīnjīng, yīnjìng (oficial term)\n阳具 yángjù\n阳道 yángdào\n鸡鸡 jījī  (“childish” version of 鸡巴)\n小鸟  xiǎoniǎo  (lit. “little bird”)\n小弟弟 xiǎo dìdì  (lit. “little brother”)",
+                                   这是啥鸡吧东西？(What the f*uck is that?)\n真鸡巴爽了。(It's f*cking awesome)\n我太鸡巴累了。(I'm f*cking tired)\n\nSynonyms:\n阴茎 or 阴径 yīnjīng, yīnjìng (oficial term)\n阳具 yángjù\n阳道 yángdào\n鸡鸡 jījī  (“childish” version of 鸡巴)\n小鸟  xiǎoniǎo  (lit. “little bird”)\n小弟弟 xiǎo dìdì  (lit. “little brother”)",
                                    @"His dick is really big and all his friends envy him.",
                                    @"Not all the girls like big cocks because it may hurt.",
                                    @"It's not easy for guys with big cocks to choose the right condom",

@@ -38,10 +38,8 @@
     
     [self loadPacks];
     
-    
     return YES;
 }
-
 
 #pragma mark - Data Manager methods
 - (void) initDB
