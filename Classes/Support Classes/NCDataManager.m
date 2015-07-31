@@ -80,6 +80,13 @@
     [[NSNotificationCenter defaultCenter] removeObserver:[NCDataManager sharedInstance]];
 }
 
+- (BOOL) ifInternetIsReachable
+{
+    if([[NCDataManager sharedInstance].internetMode isEqualToString:ONLINE_MODE])
+        return YES;
+    else
+        return NO;
+}
 
 #pragma mark first Launch Methods
 
@@ -89,7 +96,10 @@
     pack.ID = @1;
     pack.partition = @"sex";
     pack.paid = @1;
+    pack.downloaded = @1;
     [self.dbHelper setPackToDB:pack];
+    [self.dbHelper setPackDownloaded:pack];
+    [self.dbHelper setPackPaid:pack];
     [self.dbHelper setWordsToDB:[NCStaticData wordsArray] withImages:NO];
     [self.dbHelper setMaterialsToDB:[NCStaticData materialsArray] andExplanations:[NCStaticData explanationsArray]];
 }
@@ -189,8 +199,14 @@
         requester.delegate = self;
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
         [dict setObject:[NSNumber numberWithInt:packID] forKey:@"pack_id"];
-        //[requester requestPath:@"word" withParameters:dict isPOST:NO delegate:@selector(getWordsWithPackIDResponse:)];
         [requester backgroundRequest:@"word" withParameters:dict delegate:@selector(getWordsWithPackIDResponse:)];
+    }
+    else
+    {
+        if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolFailure:)])
+        {
+            [[NCDataManager sharedInstance].delegate ncDataManagerProtocolFailure:NSLocalizedString(@"internet_no_connection", nil)];
+        }
     }
 }
 
@@ -213,27 +229,36 @@
             [self performSelectorInBackground:@selector(getExplanationsWithWordID:) withObject:w.ID];
             
             NSString *imageURLString = [NSString stringWithFormat:@"%@%@", SERVER_ADDRESS, w.image];
-            //UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURLString]]];
-            NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-            NSString *pngFilePath = [NSString stringWithFormat:@"%@/%@",docDir, w.image];
+            
+            
+            NSString *appSupportDir = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject];
+            //If there isn't an App Support Directory yet ...
+            if (![[NSFileManager defaultManager] fileExistsAtPath:appSupportDir isDirectory:NULL]) {
+                NSError *error = nil;
+                //Create one
+                if (![[NSFileManager defaultManager] createDirectoryAtPath:appSupportDir withIntermediateDirectories:YES attributes:nil error:&error]) {
+                    NSLog(@"%@", error.localizedDescription);
+                }
+                else {
+                    // *** OPTIONAL *** Mark the directory as excluded from iCloud backups
+                    NSURL *url = [NSURL fileURLWithPath:appSupportDir];
+                    if (![url setResourceValue:@YES
+                                        forKey:NSURLIsExcludedFromBackupKey
+                                         error:&error])
+                    {
+                        NSLog(@"Error excluding %@ from backup %@", url.lastPathComponent, error.localizedDescription);
+                    }
+                    else {
+                        NSLog(@"Yay");
+                    }
+                }
+            }
+            
+            NSString *pngFilePath = [NSString stringWithFormat:@"%@/%@",appSupportDir, w.image];
             
             Requester *req = [[Requester alloc] init];
             req.delegate = self;
-            //NSLog(@"%i", w.ID.intValue);
             [req downloadTaskFromURL:imageURLString toFile:pngFilePath progressBarDelegate:@selector(getWordsWithPackIDProgressBarResponse:) andWordID:w.ID];
-            
-            
-            
-          /*
-            NSString *imageURLStringHalfBlur = [NSString stringWithFormat:@"%@%@", SERVER_ADDRESS, w.imageHalfBlur];
-            //UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURLString]]];
-            NSString *newPngFilePath = [NSString stringWithFormat:@"%@/%@",docDir, w.imageHalfBlur];
-            
-            Requester *req2 = [[Requester alloc] init];
-            req2.delegate = self;
-            //NSLog(@"%i", w.ID.intValue);
-            [req2 downloadTaskFromURL:imageURLStringHalfBlur toFile:newPngFilePath progressBarDelegate:nil andWordID:w.ID];
-         */
         }
         [self performSelectorInBackground:@selector(downloadPreviewImages:) withObject:wordArray];
     
@@ -251,29 +276,21 @@
     for(int i = 0; i < wordsArray.count; i++)
     {
         NCWord *w = wordsArray[i];
-        /*
-        NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-       
-        //UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURLString]]];
-        NSString *newPngFilePath = [NSString stringWithFormat:@"%@/%@",docDir, w.imageHalfBlur];
-         */
         Requester *req = [[Requester alloc] init];
         req.delegate = self;
-        //NSLog(@"%i", w.ID.intValue);
-         NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) objectAtIndex:0];
          NSString *imageURLStringHalfBlur = [NSString stringWithFormat:@"%@%@", SERVER_ADDRESS, [w.image stringByReplacingOccurrencesOfString:@".png" withString:@"_halfblur.png"]];
          NSString *newPngFilePath = [NSString stringWithFormat:@"%@/%@",docDir, [w.image stringByReplacingOccurrencesOfString:@".png" withString:@"_halfblur.png"]];
         [req downloadTaskFromURL:imageURLStringHalfBlur toFile:newPngFilePath progressBarDelegate:nil andWordID:w.ID];
         
     }
-
 }
 
 - (void) getWordsWithPackIDProgressBarResponse:(NSDictionary *) dict
 {
-    if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolGetWordsWithPackIDProgressBarDeltaValue:)])
+    if([[NCDataManager sharedInstance].productDownloadDelegate respondsToSelector:@selector(ncDataManagerProtocolGetWordsWithPackIDProgressBarDeltaValue:)])
     {
-        [[NCDataManager sharedInstance].delegate ncDataManagerProtocolGetWordsWithPackIDProgressBarDeltaValue:dict];
+        [[NCDataManager sharedInstance].productDownloadDelegate ncDataManagerProtocolGetWordsWithPackIDProgressBarDeltaValue:dict];
     }
 }
 
@@ -286,14 +303,12 @@
         requester.delegate = self;
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
         [dict setObject:wordID forKey:@"word_id"];
-        //[requester requestPath:@"explanation" withParameters:dict isPOST:NO delegate:@selector(getExplanationsWithWordIDResponse:)];
         [requester backgroundRequest:@"explanation" withParameters:dict delegate:@selector(getExplanationsWithWordIDResponse:)];
     }
 }
 
 - (void) getExplanationsWithWordIDResponse:(NSArray *)explanationsArray
 {
-    //NSLog(@"get explanation with word id response");
     NSMutableArray *materialsArray = [[NSMutableArray alloc] init];
     NSMutableArray *expArray = [[NSMutableArray alloc] init];
     for(NSDictionary *dict in explanationsArray)
@@ -340,6 +355,10 @@
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
         [dict setObject:[NSNumber numberWithInt:packID] forKey:@"pack_id"];
         [requester requestPath:@"word" withParameters:dict isPOST:NO delegate:@selector(getWordsWithPackIDPreviewResponse:)];
+    }
+    else
+    {
+        [self getWordsWithPackIDPreviewResponse:nil];
     }
 }
 
@@ -427,4 +446,24 @@
 {
     return [self.dbHelper ifPaidPack:pack];
 }
+
+- (void) setPackIsDownloaded:(NCPack *)pack
+{
+    [self.dbHelper setPackDownloaded:pack];
+}
+
+- (BOOL) ifPackDownloaded:(NCPack *) pack
+{
+    return [self.dbHelper ifPackDownloaded:pack];
+}
+
+#pragma mark Requester protocol methods
+- (void)requesterProtocolRequestFailure:(NSString *)failureDescription
+{
+    if([[NCDataManager sharedInstance].delegate respondsToSelector:@selector(ncDataManagerProtocolFailure:)])
+    {
+        [[NCDataManager sharedInstance].delegate ncDataManagerProtocolFailure:failureDescription];
+    }
+}
+
 @end

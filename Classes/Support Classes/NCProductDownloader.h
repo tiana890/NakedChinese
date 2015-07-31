@@ -16,15 +16,20 @@ UIKIT_EXTERN NSString *const NCProductDownloaderNotificationProductDownloaded;
 
 - (void) ncProductDownloaderProtocolProductDownloaded:(NCPack *)pack;
 - (void) ncProductDownloaderProtocolProductProgressPercentValue:(NSNumber *)number;
+- (void) ncProductDownloaderProtocolProductFailure:(NSString *)failureDescription;
 
 @end
 
 @interface NCProductDownloader : NSObject
 
 + (NCProductDownloader *) sharedInstance;
+- (void) addObserver:(id) observer;
+- (void) removeObserver:(id) observer;
 
 - (void) loadBoughtProduct:(NSString *)identifier;
+- (void) setProductIsBought:(NSString *)identifier;
 
 @property (nonatomic, weak) id<NCProductDownloaderProtocol> delegate;
+@property (nonatomic, retain) NSMutableSet *observers;
 
 @end

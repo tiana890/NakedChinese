@@ -55,7 +55,6 @@
              if([_delegate respondsToSelector:method])
              {
                  NSDictionary *d = responseObject;
-                 //NSLog(@"%@", responseObject);
                  [_delegate performSelector:method withObject:d];
              }
 
@@ -76,18 +75,7 @@
 {
     NSURL *baseURL = [NSURL URLWithString:SERVER_ADDRESS];
     NSURL *url = [NSURL URLWithString:pathString relativeToURL:baseURL];
-    //NSURL *url = [baseURL URLByAppendingPathComponent:filename];
-    //NSURLRequest *request = [NSURLRequest requestWithURL:url];
-
-    //NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:@"com.nakedchineseapp.nakedchinese.backgroundDownloadSession"];
-    /*
-        [[ downloadTaskWithRequest:request progress:nil destination:nil completionHandler:nil] resume];
-    
-    
-    NSURL *baseURL = [NSURL URLWithString:SERVER_ADDRESS];
-    NSURL *url = [NSURL URLWithString:pathString relativeToURL:baseURL];
-*/
-    
+       
     [[BackgroundSessionManager sharedManager] GET:url.absoluteString parameters:params success:^(NSURLSessionDataTask *task , id responseObject)
      {
          if([_delegate respondsToSelector:method])
@@ -99,12 +87,17 @@
          
      }failure:^(NSURLSessionDataTask *task , NSError *error )
      {
-         NSLog(@"Error %@", error.description);
-         if([_delegate respondsToSelector:@selector(requesterProtocolRequestFailure:)])
+         /*
+         NSLog(@"Error %@", error.debugDescription);
+         if(error)
          {
-             
-             [_delegate performSelector:@selector(requesterProtocolRequestFailure:) withObject:[self errorMessage:error]];
+             if([_delegate respondsToSelector:@selector(requesterProtocolRequestFailure:)])
+             {
+                 
+                 [_delegate performSelector:@selector(requesterProtocolRequestFailure:) withObject:[self errorMessage:error]];
+             }
          }
+          */
      }];
 }
 
@@ -119,7 +112,12 @@
         
         UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:targetPath]];
         NSData *data = [NSData dataWithData:UIImagePNGRepresentation(image)];
-        [data writeToFile:filePath atomically:YES];
+        NSError *error;
+        [@"" writeToFile:filePath atomically:YES
+                encoding:NSUTF8StringEncoding error:&error];
+        NSLog(@"WRITE ERROR: %@", error.description);
+        [data writeToURL:[self addSkipBackupAttributeToItemAtPath:filePath] atomically:YES];
+        NSLog(@"FILE PATH %@\n\n", filePath);
         
         NSNumber *wID = [NSNumber numberWithInt:[request valueForHTTPHeaderField:@"wordID"].intValue];
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
@@ -133,7 +131,16 @@
         return targetPath;
         
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
-        //NSLog(@"ERROR %@", error.description);
+        
+        if(error)
+        {
+            if([_delegate respondsToSelector:@selector(requesterProtocolRequestFailure:)])
+            {
+                [_delegate performSelector:@selector(requesterProtocolRequestFailure:) withObject:[self errorMessage:error]];
+            }
+
+        }
+            
     }];
     
     [[BackgroundSessionManager sharedManager] setDownloadTaskDidWriteDataBlock:^(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
@@ -222,5 +229,19 @@
     NSLog(@"%@", [error localizedFailureReason]);
     errorMessage = @"Ошибка при загрузке данных!";
     return errorMessage;
+}
+
+- (NSURL *)addSkipBackupAttributeToItemAtPath:(NSString *) filePathString
+{
+    NSURL* URL= [NSURL fileURLWithPath: filePathString];
+    //assert([[NSFileManager defaultManager] fileExistsAtPath: [URL path]]);
+    
+    NSError *error = nil;
+    BOOL success = [URL setResourceValue: [NSNumber numberWithBool: YES]
+                                  forKey: NSURLIsExcludedFromBackupKey error: &error];
+    if(!success){
+        NSLog(@"Error excluding %@ from backup %@", [URL lastPathComponent], error);
+    }
+    return URL;
 }
 @end

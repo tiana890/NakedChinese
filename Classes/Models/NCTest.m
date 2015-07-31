@@ -62,6 +62,12 @@
         NSIndexSet *notRightAnswersIndexSet = [self getRandomIndexSetOfArrayWithCount:(int)shuffledArray.count exceptIndex:[NSIndexSet indexSetWithIndex:j]];
         
         NSArray *notRightAnswerArray = [shuffledArray objectsAtIndexes:notRightAnswersIndexSet];
+        /*NSLog(@"right = %@", word.material.materialWord);
+        for(NCWord *w in notRightAnswerArray)
+        {
+            NSLog(@"wrong = %@", w.material.materialWord);
+        }*/
+        
         BOOL ifRightAnswerSet = NO;
         for(int i = 0; i < 4; i++)
         {
@@ -75,10 +81,15 @@
                 else
                 {
                     if(!ifRightAnswerSet)
+                    {
                         [question.answerArray addObject:((NCWord *)notRightAnswerArray[i]).material.materialWord];
+                        //NSLog(@"i = %i" ,i);
+                    }
                     else
                         [question.answerArray addObject:((NCWord *)notRightAnswerArray[i-1]).material.materialWord];
+                        //NSLog(@"i-1 = %i" ,i-1);
                 }
+               
             }
             else if(testType == NCTestTypeChineseLanguage)
             {
@@ -89,10 +100,13 @@
                 }
                 else
                 {
+                    
                     if(!ifRightAnswerSet)
                         [question.answerArray addObject:((NCWord *)notRightAnswerArray[i]).material.materialZH];
+                    
                     else
                         [question.answerArray addObject:((NCWord *)notRightAnswerArray[i-1]).material.materialZH];
+                    
                 }
             }
         }
@@ -103,22 +117,7 @@
     
     
     self.questionArray = questionArray;
-    /*
-    for(int i = 0; i < self.questionArray.count; i++)
-    {
-        NCQuestion *q = self.questionArray[i];
-        NSLog(@"***********************************");
-        NSLog(@"QUESTION %i", i);
-        NSLog(@"Word = %@", q.word);
-        for(int j = 0; j < q.answerArray.count; j++)
-        {
-            NSLog(@"Answer %i = %@", j, (NSString *)q.answerArray[j]);
-        }
-        
-        NSLog(@"right index = %i", (int)q.rightIndex.lastIndex);
-        NSLog(@"***********************************");
-    }
-     */
+    
     //возвращает количество слов в тесте
     return shuffledArray.count;
 }

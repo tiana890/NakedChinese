@@ -29,6 +29,8 @@
 #import "NCProductDownloader.h"
 #import "NCStaticPackIdentifier.h"
 
+#import "NCPartitionViewController.h"
+
 #import "NakedChinese-Swift.h"
 
 #import <UIKit/UIKit.h>
@@ -88,12 +90,8 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [NCProductDownloader sharedInstance].delegate = self;
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:IAPHelperProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:IAHelperProductNotPurchasedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ncProductDownloaderProtocolProductDownloaded:) name:NCProductDownloaderNotificationProductDownloaded object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ncProductDownloaderProtocolProductProgressPercentValue:) name:NCProductDownloaderNotificationProgressBarValue object:nil];
     
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     
@@ -102,16 +100,23 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     [indicator startAnimating];
     [indicator setTag:1234];
     [self.view addSubview:indicator];
-
+    
     [self disableBlurView];
     
     switch ([self type]) {
         case NCPackControllerOfNumber:
         {
             [NCDataManager sharedInstance].delegate = self;
-            if([self.pack.paid isEqualToNumber:@1])
+            if(self.pack.paid.intValue == 1 && self.pack.downloaded.intValue == 1)
             {
                 [[NCDataManager sharedInstance] getLocalWordsWithPackID:self.pack.ID];
+            }
+            else if(self.pack.paid.intValue == 1 && self.pack.downloaded.intValue == 0)
+            {
+                [[self.view viewWithTag:1234] removeFromSuperview];
+                //Загрузка пакета
+                NSString *identifier = [NCStaticPackIdentifier getProductIdentifierByPackID:self.pack.ID.intValue];
+                [self downloadProductWithIdentifier:identifier];
             }
             else
             {
@@ -129,9 +134,16 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
             break;
     }
     [self updateNavigationItemsIfNeeded];
-    
-
 }
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NCProductDownloader sharedInstance] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self disableBlurView];
+}
+
 
 - (void)updateNavigationItemsIfNeeded
 {
@@ -147,34 +159,19 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
-- (IBAction)popToPartitionControllerAction:(id)sender {
-    [self.navigationController popToRootViewControllerAnimated:YES];
-}
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self disableBlurView];
+- (IBAction)popToPartitionControllerAction:(id)sender
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark getter
 - (NSMutableArray *)searchArrayOfWords
 {
     if(!_searchArrayOfWords) _searchArrayOfWords = [[NSMutableArray alloc] init];
-    
         return _searchArrayOfWords;
 }
 
-- (void)setPack:(NCPack *)pack
-{
-    _pack = pack;
-    BOOL ifPaid = [[NCDataManager sharedInstance] ifPaidPack:pack];
-    if(ifPaid)
-    {
-        _pack.paid = @1;
-    }
-}
 #pragma  mark DataManager Protocol methods
 
 - (void)ncDataManagerProtocolGetLocalWordsWithPackID:(NSArray *)arrayOfWords
@@ -191,8 +188,20 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     [[self.view viewWithTag:1234] removeFromSuperview];
     [self.collectionView setHidden:NO];
     
-    self.arrayOfWords = arrayOfWords;
-    [self.collectionView reloadData];
+    if(arrayOfWords.count > 0)
+    {
+        self.arrayOfWords = arrayOfWords;
+        [self.collectionView reloadData];
+    }
+    else
+    {
+        NSMutableArray *tempArray = [[NSMutableArray alloc] init];
+        for(int i = 0; i < 12; i++)
+        {
+            [tempArray addObject:[[NCWord alloc] init]];
+        }
+        self.arrayOfWords = [tempArray copy];
+    }
 }
 
 - (void)ncDataManagerProtocolGetFavorites:(NSArray *)arrayOfFavorites
@@ -209,9 +218,32 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     [self.searchArrayOfWords addObjectsFromArray:arrayOfWords];
     [self.searchCollectionView reloadData];
 }
+
+- (void) ncDataManagerProductProtocolFailure:(NSString *)message
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alert show];
+}
+
+- (void)ncProductDownloaderProtocolProductFailure:(NSString *)failureDescription
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:failureDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alert show];
+}
 #pragma mark - IBActions
 
 - (IBAction)goBack:(id)sender {
+    if(self.type != NCPackControllerOfFavorite)
+    {
+        for(UIViewController *c in self.navigationController.childViewControllers)
+        {
+            if([c isKindOfClass:[NCPartitionViewController class]])
+            {
+                [(NCPartitionViewController *)c changePack:self.pack];
+            }
+        }
+    }
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -225,7 +257,6 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     self.navigationController.navigationBar.hidden = NO;
     [UIView animateWithDuration:SearchCollectionViewAnimationDuration animations:^{
         self.navigationController.navigationBar.alpha = 1;
-        
         self.searchBlurView.alpha = 0;
         self.searchBlurView.blurRadius = 0;
     } completion:^(BOOL finished) {
@@ -258,7 +289,6 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 - (void)startSearch {
     [self.searchArrayOfWords removeAllObjects];
     [self.searchBar setText:@""];
-    
     [self.searchCollectionView reloadData];
     self.searchBlurView.blurEnabled = YES;
     [self showSearchCollectionViewWithCompletion:^{
@@ -270,7 +300,6 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     self.searchBlurView.blurEnabled = NO;
     [self.searchBar resignFirstResponder];
     [self hideSearchCollectionViewWithCompletion:nil];
-
 }
 
 - (void)disableBlurView {
@@ -302,8 +331,8 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 
 #pragma mark - UICollectionViewDataSource
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
     if(collectionView == self.collectionView)
     {
         switch ([self type]) {
@@ -326,8 +355,8 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     return 0;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
     if(collectionView == self.collectionView)
     {
         switch ([self type]) {
@@ -389,6 +418,10 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
                             
                         }];
                     }
+                    else
+                    {
+                        [lockCell.pictureView setImage:[UIImage imageNamed:@"default"]];
+                    }
                     
                     return lockCell;
                 }
@@ -419,7 +452,6 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
                 [openCell.pinyinLabel setText:word.material.materialZH_TR];
                 openCell.blurView.blurRadius = 10.0f;
                 openCell.blurView.dynamic = YES;
-                //NSString *str = [self cutFirstWord:word.material.materialWord];
                 [openCell.translateLabel setText:word.material.materialWord];
                 return openCell;
                 
@@ -448,36 +480,17 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
         
         [openCell.chineseLabel setText:word.material.materialZH];
         [openCell.pinyinLabel setText:word.material.materialZH_TR];
-        NSString *str = [self cutFirstWord:word.material.materialWord];
-        [openCell.translateLabel setText:str];
+        [openCell.translateLabel setText:word.material.materialWord];
         return openCell;
     }
     return nil;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView willDisplaySupplementaryView:(UICollectionReusableView *)view forElementKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath
-{
-    
-}
-
-- (NSString *) cutFirstWord:(NSString *) str
-{
-    NSArray * words = [str componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    for (NSString * word in words)
-    {
-        return word;
-    }
-    return str;
-}
 
 #pragma mark - UICollectionViewDelegate
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    /*
-    if (collectionView == [self searchCollectionView]) {
-        [self cancelSearch];
-    }*/
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
     if(collectionView == self.collectionView)
     {
         if ([self.pack.paid isEqualToNumber:@1]) {
@@ -485,7 +498,15 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
         }
         else
         {
-            [self reload];
+            if([[NCDataManager sharedInstance] ifInternetIsReachable])
+            {
+                [self reload];
+            }
+            else
+            {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"internet_no_connection", nil) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+            }
             
         }
     }
@@ -497,7 +518,8 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 }
 
 
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
     if (scrollView == [self collectionView]) {
         self.navigationBlurView.blurEnabled = NO;
     }
@@ -505,11 +527,13 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
 
 #pragma mark - UISearchBarDelegate
 
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
     [self cancelSearch];
 }
 
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
     self.searchCollectionView.contentInset = UIEdgeInsetsMake(0, 0, KeyboardHeight, 0);
 }
 
@@ -541,11 +565,9 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
                 packViewController.ifFavorite = YES;
                 break;
             }
-            
             default:
                 break;
         }
-    
     }
     else
     {
@@ -558,37 +580,40 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     
 }
 
-
 //Enable blur effect before scrolls
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
     if (scrollView == [self collectionView]) {
         self.navigationBlurView.blurEnabled = YES;
-        
-        
     }
 }
 
 #pragma mark In-App Purchases
 - (void)reload {
-        _products = nil;
-        [[NCIAHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success, NSArray *products) {
-            if (success) {
-                _products = products;
-                NSString *identifier = [NCStaticPackIdentifier getProductIdentifierByPackID:self.pack.ID.intValue];
-                SKProduct *product = [[SKProduct alloc] init];
-                for(SKProduct *p in _products)
+    _products = nil;
+    [[NCIAHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success, NSArray *products) {
+        if (success) {
+            _products = products;
+            NSString *identifier = [NCStaticPackIdentifier getProductIdentifierByPackID:self.pack.ID.intValue];
+            SKProduct *product = [[SKProduct alloc] init];
+            for(SKProduct *p in _products)
+            {
+                if([p.productIdentifier isEqualToString:identifier])
                 {
-                    if([p.productIdentifier isEqualToString:identifier])
-                    {
-                        product = p;
-                        self.prod = p;
-                    }
+                    product = p;
+                    self.prod = p;
                 }
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:product.localizedDescription delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-                [alert setTag:1];
-                [alert show];
             }
-        }];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:product.localizedDescription delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+            [alert setTag:1];
+            [alert show];
+        }
+        else
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"products_failed_load_list", nil) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alert show];
+        }
+    }];
     
 }
 
@@ -604,7 +629,6 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
     }
 }
 
-
 - (void)productPurchased:(NSNotification *)notification {
     if([notification.name isEqualToString:IAPHelperProductPurchasedNotification])
     {
@@ -614,154 +638,61 @@ const NSTimeInterval SearchCollectionViewAnimationDuration = 0.3;
                 
                 *stop = YES;
                 [NCProductDownloader sharedInstance].delegate = self;
-                
-                //[self performSelectorInBackground:@selector(downloadProductWithIdentifier:) withObject:productIdentifier];
                 [self downloadProductWithIdentifier:productIdentifier];
                 
             }
         }];
     }
-    /*
-    else if([notification.name isEqualToString:IAHelperProductNotPurchasedNotification])
-    {
-        
-        NSString *str = (NSString *)notification.object;
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:str delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-        [alert show];
-    }
-  */
 }
+
 
 - (void) downloadProductWithIdentifier:(NSString *) identifier
 {
-    //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.razeware.imagegrabber.bgqueue", NULL);
+    [[NCProductDownloader sharedInstance] addObserver:self];
     self.collectionView.hidden = YES;
-    //self.progress.hidden = NO;
     self.progressCount = 0.0f;
     [self setupCircularProgress];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            [[NCProductDownloader sharedInstance] loadBoughtProduct:identifier];
+        [[NCProductDownloader sharedInstance] loadBoughtProduct:identifier];
         
     });
     self.collectionView.userInteractionEnabled = YES;
-    
 }
+
 #pragma mark NCProductDownloaderProtocol
 - (void)ncProductDownloaderProtocolProductDownloaded:(NCPack*)pack
 {
     self.pack = pack;
     self.pack.paid = @1;
+    self.pack.downloaded = @1;
     dispatch_async(dispatch_get_main_queue(), ^{
-        //self.progress.hidden = YES;
-        //UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        
-        //CGRect mainFrame = [[UIScreen mainScreen] bounds];
-        //[indicator setFrame:CGRectMake(mainFrame.size.width/2-indicator.frame.size.width/2, 140, indicator.frame.size.width, indicator.frame.size.height)];
-        //[indicator startAnimating];
-        //[indicator setTag:1234];
-        //[self.view addSubview:indicator];
+
         [self performSelectorOnMainThread:@selector(updateProgress:) withObject:@100 waitUntilDone:YES];
         [self.circularProgress removeFromSuperview];
         [self.textLabel removeFromSuperview];
-        [self.collectionView reloadData];
+        self.collectionView.hidden = NO;
+        //[self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+        //[self.collectionView reloadData];
+        [NCDataManager sharedInstance].delegate = self;
+        [[NCDataManager sharedInstance] getLocalWordsWithPackID:self.pack.ID];
         
         [[self.view viewWithTag:1234] removeFromSuperview];
-        
-        self.collectionView.hidden = NO;
-        //self.progress.progress = 0.0f;
     });
     
 }
 
+
 - (void)ncProductDownloaderProtocolProductProgressPercentValue:(NSNumber *)number
 {
+    if(!self.circularProgress)
+    {
+        [self performSelectorOnMainThread:@selector(setupCircularProgress) withObject:nil waitUntilDone:NO];
+    }
     self.collectionView.hidden = YES;
-    //[self updateProgress:number.floatValue];
     [self performSelectorOnMainThread:@selector(updateProgress:) withObject:number waitUntilDone:NO];
-    //self.progress.hidden = NO;
-    //[self performSelectorOnMainThread:@selector(updateProgressView:) withObject:number waitUntilDone:NO];
-    //NSLog(@"Loading ... %f", number.floatValue);
-}
-
-- (void) updateProgressView:(NSNumber *)value
-{
-    NSLog(@"Loading ... %f", value.floatValue);
-    [self.progress setProgress:value.floatValue/100 animated:YES];
-    
-    
 }
 
 #pragma mark Progress
-/*
-func setupKYCircularProgress1() {
-    circularProgress1 = KYCircularProgress(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2))
-    let center = (CGFloat(160.0), CGFloat(200.0))
-    circularProgress1.path = UIBezierPath(arcCenter: CGPointMake(center.0, center.1), radius: CGFloat(circularProgress1.frame.size.width/3.0), startAngle: CGFloat(M_PI), endAngle: CGFloat(0.0), clockwise: true)
-    circularProgress1.lineWidth = 8.0
-    
-    let textLabel = UILabel(frame: CGRectMake(self.view.frame.size.width/2 - 30.0, 170.0, 80.0, 32.0))
-    textLabel.font = UIFont(name: "HelveticaNeue-UltraLight", size: 32)
-    textLabel.textAlignment = .Center
-    textLabel.textColor = circularProgress1.colorHex(0xA6E39D)
-    textLabel.backgroundColor = UIColor.clearColor()
-    self.view.addSubview(textLabel)
-    
-    circularProgress1.progressChangedBlock({ (progress: Double, circular: KYCircularProgress) in
-        println("progress: \(progress)")
-        textLabel.text = "\(Int(progress * 100.0))%"
-    })
-    
-    self.view.addSubview(circularProgress1)
-}*/
-
-/*
- func updateProgress() {
- progress = progress &+ 1
- let normalizedProgress = Double(progress) / 255.0
- 
- circularProgress1.progress = normalizedProgress
- circularProgress2.progress = normalizedProgress
- circularProgress3.progress = normalizedProgress
- }
- */
-/*
-- (void) setupCircularProgress
-{
-    self.circularProgress = [[KYCircularProgress alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height/2)];
-    CGPoint center = CGPointMake(self.view.frame.size.width/2, 200.0f);
-    self.circularProgress.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(center.x, center.y) radius:self.circularProgress.frame.size.width/3.0f startAngle:M_PI endAngle:0.0f clockwise:YES];
-    self.circularProgress.lineWidth = 8.0f;
-    
-    self.textLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-40.0f, 170.0f, 80.0f, 32.0f)];
-    NSLog(@"%@", NSStringFromCGRect(self.textLabel.frame));
-    self.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:32.0f];
-    self.textLabel.textAlignment = NSTextAlignmentCenter;
-    self.textLabel.textColor = [UIColor lightGrayColor];
-    self.textLabel.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:self.textLabel];
-    
-    [self.circularProgress progressChangedBlock:^(double progress, KYCircularProgress *circular) {
-       dispatch_async(dispatch_get_main_queue(), ^{
-           int result = progress * 100;
-           [self.textLabel setText:[NSString stringWithFormat:@"%i%%", result]];
-       });
-        
-    }];
-     
-    [self.view addSubview:self.circularProgress];
-}
- */
-/*
-func setupKYCircularProgress2() {
-    circularProgress2 = KYCircularProgress(frame: CGRectMake(0, circularProgress1.frame.size.height, self.view.frame.size.width/2, self.view.frame.size.height/3))
-    circularProgress2.colors = [circularProgress2.colorHex(0xA6E39D).CGColor!,
-                                circularProgress2.colorHex(0xAEC1E3).CGColor!,
-                                circularProgress2.colorHex(0xE1A5CB).CGColor!,
-                                circularProgress2.colorHex(0xF3C0AB).CGColor!
-                                ]
-    
-    self.view.addSubview(circularProgress2)
-}*/
 
 - (void) setupCircularProgress
 {
@@ -773,12 +704,6 @@ func setupKYCircularProgress2() {
     frame.origin.y = 100.0f;
     
     self.circularProgress = [[KYCircularProgress alloc] initWithFrame:frame];
-    
-   /* NSArray *colorsArray = @[(id)[UIColor colorWithRed:166.0f/255.0f green:227.0f/255.0f blue:157.0f/255.0f alpha:1.0f].CGColor,
-                             (id)[UIColor colorWithRed:174.0f/255.0f green:193.0f/255.0f blue:227.0f/255.0f alpha:1.0f].CGColor,
-                             (id)[UIColor colorWithRed:225.0f/255.0f green:165.0f/255.0f blue:203.0f/255.0f alpha:1.0f].CGColor,
-                             (id)[UIColor colorWithRed:243.0f/255.0f green:192.0f/255.0f blue:171.0f/255.0f alpha:1.0f].CGColor];
-    */
     NSArray *colorsArray = @[(id)[UIColor redColor].CGColor,
                              (id)[UIColor redColor].CGColor,
                              (id)[UIColor redColor].CGColor,
@@ -786,7 +711,6 @@ func setupKYCircularProgress2() {
     
     self.circularProgress.colors = colorsArray;
     [self.view addSubview:self.circularProgress];
-    
     self.textLabel = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + frame.size.width/2, frame.origin.y + frame.size.height/2, 70.0f, 30.0f)];
     [self.textLabel setCenter:self.circularProgress.center];
     self.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:28.0f];
@@ -795,21 +719,17 @@ func setupKYCircularProgress2() {
     self.textLabel.backgroundColor = [UIColor clearColor];
     [self.textLabel setText:@"0%"];
     [self.view addSubview:self.textLabel];
-
 }
 
 - (void) updateProgress:(NSNumber *)number
 {
-    //NSLog(@"%f", self.progressCount);
     float delta = (number.floatValue/100 - self.progressCount)/100;
-    
     
     for(int i = 0; i < 100; i++)
     {
         self.circularProgress.progress = self.progressCount + delta;
         self.progressCount += delta;
     }
-    //self.circularProgress.progress = number.floatValue/100;
     self.progressCount = number.floatValue/100;
     [self.textLabel setText:[NSString stringWithFormat:@"%i%%", number.intValue]];
 }

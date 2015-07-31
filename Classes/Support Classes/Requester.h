@@ -17,7 +17,7 @@
 
 @interface Requester : NSObject
 
-@property (nonatomic, strong) id<RequesterProtocol> delegate;
+@property (nonatomic, weak) id<RequesterProtocol> delegate;
 - (void) requestPath:(NSString*)pathString withParameters:(NSDictionary*) params isPOST:(BOOL) isPost delegate:(SEL) method;
 - (void) backgroundRequest:(NSString *)pathString withParameters:(NSDictionary *) params delegate:(SEL) method;
 - (void) downloadTaskFromURL:(NSString *)url toFile:(NSString *)filePath progressBarDelegate:(SEL)method andWordID:(NSNumber *) wordID;

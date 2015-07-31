@@ -17,7 +17,7 @@
 
 #define SERVER_ADDRESS @"http://www.nakedchineseapp.com/api/get/"
 
-@interface NCProductDownloader()<NCDataManagerProtocol>
+@interface NCProductDownloader()<NCDataManagerProtocol, NCDataManagerProductDownloadProtocol>
 @property (nonatomic, strong) NCPack *pack;
 @property (nonatomic, strong) NSMutableDictionary *percentDict;
 @property (nonatomic, strong) NSNumber *summ;
@@ -31,6 +31,7 @@
     static dispatch_once_t predicate;
     dispatch_once( &predicate, ^{
         sProductDownloader = [ [ self alloc ] init ];
+        sProductDownloader.observers = [[NSMutableSet alloc] init];
     } );
     return sProductDownloader;
 }
@@ -53,30 +54,19 @@
     NCPack *pack = [NCStaticPackIdentifier getPackByProductIdentifier:identifier];
     pack.paid = @1;
     [NCDataManager sharedInstance].delegate = self;
+    [NCDataManager sharedInstance].productDownloadDelegate = self;
     [[NCDataManager sharedInstance] getWordsWithPackID:pack.ID.intValue];
     [[NCDataManager sharedInstance] setPackIsPaid:pack];
     self.pack = pack;
+    [self.percentDict removeAllObjects];
 }
 
 #pragma mark NCDataManagerProtocol methods
-- (void)ncDataManagerProtocolGetLocalPacks:(NSArray *)arrayOfPacks
-{
-    
-}
 
 - (void)ncDataManagerProtocolGetWordsWithPackIDProgressBarDeltaValue:(NSDictionary *) dict
 {
-    /*
-     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-     [dict setObject:wordID forKey:@"wordID"];
-     NSNumber *bytesPercentage = [NSNumber numberWithFloat:(float)totalBytesWritten/(float)totalBytesExpectedToWrite];
-     [dict setObject:bytesPercentage forKey:@"percent"];
-     [_delegate performSelector:method withObject:dict];
-     */
-    
     NSNumber *wordID = [dict objectForKey:@"wordID"];
     NSNumber *percentage = [dict objectForKey:@"percent"];
-    //NSLog(@"percentage = %f", percentage.floatValue);
     [self.percentDict setObject:percentage forKey:wordID];
     
     float sum = 0;
@@ -85,18 +75,24 @@
         sum += num.floatValue;
         
     }
-    if([self.delegate respondsToSelector:@selector(ncProductDownloaderProtocolProductProgressPercentValue:)])
+    for(id obj in self.observers.allObjects)
     {
-        [self.delegate ncProductDownloaderProtocolProductProgressPercentValue:[NSNumber numberWithFloat:(100*sum/12)]];
-        //[[NSNotificationCenter defaultCenter] postNotificationName:NCProductDownloaderNotificationProgressBarValue object:[NSNumber numberWithFloat:(100*sum/12)] userInfo:nil];
-    }
-    if(sum >= 12.0f)
-    {
-        [self.percentDict removeAllObjects];
-        if([self.delegate respondsToSelector:@selector(ncProductDownloaderProtocolProductDownloaded:)])
+        if([obj respondsToSelector:@selector(ncProductDownloaderProtocolProductProgressPercentValue:)])
         {
-            [self.delegate ncProductDownloaderProtocolProductDownloaded:self.pack];
-            //[[NSNotificationCenter defaultCenter] postNotificationName:NCProductDownloaderNotificationProductDownloaded object:nil];
+            [obj ncProductDownloaderProtocolProductProgressPercentValue:[NSNumber numberWithFloat:(100*sum/12)]];
+        }
+    }
+    for(id obj in self.observers.allObjects)
+    {
+        if(sum >= 12.0f)
+        {
+            [self.percentDict removeAllObjects];
+             [[NCDataManager sharedInstance] setPackIsDownloaded:self.pack];
+            if([obj respondsToSelector:@selector(ncProductDownloaderProtocolProductDownloaded:)])
+            {
+               
+                [obj ncProductDownloaderProtocolProductDownloaded:self.pack];
+            }
         }
     }
 }
@@ -104,11 +100,42 @@
 - (void)ncDataManagerProtocolGetWordsWithPackID:(NSArray *)arrayOfWords
 {
     [[NCDataManager sharedInstance] setPackIsPaid:self.pack];
-    /*
-    if([self.delegate respondsToSelector:@selector(ncProductDownloaderProtocolProductDownloaded:)])
+}
+
+
+- (void)ncDataManagerProtocolFailure:(NSString *)message
+{
+    for(id obj in self.observers.allObjects)
     {
-        [self.delegate ncProductDownloaderProtocolProductDownloaded:self.pack];
+        [self.percentDict removeAllObjects];
+        
+        if([obj respondsToSelector:@selector(ncProductDownloaderProtocolProductFailure:)])
+        {
+            [obj ncProductDownloaderProtocolProductFailure:message];
+        }
+        
     }
-     */
+}
+- (void)addObserver:(id)observer
+{
+    if(![self.observers containsObject:observer])
+    {
+        [self.observers addObject:observer];
+    }
+}
+
+- (void)removeObserver:(id)observer
+{
+    if([self.observers containsObject:observer])
+    {
+        [self.observers removeObject:observer];
+    }
+}
+
+- (void) setProductIsBought:(NSString *)identifier
+{
+    NCPack *pack = [NCStaticPackIdentifier getPackByProductIdentifier:identifier];
+    pack.paid = @1;
+    [[NCDataManager sharedInstance] setPackIsPaid:pack];
 }
 @end

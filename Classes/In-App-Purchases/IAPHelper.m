@@ -14,6 +14,8 @@
 NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurchasedNotification";
 NSString *const IAHelperProductNotPurchasedNotification = @"IAHelperProductNotPurchasedNotification";
 NSString *const IAPHelperProductPurchasedFailedTransactionNotification = @"IAPHelperProductPurchasedFailedTransactionNotification";
+NSString *const IAPHelperProductRestoreNotification = @"IAPHelperProductRestoreNotification";
+NSString *const IAPHelperProductRestoreFailNotification = @"IAPHelperProductRestoreFailNotification";
 // 2
 @interface IAPHelper () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
@@ -163,7 +165,7 @@ NSString *const IAPHelperProductPurchasedFailedTransactionNotification = @"IAPHe
 {
     NSLog(@"%@",queue );
     NSLog(@"Restored Transactions are once again in Queue for purchasing %@",[queue transactions]);
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:IAPHelperProductRestoreNotification object:nil userInfo:nil];
     NSMutableArray *purchasedItemIDs = [[NSMutableArray alloc] init];
     NSLog(@"received restored transactions: %i", queue.transactions.count);
     
@@ -173,10 +175,12 @@ NSString *const IAPHelperProductPurchasedFailedTransactionNotification = @"IAPHe
         NSLog (@"product id is %@" , productID);
         // here put an if/then statement to write files based on previously purchased items
         // example if ([productID isEqualToString: @"youruniqueproductidentifier]){write files} else { nslog sorry}
-        dispatch_async(dispatch_queue_create("com.nakedchineseapp.nakedchinese.background_thread", NULL), ^{
+        /*dispatch_async(dispatch_queue_create("com.nakedchineseapp.nakedchinese.background_thread", NULL), ^{
             [[NCProductDownloader sharedInstance] loadBoughtProduct:productID];
         });
+        */
         
+        [[NCProductDownloader sharedInstance] setProductIsBought:productID];
     }
 }
 
@@ -185,6 +189,7 @@ NSString *const IAPHelperProductPurchasedFailedTransactionNotification = @"IAPHe
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error
 {
     NSLog(@"Restore completed transaction failed with error: %@", error);
+    [[NSNotificationCenter defaultCenter] postNotificationName:IAPHelperProductRestoreFailNotification object:nil userInfo:nil];
 }
 
 - (void)provideContentForProductIdentifier:(NSString *)productIdentifier {

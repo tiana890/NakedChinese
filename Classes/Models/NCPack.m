@@ -37,6 +37,20 @@
         pack.paid = @0;
     }
     
+    if([jsonDict objectForKey:@"downloaded"] != [NSNull null])
+    {
+        pack.downloaded = [jsonDict objectForKey:@"downloaded"];
+        if(pack.downloaded == nil)
+        {
+            pack.downloaded = @0;
+        }
+    }
+    else
+    {
+        pack.downloaded = @0;
+    }
+
+    
     return pack;
 }
 
@@ -47,8 +61,10 @@
     pack.ID = [object valueForKey:@"id"];
     pack.partition = [object valueForKey:@"partition"];
     pack.paid = [object valueForKey:@"paid"];
-    
+    pack.downloaded = [object valueForKey:@"downloaded"];
+    NSLog(@"pack ID = %i, downloaded = %i, paid = %i", pack.ID.intValue, pack.downloaded.intValue, pack.paid.intValue);
     return pack;
 }
+
 
 @end

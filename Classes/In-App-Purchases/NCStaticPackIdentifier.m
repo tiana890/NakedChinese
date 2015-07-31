@@ -15,12 +15,12 @@
     //slang
     if(packID == 19)
     {
-        return @"com.nakedchineseapp.nakedchinese.product.packslangone";
+        return @"com.nakedchineseapp.nakedchinese.slang1";
     }
     //swear
     else if(packID == 20)
     {
-        return @"com.nakedchineseapp.nakedchinese.product.packswearone";
+        return @"com.nakedchineseapp.nakedchinese.swear1";
     }
     //sex - 2
     else if(packID == 18)
@@ -36,13 +36,13 @@
     NCPack *pack = [[NCPack alloc] init];
     
     //slang
-    if([identifier isEqualToString:@"com.nakedchineseapp.nakedchinese.product.packslangone"])
+    if([identifier isEqualToString:@"com.nakedchineseapp.nakedchinese.slang1"])
     {
         pack.partition = @"slang";
         pack.ID = @19;
     }
     //swear
-    else if([identifier isEqualToString:@"com.nakedchineseapp.nakedchinese.product.packswearone"])
+    else if([identifier isEqualToString:@"com.nakedchineseapp.nakedchinese.swear1"])
     {
         pack.partition = @"swear";
         pack.ID = @20;

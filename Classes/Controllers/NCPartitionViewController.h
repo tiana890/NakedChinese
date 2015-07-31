@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NCPack.h"
 
 #import "NCInteractionView.h"
 
 @interface NCPartitionViewController : UIViewController
 
+- (void) changePack:(NCPack *)pack;
 @end

@@ -65,7 +65,7 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
 
 @property (strong, nonatomic) NCDataManager *dataManager;
 
-@property (nonatomic, strong) NSArray *packsArray;
+@property (nonatomic, strong) NSMutableArray *packsArray;
 @property (nonatomic) NSArray *currentPartition;
 
 @property (nonatomic, strong) NSMutableArray *numbersAndPacks;
@@ -104,6 +104,8 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
     [self.navigationItem setHidesBackButton:YES];
     
     self.tabBar.delegate = self;
+    
+    self.partitionSegmentedControl.selectedSegmentIndex = UISegmentedControlNoSegment;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -112,14 +114,14 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
     [self hideBarLine];
     [self disableBlurViews];
     
-    self.currentPartition = @[@"sex", @"swear", @"slang"];
+    //self.currentPartition = @[@"sex", @"swear", @"slang"];
     
     NCAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     appDelegate.delegate = self;
     
     self.dataManager = [NCDataManager sharedInstance];
     self.dataManager.delegate = self;
-    
+    [self.dataManager getLocalPacks];
 }
 
 - (void)appDelegateHandleURLProtocolOpenJokeItemWithNumber:(int)number
@@ -128,19 +130,6 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
     NCJokesViewController *jc = [self.storyboard instantiateViewControllerWithIdentifier:@"jokesViewController"];
     jc.jokeNumber = [NSNumber numberWithInt:number];
     jc.fromAppDelegate = YES;
-    
-    //[self performSegueWithIdentifier:NCJokesControllerSegueIdentifier sender:@{@"key":NCAppDelegateKey,@"number":[NSNumber numberWithInt:number]}];
-    //NCJokesViewController *jc = [self.storyboard instantiateViewControllerWithIdentifier:@"jokesViewController"];
-    //UIStoryboardSegue *segue = [[UIStoryboardSegue alloc] initWithIdentifier:NCJokesControllerSegueIdentifier source:self destination:jc];
-    //[self prepareForSegue:segue sender:@{@"key":NCAppDelegateKey,@"number":[NSNumber numberWithInt:number]}];
-    //[segue perform];
-    //UIStoryboard *storyboard = self.storyboard;
-    //NCJokesViewController *jc = [storyboard instantiateViewControllerWithIdentifier:@"jokesViewController"];
-    //jc.jokeNumber = [NSNumber numberWithInt:number];
-    //jc.fromAppDelegate = YES;
-    //[self.navigationController pushViewController:jc animated:YES];
-    //[self.navigationController presentViewController:jc animated:YES completion:nil];
-    //[self performSegueWithIdentifier:NCJokesControllerSegueIdentifier sender:@{@"key":NCAppDelegateKey,@"number":[NSNumber numberWithInt:number]}];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -148,13 +137,20 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
     [self disableBlurViews];
 }
 
-
-
 #pragma mark - Getters&Setters
 - (NSArray *)packsArray
 {
-    if(!_packsArray) _packsArray = [[NSArray alloc] init];
+    if(!_packsArray) _packsArray = [[NSMutableArray alloc] init];
     return _packsArray;
+}
+
+- (NSArray *)currentPartition
+{
+    if(!_currentPartition)
+    {
+        _currentPartition = @[@"sex", @"swear", @"slang"];
+    }
+    return _currentPartition;
 }
 
 - (NSMutableArray *)numbersAndPacks
@@ -186,7 +182,8 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
 - (void)ncDataManagerProtocolGetLocalPacks:(NSArray *)arrayOfPacks
 {
     self.numbersAndPacks = nil;
-    self.packsArray = arrayOfPacks;
+    [self.packsArray removeAllObjects];
+    [self.packsArray addObjectsFromArray:arrayOfPacks];
     int count0 = 0;
     int count1 = 0;
     int count2 = 0;
@@ -211,7 +208,8 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
         }
     }
     [self.collectionView reloadData];
-    [self showHiddenUIElements];
+    if(self.partitionSegmentedControl.selectedSegmentIndex != UISegmentedControlNoSegment)
+        [self showHiddenUIElements];
 }
 
 #pragma mark - Custom Accessors
@@ -245,7 +243,7 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
     }];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
-    //[[UIApplication sharedApplication] setStatusBarHidden:YES];
+
 }
 
 - (void)hideShownUIElements {
@@ -303,12 +301,16 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    
     int count = 0;
     for(NCPack *pack in self.packsArray)
     {
-        if([pack.partition isEqualToString:self.currentPartition[self.partitionSegmentedControl.selectedSegmentIndex]])
+        if(self.partitionSegmentedControl.selectedSegmentIndex != UISegmentedControlNoSegment)
         {
-            count ++;
+            if([pack.partition isEqualToString:self.currentPartition[self.partitionSegmentedControl.selectedSegmentIndex]])
+            {
+                count ++;
+            }
         }
     }
     return count;
@@ -320,9 +322,7 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
     NCPackCell *packCell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
     packCell.packView.packNumber = indexPath.row+1;
-//  packCell.packNumber = indexPath.row+1;
-    
-    //NSLog(@"row %li frame %@", (long)indexPath.row, NSStringFromCGRect(packCell.frame));
+
     return packCell;
 }
 
@@ -406,6 +406,7 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
         NSNumber *key = [NSNumber numberWithInteger:destinationViewController.packNumber-1];
         NSNumber *index = [self.numbersAndPacks[self.partitionSegmentedControl.selectedSegmentIndex] objectForKey:key];
         NCPack *pack = self.packsArray[[index integerValue]];
+        NSLog(@"pack ID = %i, downloaded = %i, paid = %i", pack.ID.intValue, pack.downloaded.intValue, pack.paid.intValue);
         destinationViewController.pack = pack;
     }
     else if([segue.identifier isEqualToString:NCGreetingControllerSeguedentifier])
@@ -420,9 +421,27 @@ static NSString *const NCAppDelegateKey = @"fromDelegate";
             NCJokesViewController *jc = (NCJokesViewController *)segue.destinationViewController;
             jc.fromAppDelegate = YES;
             jc.jokeNumber = sender[@"number"];
-           
         }
     }
+}
+
+- (void) changePack:(NCPack *)pack
+{
+    NSMutableArray *newArray = [[NSMutableArray alloc] init];
+    for(NCPack *p in self.packsArray)
+    {
+        if([p.ID isEqualToNumber:pack.ID])
+        {
+            [newArray addObject:pack];
+        }
+        else
+        {
+            [newArray addObject:p];
+
+        }
+    }
+    [self.packsArray removeAllObjects];
+    self.packsArray = newArray;
 }
 
 @end

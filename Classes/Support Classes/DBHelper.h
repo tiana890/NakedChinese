@@ -27,6 +27,8 @@
 - (void) setPackToDB:(NCPack *)pack;
 - (void) setPackPaid:(NCPack *)pack;
 - (BOOL) ifPaidPack:(NCPack *)pack;
+- (void) setPackDownloaded:(NCPack *)pack;
+- (BOOL) ifPackDownloaded:(NCPack *)pack;
 - (NCWord *) getWordWithID:(int)wordID;
 - (NSArray *) searchWordContainsString:(NSString *)string;
 - (void)setMaterialsToDB:(NSArray *)materialsArray andExplanations:(NSArray *)explanationsArray;

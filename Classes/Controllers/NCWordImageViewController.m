@@ -22,23 +22,14 @@
     [self.image setImage:self.img];
     
     [self.image setFrame:CGRectMake(self.image.frame.origin.x, self.image.frame.origin.y, self.image.image.size.width, self.image.image.size.height)];
-    //NSLog(@"%@", NSStringFromCGRect(CGRectMake(self.image.frame.origin.x, self.image.frame.origin.y, self.image.image.size.width, self.image.image.size.height)));
-    //NSLog(@"%@", NSStringFromCGRect(CGRectMake(self.image.frame.origin.x, self.image.frame.origin.y, self.image.frame.size.width, self.image.frame.size.height)));
     
-    //[self.scroll setFrame:self.image.frame];
     [self.scroll setContentSize:self.image.frame.size];
-    //NSLog(@"%@", NSStringFromCGRect(CGRectMake(self.scroll.frame.origin.x, self.scroll.frame.origin.y, self.scroll.frame.size.width, self.scroll.frame.size.height)));
-    
     UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollViewDoubleTapped:)];
     doubleTapRecognizer.numberOfTapsRequired = 2;
-    doubleTapRecognizer.numberOfTouchesRequired = 1;
     [self.scroll addGestureRecognizer:doubleTapRecognizer];
     
     CGRect scrollViewFrame = self.scroll.frame;
     self.scrollFrame = self.scroll.frame;
-    //float scaleWidth = scrollViewFrame.size.width / self.scroll.contentSize.width;
-   // float scaleHeight = scrollViewFrame.size.height / self.scroll.contentSize.height;
-    //float minScale = MIN(scaleHeight, scaleWidth);
     self.scroll.minimumZoomScale = 1;
     
     self.scroll.maximumZoomScale = 2.0f;
@@ -46,8 +37,6 @@
     
     [self centerScrollViewContents];
     
-    //self.scroll.layer.borderWidth =  0.3f;
-    //self.scroll.layer.borderColor = [[UIColor redColor] CGColor];
 }
 
 - (void) centerScrollViewContents
@@ -118,6 +107,7 @@
     CGRect rectToZoomTo = CGRectMake(x, y, w, h);
     [self.scroll zoomToRect:rectToZoomTo animated:YES];
 }
+
 
 - (void) setScrollFrameAnimated:(CGRect)frame
 {

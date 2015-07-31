@@ -20,8 +20,8 @@
     
     NSArray *chinese = @[@"假阳具", @"同志", @"拉拉", @"小姐", @"婊子", @"打飞机",
                          @"射", @"高潮", @"阳痿", @"屄", @"鸡巴", @"色狼"];
-    NSArray *pinyin = @[@"jǐayángjǜ", @"tóngzhì", @"lāla", @"xiǎojiě", @"biǎo zi", @"dǎfēijī",
-                        @"shè", @"gāo cháo", @"yángwěi", @"bī", @"jībā", @"sèláng"];
+    NSArray *pinyin = @[@"jǐayángjǜ", @"tóngzhì", @"lāla", @"xiǎojiě", @"biǎozi", @"dǎfēijī",
+                        @"shè", @"gāocháo", @"yángwěi", @"bī", @"jībā", @"sèláng"];
     NSArray *russian = @[@"Фаллоимитатор", @"Гей", @"Лесбиянка", @"Проститутка", @"Шлюха", @"Мастурбировать", @"Кончить", @"Оргазм", @"Импотент", @"Пи*да", @"Х*й", @"Извращенец"];
     NSArray *english = @[@"Dildo", @"Gay", @"Lesbian", @"Prostitute", @"Whore", @"Handjob",
                          @"Cum", @"Orgasm", @"Impotent", @"C*nt", @"Dick", @"Pervert"];
@@ -121,7 +121,7 @@
             @"网络上有很多色狼， 他们经常要求射频."]
       };
     
-    NSDictionary *ruDict = @{@1:@[@"Дословно \"искусственный инструмент для влагалища\".\n\nСинонимы:\n电动鸡巴 diàndòngjībā\n假鸡巴 jiǎjībā",
+    NSDictionary *ruDict = @{@1:@[@"Дословно \"искусственный инструмент для влагалища\".\n\nСинонимы:\n电动鸡巴 diàndòngjībā\n假鸡巴 jiǎjībā\n假阴茎 jiǎyīnjīng",
                                   @"На день рождения её хорошая подруга послала фаллоимитатор.",
                                   @"Она считает, что каждая девушка должна иметь фаллоимитатор.",
                                   @"Некоторым девушкам нравится коллекционировать фаллосы.",
@@ -149,7 +149,7 @@
                                   @"Некоторые студентки уходят в проституцию из-за нехватки денег."],
                              
                              
-                             @5:@[@"婊子 и другие его синонимы, представленные ниже, является куда более грубым и вульгарным термином для “проститутки”. В русском языке наиболее близкий аналог - “шлюха”. Это слово может обозначать как реальную проститутку, так и может выступать в роли очередного ругальства.\n\nСинонимы:\n鸡 jī (дословно “курица”, очень распространённый термин)\n妓女 jìnǚ\n娼妓 chāngjì\n援交妹 yuánjiāo mèi (распространено на юге Китая)",
+                             @5:@[@"婊子 и другие его синонимы, представленные ниже, является куда более грубым и вульгарным термином для “проститутки”. В русском языке наиболее близкий аналог - “шлюха”. Это слово может обозначать как реальную проститутку, так и может выступать в роли очередного ругальства. К примеру  婊子的儿子 (сукин сын)\n\nСинонимы:\n鸡 jī (дословно “курица”, очень распространённый термин)\n妓女 jìnǚ\n娼妓 chāngjì\n援交妹 yuánjiāo mèi (распространено на юге Китая)",
                                   @"Это шлюха вообще без капли стыда.",
                                   @"Эта шлюха с тобой только ради денег!",
                                   @"Сейчас даже школьники вызывают себе девочек.",
@@ -172,7 +172,7 @@
                                   @"Ему нравится, что девушка царапает его спину в тот момент, когда он кончает."],
                              
                              
-                             @8:@[@"Дословно переводится \"высокая волна\", что достаточно хорошо описывает то, что  происходит с девушкой во время оргазма. Не используется для мужского оргазма.",
+                             @8:@[@"Дословно переводится \"высокая волна\", что достаточно хорошо описывает то, что  происходит с девушкой во время оргазма. Не используется для мужского оргазма. \n\nСинонимы:\n性高潮 xìnggāocháo",
                                   @"Не каждая девушка способна достичь оргазма.",
                                   @"Ты первый парень, который довёл меня до оргазма.",
                                   @"Прошлой ночью её парень кончил 3 раза, она же так и не дошла до оргазма.",
@@ -216,7 +216,7 @@
                                    @"Этому мужчине нравится лизать женское влагалище.",
                                    @"У неё между ног очень много волос."],
                              
-                             @11:@[@"Является сравнительно нейтральным словом обозначающим пенис. Это слово также может выступать в роли определения в значении “ох*енный”, к примеру：\n这是啥鸡吧东西？(Что за х*ета тут?)\n真鸡巴爽了。(Просто ох*енно)\n我太鸡巴累了。(Я ох*енно устал)\n\nСинонимы:\n阴茎 или 阴径 yīnjīng, yīnjìng (официальный термин)\n阳具 yángjù\n阳道 yángdào\n鸡鸡 jījī (“детская“ версия от 鸡巴)\n小鸟  xiǎoniǎo (досл. “маленький птенчик”)\n小弟弟 xiǎo dìdì (досл. “маленький братец”)",
+                             @11:@[@"Является сравнительно нейтральным словом обозначающим пенис. Это слово также может выступать в роли определения в значении “ох*енный”, к примеру：\n这是啥鸡吧东西？(Что за х*ета тут?)\n真鸡巴爽了。(Просто ох*енно)\n我太鸡巴累了。(Я ох*енно устал)\n\nСинонимы:\n阴茎 или 阴径 yīnjīng, yīnjìng (официальный термин)\n阳具 yángjù\n阳道 yángdào\n鸡鸡 jījī (“детская“ версия от 鸡巴)\n小鸟  xiǎoniǎo (досл. “маленький птенчик”)\n小弟弟 xiǎo dìdì (досл. “маленький братец”)\nПолезные слова:\n鸡巴蛋 jībādàn\n鸡巴毛 jībāmáo",
                                    @"У него такой большой пенис, что все друзья завидуют ему.",
                                    @"Не всем девушкам нравятся большие члены, потому как они боятся, что будет больно.",
                                    @"Парням с большими членами нелегко подобрать подходящие презервативы.",
@@ -231,7 +231,7 @@
                                    @"В интернете очень много извращенцев. Они постоянно просят у меня включить камеру."]
                              };
     
-    NSDictionary *enDict = @{@1:@[@"Literally \"fake instrument for vagina\".\n\nSynonyms:\n电动鸡巴 diàndòngjībā\n假鸡巴 jiǎjībā",
+    NSDictionary *enDict = @{@1:@[@"Literally \"fake instrument for vagina\".\n\nSynonyms:\n电动鸡巴 diàndòngjībā\n假鸡巴 jiǎjībā\n假阴茎 jiǎyīnjīng",
                                   @"Her good friend sent her a dildo as a birthday gift.",
                                   @"She thinks every girl should have a dildo.",
                                   @"Some girls like to collect dildos.",
@@ -260,7 +260,7 @@
                                   @"Why should I call a prostitute? I love my wife too much",
                                   @"Some students become prostitutes because of lack of money"],
                              
-                             @5:@[@"婊子 and its symonyms which listed below are more vulgar ways to say “prostitute” just like English “whore”. This word can be used to call a real prostitute as well as be just an abuse.\n\nSynonims:\n鸡 jī (literally “chick”, commonly used)\n妓女 jìnǚ\n娼妓 chāngjì\n援交妹 yuánjiāo mèi (more popular in the South of China)",
+                             @5:@[@"婊子 and its symonyms which listed below are more vulgar ways to say “prostitute” just like English “whore”. This word can be used to call a real prostitute as well as be just an abuse. For example, 婊子的儿子 (son of a bitch).\n\nSynonims:\n鸡 jī (literally “chick”, commonly used)\n妓女 jìnǚ\n娼妓 chāngjì\n援交妹 yuánjiāo mèi (more popular in the South of China)",
                                   @"That whore is shameless.",
                                   @"That whore is with you just because of your money!",
                                   @"Nowadays students also call prostutes.",
@@ -283,7 +283,7 @@
                                   @"He likes his girlfriend to scratch his back as he ejaculates."],
                              
                              
-                             @8:@[@"Literally translates as \"high tide\", which is a really quite a good description of the sensation felt by women. It can’t be used for men however.",
+                             @8:@[@"Literally translates as \"high tide\", which is a really quite a good description of the sensation felt by women. It can’t be used for men however. \n\nSynonyms:\n性高潮 xìnggāocháo",
                                   @"Not every girl can reach orgasm.",
                                   @"You're the first boyfriend that made me reach orgasm.",
                                   @"Last night her boyfriend ejaculated 3 times, but she didn’t cum at all.",
@@ -304,8 +304,7 @@
                                    @"This man likes to lick pussies.",
                                    @"She's got lots of hair between her legs."],
                              
-                             @11:@[@"Relatively neutral word for penis. This word can also serve as a definition meaning “f*cking”. For example:\n\
-                                   这是啥鸡吧东西？(What the f*uck is that?)\n真鸡巴爽了。(It's f*cking awesome)\n我太鸡巴累了。(I'm f*cking tired)\n\nSynonyms:\n阴茎 or 阴径 yīnjīng, yīnjìng (oficial term)\n阳具 yángjù\n阳道 yángdào\n鸡鸡 jījī  (“childish” version of 鸡巴)\n小鸟  xiǎoniǎo  (lit. “little bird”)\n小弟弟 xiǎo dìdì  (lit. “little brother”)",
+                             @11:@[@"Relatively neutral word for penis. This word can also serve as a definition meaning “f*cking”. For example:\n这是啥鸡吧东西？(What the f*uck is that?)\n真鸡巴爽了。(It's f*cking awesome)\n我太鸡巴累了。(I'm f*cking tired)\n\nSynonyms:\n阴茎 or 阴径 yīnjīng, yīnjìng (oficial term)\n阳具 yángjù\n阳道 yángdào\n鸡鸡 jījī  (“childish” version of 鸡巴)\n小鸟  xiǎoniǎo  (lit. “little bird”)\n小弟弟 xiǎo dìdì  (lit. “little brother”)\n\nUseful words:\n鸡巴蛋 jībādàn (balls)\n鸡巴毛 jībāmáo (hair on the dick)",
                                    @"His dick is really big and all his friends envy him.",
                                    @"Not all the girls like big cocks because it may hurt.",
                                    @"It's not easy for guys with big cocks to choose the right condom",

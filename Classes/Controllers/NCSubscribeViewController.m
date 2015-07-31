@@ -30,7 +30,7 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    if([NSLocalizedString(@"lang", <#comment#>) isEqualToString:@"en"])
+    if([NSLocalizedString(@"lang", nil) isEqualToString:@"en"])
     {
         self.scroll.hidden = YES;
         self.siteLink.hidden = YES;
@@ -38,7 +38,15 @@
         self.descriptionLabel.hidden = YES;
         self.descr.hidden = YES;
     }
-    
+    else
+    {
+        self.scroll.hidden = NO;
+        self.siteLink.hidden = NO;
+        self.lineView.hidden = NO;
+        self.descriptionLabel.hidden = NO;
+        self.descr.hidden = NO;
+    }
+    NSLog(@"frame = %@", NSStringFromCGRect(self.descr.frame));
 }
 
 #pragma mark - IBActions

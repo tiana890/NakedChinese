@@ -22,7 +22,12 @@
 - (void) ncDataManagerProtocolGetMaterialsWithWordID:(NSArray *)arrayOfMaterials;
 - (void) ncDataManagerProtocolGetJokes:(NSArray *)arrayOfJokes;
 - (void) ncDataManagerProtocolGetWordsWithPackIDPreview:(NSArray *)arrayOfWords;
-- (void)ncDataManagerProtocolGetWordsWithPackIDProgressBarDeltaValue:(NSDictionary *) dict;
+- (void) ncDataManagerProtocolFailure:(NSString *)message;
+@end
+
+@protocol NCDataManagerProductDownloadProtocol <NSObject>
+
+- (void) ncDataManagerProtocolGetWordsWithPackIDProgressBarDeltaValue:(NSDictionary *) dict;
 @end
 
 
@@ -52,13 +57,18 @@
 
 //Search
 - (void) searchWordContainsString:(NSString *)string;
-//- (void) setMaterials:(NSArray *)materials andExplanations:(NSArray *)explanations;
 - (void) getMaterialsWithWordID:(int) wordID;
 
 //set methods
 - (void) setPackIsPaid:(NCPack *)pack;
-
+- (void) setPackIsDownloaded:(NCPack *)pack;
 - (BOOL) ifPaidPack:(NCPack *) pack;
+- (BOOL) ifPackDownloaded:(NCPack *) pack;
+
+//Internet is Reachable
+- (BOOL) ifInternetIsReachable;
+
 @property (nonatomic, weak) id<NCDataManagerProtocol> delegate;
+@property (nonatomic, weak) id<NCDataManagerProductDownloadProtocol> productDownloadDelegate;
 
 @end

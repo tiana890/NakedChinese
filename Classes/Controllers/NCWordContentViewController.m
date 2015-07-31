@@ -29,6 +29,7 @@
 @property (strong, nonatomic) IBOutlet UIView *helpView;
 @property (strong, nonatomic) IBOutlet UIView *embedView;
 
+@property (strong, nonatomic) IBOutlet UIView *doubleTapView;
 
 @end
 
@@ -52,6 +53,14 @@
     self.pinyinLabel.text = self.word.material.materialZH_TR;
     [self.translationLabel setText:self.word.material.materialWord];
     
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap)];
+    tapGesture.numberOfTapsRequired = 2;
+    [self.doubleTapView addGestureRecognizer:tapGesture];
+}
+
+- (void) handleDoubleTap
+{
+    [self zoomButtonPressed:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated

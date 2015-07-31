@@ -145,7 +145,7 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
 #pragma mark - Private
 
 - (void)setupPageViewController {
-    /*
+    
     NCWordContentViewController *contentViewController = (id)[self viewControllerAtIndex:[self openedWordIndex]];
     NSArray *viewControllers = @[contentViewController];
     [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
@@ -159,7 +159,7 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
     
     [self setupFavButton:[self openedWordIndex]];
      
-    */
+        /*
     for(int i = 0; i < self.arrayOfWords.count; i++)
     {
         NCWordContentViewController *contentViewController = (id)[self viewControllerAtIndex:i];
@@ -178,7 +178,7 @@ static CGFloat const NCVisuallySlideViewHeight = 75.f;
     [self.slidingViewController didMoveToParentViewController:self];
     
     [self setupFavButton:[self openedWordIndex]];
-     
+     */
 }
 
 - (void)setupExplanationViewController {

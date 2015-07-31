@@ -54,7 +54,14 @@ static NSString *const NCMenuTitleKey = @"title";
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = NO;
     //[self.navigationController.navigationBar setTintColor:[UIColor colorWithRed:146.0f/255.0f green:138.0f/255.0f blue:138.0f/255.0f alpha:1.0f]];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:IAPHelperProductRestoreNotification  object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestoredFail:) name:IAPHelperProductRestoreFailNotification  object:nil];
     
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 - (void) viewDidAppear:(BOOL)animated
 {
@@ -91,7 +98,7 @@ static NSString *const NCMenuTitleKey = @"title";
     NSArray *items = nil;
     if (section == 0) {
         items = @[@{NCMenuIconKey: @"nc_lamp_b",  NCMenuTitleKey: NSLocalizedString(@"about", nil)},
-                  @{NCMenuIconKey: @"nc_user",  NCMenuTitleKey: NSLocalizedString(@"creators", nil)},
+                  //@{NCMenuIconKey: @"nc_user",  NCMenuTitleKey: NSLocalizedString(@"creators", nil)},
                   @{NCMenuIconKey: @"nc_mark",  NCMenuTitleKey: NSLocalizedString(@"partners", nil)},
                   @{NCMenuIconKey: @"nc_cart",  NCMenuTitleKey: NSLocalizedString(@"restore", nil)}];
                   //@{NCMenuIconKey: @"nc_globe", NCMenuTitleKey: @}];
@@ -141,23 +148,24 @@ static NSString *const NCMenuTitleKey = @"title";
                 [self performSegueWithIdentifier:NCGreetingControllerSegueIdentifier sender:self];
                 break;
             }
-            case 1:
+           /* case 1:
             {
                 [self performSegueWithIdentifier:NCAuthorControllerSegueIdentifier sender:self];
                 break;
             }
-            case 2:
+            */
+            case 1:
             {
                 [self performSegueWithIdentifier:NCPartnersControllerSegueIdentifier sender:self];
                 break;
             }
-            case 3:
+            case 2:
             {
                 [[NCIAHelper sharedInstance] restoreCompletedTransactions];
                 break;
             }
                 
-            case 4:
+            case 3:
                 [self performSegueWithIdentifier:NCLanguageControllerSegueIdentifier sender:self];
                 break;
         }
@@ -241,7 +249,17 @@ static NSString *const NCMenuTitleKey = @"title";
     }
 }
 
+- (void)productsRestored:(NSNotification *) notification
+{
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:NSLocalizedString(@"product_restored", nil) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alert show];
+}
 
+- (void)productsRestoredFail:(NSNotification *) notification
+{
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:NSLocalizedString(@"product_restored_fail", nil) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alert show];
+}
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

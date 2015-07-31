@@ -14,7 +14,9 @@
 @property (nonatomic, strong) NSNumber *ID;
 @property (nonatomic, strong) NSString *partition;
 @property (nonatomic, strong) NSNumber *paid;
+@property (nonatomic, strong) NSNumber *downloaded;
 
 + (NCPack *) getNCPackFromJson:(NSDictionary *)jsonDict;
 + (NCPack *) getNCPackFromNSManagedObject:(NSManagedObject *)object;
+
 @end

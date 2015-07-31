@@ -63,6 +63,7 @@
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
+    NSLog(@"Error sending joke = %@", error.description);
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

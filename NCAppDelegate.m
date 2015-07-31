@@ -70,8 +70,32 @@
     if(_persistentStoreCoordinator)
         return _persistentStoreCoordinator;
     
-    NSURL *storeURL = [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-                                                               inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:@"nakedChienese.sqlite"];
+    
+    /*
+    NSString *appSupportDir = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject];
+    //If there isn't an App Support Directory yet ...
+    if (![[NSFileManager defaultManager] fileExistsAtPath:appSupportDir isDirectory:NULL]) {
+        NSError *error = nil;
+        //Create one
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:appSupportDir withIntermediateDirectories:YES attributes:nil error:&error]) {
+            NSLog(@"%@", error.localizedDescription);
+        }
+        else {
+            // *** OPTIONAL *** Mark the directory as excluded from iCloud backups
+            dirURL = [NSURL fileURLWithPath:appSupportDir];
+            if (![dirURL setResourceValue:@YES
+                                forKey:NSURLIsExcludedFromBackupKey
+                                 error:&error])
+            {
+                NSLog(@"Error excluding %@ from backup %@", dirURL.lastPathComponent, error.localizedDescription);
+            }
+            else {
+                NSLog(@"Yay");
+            }
+        }
+    }
+   */
+    NSURL *storeURL =[[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:@"nakedchinese.sqlite"];
     
     NSError *error = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];

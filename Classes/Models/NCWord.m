@@ -88,7 +88,7 @@
 {
     if(_packID.intValue != 1)
     {
-        NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) objectAtIndex:0];
         return [NSString stringWithFormat:@"%@/%@", docDir, _bigImage];
     }
     else

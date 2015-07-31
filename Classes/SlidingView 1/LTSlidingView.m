@@ -113,7 +113,6 @@
     SlideDirection direction = (offset - self.beginOffset>0)?right:left;
     self.decelerateDirection = direction;
     if(self.animator){
-       // NSLog(@"percent = %f", percent);
         [self.animator updateSourceView:sourceView destinationView:destView withPercent:percent direction:direction];
     }
 }
@@ -168,10 +167,6 @@
         }
     }
     
-    //protocol
-    //CGFloat pageWidth = self.scrollView.frame.size.width;
-    //CGFloat offset = self.scrollView.contentOffset.x;
-    
     CGFloat percent = MIN(1,fabs((offset - self.beginOffset)/pageWidth));
     
     UIView* sourceView =self.views[self.currentIndex];
@@ -183,8 +178,6 @@
         destView = self.views[nextIndex];
     }
     SlideDirection direction = (offset - self.beginOffset>0)?right:left;
-    NSLog(@"new index = %i next index = %i", newIndex, nextIndex);
-    NSLog(@"self.currentIndex = %i", self.currentIndex);
     if(newIndex != self.currentIndex)
     {
         if(self.animator)
@@ -197,8 +190,6 @@
             {
                 [self.animator updateSourceView:sourceView destinationView:destView withPercent:1.0f direction:direction];
             }
-            
-            NSLog(@"end decelerating percent 1.0f");
         }
     }
     else
@@ -214,8 +205,6 @@
             {
                 [self.animator updateSourceView:sourceView destinationView:destView withPercent:0.0f direction:direction];
             }
-
-            NSLog(@"end decelerating percent 0.0f");
         }
 
     }
