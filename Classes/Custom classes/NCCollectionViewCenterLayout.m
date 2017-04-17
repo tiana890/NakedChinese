@@ -95,7 +95,7 @@
                  }
              }
              
-                          //this is the cell at row j in section i
+            //this is the cell at row j in section i
              CGRect cellFrame = CGRectMake(x , y, 70.0f, 70.0f);
 
             //see if the collection view needs this cell
